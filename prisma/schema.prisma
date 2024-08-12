@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 34:04
 model UserSettings {
   userId   String @id
   currency String
