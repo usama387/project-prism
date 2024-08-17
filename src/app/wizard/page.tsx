@@ -45,6 +45,7 @@ const WizardPage = async () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {/* Child component that contains currency options where user can choose from */}
           <CurrencyComboBox />
         </CardContent>
       </Card>
