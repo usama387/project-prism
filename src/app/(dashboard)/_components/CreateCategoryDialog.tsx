@@ -44,9 +44,11 @@ import { toast } from "sonner";
 
 interface Props {
   type: TransactionType;
+  SuccessCallback: (category: Category) => void;
 }
 
-const CreateCategoryDialog = ({ type }: Props) => {
+// child component of CategoryPicker
+const CreateCategoryDialog = ({ type, SuccessCallback }: Props) => {
   // managing opening state
   const [open, setOpen] = useState(false);
 
@@ -73,6 +75,9 @@ const CreateCategoryDialog = ({ type }: Props) => {
       toast.success(`Category ${data.name} created successfully`, {
         id: "create-category",
       });
+
+      // will update the data which is category coming as prop form parent
+      SuccessCallback(data);
 
       await queryClient.invalidateQueries({
         queryKey: ["categories"],
