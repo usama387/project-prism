@@ -41,6 +41,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCategory } from "../_actions/categories";
 import { Category } from "@prisma/client";
 import { toast } from "sonner";
+import { useTheme } from "next-themes";
 
 interface Props {
   type: TransactionType;
@@ -60,7 +61,11 @@ const CreateCategoryDialog = ({ type, SuccessCallback }: Props) => {
     },
   });
 
+  // This hook is part of React Query. It returns an instance of QueryClient,
   const queryClient = useQueryClient();
+
+  // hook to update theme of emoji picker in light mode
+  const theme = useTheme();
 
   // connecting my server action with useMutation hook of tanstack to create a category
   const { mutate, isPending } = useMutation({
@@ -79,6 +84,7 @@ const CreateCategoryDialog = ({ type, SuccessCallback }: Props) => {
       // will update the data which is category coming as prop form parent
       SuccessCallback(data);
 
+      // to trigger the refetch of categories and keep data up to date
       await queryClient.invalidateQueries({
         queryKey: ["categories"],
       });
@@ -143,10 +149,10 @@ const CreateCategoryDialog = ({ type, SuccessCallback }: Props) => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input defaultValue={""} {...field} />
+                    <Input placeholder="Category" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Transaction Description (optional)
+                    This is how your category will appear in the app
                   </FormDescription>
                 </FormItem>
               )}
@@ -187,6 +193,8 @@ const CreateCategoryDialog = ({ type, SuccessCallback }: Props) => {
                       <PopoverContent className="w-full">
                         {/* component that lets emoji appear and select it with onEmojiSelect native is an emoji with type string*/}
                         <Picker
+                          // to set theme of emoji picker in light mode
+                          theme={theme.resolvedTheme}
                           data={data}
                           onEmojiSelect={(emoji: { native: string }) => {
                             field.onChange(emoji.native);
