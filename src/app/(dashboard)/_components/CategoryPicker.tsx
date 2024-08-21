@@ -45,6 +45,7 @@ const CategoryPicker = ({ type }: Props) => {
     (category: Category) => category.name === value
   );
 
+  // this function is passed as props to child to update data in CreateCategoryDialog component
   const successCallBack = useCallback(
     (category: Category) => {
       setValue(category.name);
