@@ -1,7 +1,7 @@
 "use client";
 
 import { TransactionType } from "@/lib/types";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   CreateCategorySchema,
@@ -19,7 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CircleOff, PlusSquare } from "lucide-react";
+import { CircleOff, Loader2, PlusSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Form,
@@ -37,6 +37,10 @@ import {
 } from "@/components/ui/popover";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createCategory } from "../_actions/categories";
+import { Category } from "@prisma/client";
+import { toast } from "sonner";
 
 interface Props {
   type: TransactionType;
@@ -44,7 +48,7 @@ interface Props {
 
 const CreateCategoryDialog = ({ type }: Props) => {
   // managing opening state
-  const [open, setOPen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   //   accessing from validation of categories with zod
   const form = useForm<CreateCategorySchemaType>({
@@ -54,8 +58,50 @@ const CreateCategoryDialog = ({ type }: Props) => {
     },
   });
 
+  const queryClient = useQueryClient();
+
+  // connecting my server action with useMutation hook of tanstack to create a category
+  const { mutate, isPending } = useMutation({
+    mutationFn: createCategory,
+    onSuccess: async (data: Category) => {
+      form.reset({
+        name: "",
+        icon: "",
+        type,
+      });
+
+      toast.success(`Category ${data.name} created successfully`, {
+        id: "create-category",
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["categories"],
+      });
+
+      // close the dialog now
+      setOpen(!open);
+    },
+
+    onError: () => {
+      toast.error("Something went wrong", {
+        id: "create-category",
+      });
+    },
+  });
+
+  // to prevent rendering errors using callback that takes 2 arguments one is the func and second is dependency array
+  const onSubmit = useCallback(
+    (values: CreateCategorySchemaType) => {
+      toast.loading("Creating Category...", {
+        id: "create-category",
+      });
+      mutate(values);
+    },
+    [mutate]
+  );
+
   return (
-    <Dialog open={open} onOpenChange={setOPen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant={"ghost"}
@@ -84,7 +130,7 @@ const CreateCategoryDialog = ({ type }: Props) => {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form className="space-y-8">
+          <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="name"
@@ -162,7 +208,11 @@ const CreateCategoryDialog = ({ type }: Props) => {
               Cancel
             </Button>
           </DialogClose>
-          <Button>Save</Button>
+          <Button onClick={form.handleSubmit(onSubmit)} disabled={isPending}>
+            {!isPending && "Create"}
+            {/* 2:00:00 */}
+            {isPending && <Loader2 className="animate-spin" />}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
