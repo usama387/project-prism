@@ -17,20 +17,27 @@ import {
 import { TransactionType } from "@/lib/types";
 import { Category } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import CreateCategoryDialog from "./CreateCategoryDialog";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Props {
   type: TransactionType;
+  onChange: (value: string) => void;
 }
 
-const CategoryPicker = ({ type }: Props) => {
+const CategoryPicker = ({ type, onChange }: Props) => {
   // managing state for category picker pop up
   const [open, setOpen] = useState(false);
 
   const [value, setValue] = useState("");
+
+  // when the value changes it calls onChange callback
+  useEffect(() => {
+    if (!value) return;
+    onChange(value);
+  }, [onChange, value]);
 
   // using tanstack query Fn fetching categories based on income or expense
   const categoryQuery = useQuery({
