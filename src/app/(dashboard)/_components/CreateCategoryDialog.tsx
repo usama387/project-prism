@@ -209,6 +209,7 @@ const CreateCategoryDialog = ({ type, SuccessCallback }: Props) => {
             />
           </form>
         </Form>
+        {/* Contains logic to trigger creation of categories */}
         <DialogFooter>
           <DialogClose asChild>
             <Button

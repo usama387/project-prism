@@ -52,9 +52,9 @@ model MonthHistory {
   year    Int
   income  Float
   expense Float
+  // Relationship: MonthHistory is associated with a user via userId
 
-  @@id([day, month, year])
-// Relationship: MonthHistory is associated with a user via userId
+  @@id([day, month, year, userId])
 }
 
 model YearHistory {
@@ -63,7 +63,7 @@ model YearHistory {
   year    Int
   income  Float
   expense Float
+  // Relationship: YearHistory is associated with a user via userId
 
-  @@id([month, year])
- // Relationship: YearHistory is associated with a user via userId
+  @@id([month, year, userId])
 }
