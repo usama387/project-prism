@@ -4,6 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React from "react";
 import CreateTransactionDialog from "./_components/CreateTransactionDialog";
+import Overview from "./_components/Overview";
 
 const DashboardPage = async () => {
   // getting user to display its details
@@ -60,6 +61,9 @@ const DashboardPage = async () => {
           </div>
         </div>
       </div>
+
+      {/* OVERVIEW SECTION */}
+      <Overview userSettings={UserSettings}/>
     </div>
   );
 };
