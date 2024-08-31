@@ -52,8 +52,8 @@ const getBalanceStats = async (userId: string, from: Date, to: Date) => {
     where: {
       userId,
       date: {
-        gte: "from",
-        lte: "to",
+        gte: from,
+        lte: to,
       },
     },
     _sum: {
