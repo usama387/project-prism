@@ -7,6 +7,7 @@ import { differenceInDays, startOfMonth } from "date-fns";
 import { useState } from "react";
 import { toast } from "sonner";
 import StatsCard from "./StatsCard";
+import CategoriesStats from "./CategoriesStats";
 
 const Overview = ({ userSettings }: { userSettings: UserSettings }) => {
   // managing date range state
@@ -41,9 +42,19 @@ const Overview = ({ userSettings }: { userSettings: UserSettings }) => {
           />
         </div>
       </div>
+
+      {/* second child component that displays income, expenses and balance   */}
       <div className="container flex flex-col sm:items-center w-full gap-2">
         {/* Passing required props to this child component */}
         <StatsCard
+          userSettings={userSettings}
+          from={dateRange.from}
+          to={dateRange.to}
+        />
+
+        {/* second child component that displays stats of income, expenses and balance
+        it accepts the same prop as above component*/}
+        <CategoriesStats
           userSettings={userSettings}
           from={dateRange.from}
           to={dateRange.to}
