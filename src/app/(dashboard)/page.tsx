@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import React from "react";
 import CreateTransactionDialog from "./_components/CreateTransactionDialog";
 import Overview from "./_components/Overview";
+import History from "./_components/History";
 
 const DashboardPage = async () => {
   // getting user to display its details
@@ -33,7 +34,6 @@ const DashboardPage = async () => {
         <div className="container flex flex-wrap items-center justify-between gap-6 py-8">
           <p className="text-3xl font-bold">Hello, {user.firstName}! 👋</p>
           <div className="flex items-center gap-3">
-            
             {/* create transaction dialog is a child client component which creates transactions for project the type is passed as props which is either income or expense  */}
             <CreateTransactionDialog
               trigger={
@@ -63,7 +63,10 @@ const DashboardPage = async () => {
       </div>
 
       {/* OVERVIEW SECTION */}
-      <Overview userSettings={UserSettings}/>
+      <Overview userSettings={UserSettings} />
+
+      {/* HISTORY SECTION */}
+      <History userSettings={UserSettings} />
     </div>
   );
 };
