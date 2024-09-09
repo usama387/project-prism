@@ -1,7 +1,7 @@
 "use client";
 
 import { TransactionType } from "@/lib/types";
-import { useCallback, useState } from "react";
+import { ReactNode, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   CreateCategorySchema,
@@ -46,10 +46,11 @@ import { useTheme } from "next-themes";
 interface Props {
   type: TransactionType;
   SuccessCallback: (category: Category) => void;
+  trigger?: ReactNode;
 }
 
 // child component of CategoryPicker
-const CreateCategoryDialog = ({ type, SuccessCallback }: Props) => {
+const CreateCategoryDialog = ({ type, SuccessCallback, trigger }: Props) => {
   // managing opening state
   const [open, setOpen] = useState(false);
 
@@ -113,15 +114,21 @@ const CreateCategoryDialog = ({ type, SuccessCallback }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
+      {/* trigger is a prop coming from manage route to create category from there */}
       <DialogTrigger asChild>
-        <Button
-          variant={"ghost"}
-          className="flex border-separate items-center justify-start rounded-none border-b px-3 text-muted-foreground"
-        >
-          <PlusSquare className="mr-2 h-4 w-4" />
-          Create New
-        </Button>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button
+            variant={"ghost"}
+            className="flex border-separate items-center justify-start rounded-none border-b px-3 text-muted-foreground"
+          >
+            <PlusSquare className="mr-2 h-4 w-4" />
+            Create New
+          </Button>
+        )}
       </DialogTrigger>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
