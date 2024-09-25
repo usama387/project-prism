@@ -19,7 +19,9 @@ const TransactionsPage = () => {
       <div className="border-b bg-card">
         <div className="container flex flex-wrap items-center justify-between gap-6 py-8">
           <div>
-            <p className="text-3xl font-bold">Transactions History</p>
+            <p className="text-2xl md:text-3xl font-bold">
+              Transactions History
+            </p>
           </div>
           {/* DateRangePicker is a shadcn ui component that allows date range selection using these methods */}
           <DateRangePicker
@@ -42,7 +44,7 @@ const TransactionsPage = () => {
           />
         </div>
       </div>
-      <div className="">
+      <div className="px-4 md:px-10  overflow-x-auto">
         {/* child component accept props to select date range data */}
         <TransactionTable from={dateRange.from} to={dateRange.to} />
       </div>
