@@ -21,8 +21,10 @@ interface Props {
 }
 
 const DeleteTransactionDialog = ({ open, setOpen, transactionId }: Props) => {
+  // instance of queryClient to update the transaction table after deleting a transaction
   const queryClient = useQueryClient();
 
+  // function that invokes deleteTransaction server action
   const deleteMutation = useMutation({
     mutationFn: deleteTransaction,
     onSuccess: async () => {
@@ -53,11 +55,14 @@ const DeleteTransactionDialog = ({ open, setOpen, transactionId }: Props) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
+
           <AlertDialogAction
             onClick={() => {
               toast.loading("Deleting Transaction...", {
                 id: transactionId,
               });
+
+              // passing my transaction id to server action that deletes the transaction
               deleteMutation.mutate(transactionId);
             }}
           >
