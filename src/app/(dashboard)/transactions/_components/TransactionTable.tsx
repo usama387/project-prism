@@ -30,7 +30,16 @@ import { DataTableFacetedFilter } from "@/components/datatable/FacetedFilter";
 import { DataTableViewOptions } from "@/components/datatable/ColumnToggle";
 import { Button } from "@/components/ui/button";
 import { download, generateCsv, mkConfig } from "export-to-csv";
-import { DownloadIcon } from "lucide-react";
+import { DownloadIcon, MoreHorizontal, TrashIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import DeleteTransactionDialog from "./DeleteTransactionDialog";
 
 interface Props {
   from: Date;
@@ -124,6 +133,14 @@ const columns: ColumnDef<TransactionHistoryRow>[] = [
           {row.original.formattedAmount}
         </p>
       );
+    },
+  },
+
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      return <RowActions transaction={row.original} />;
     },
   },
 ];
@@ -328,3 +345,42 @@ const TransactionTable = ({ from, to }: Props) => {
 };
 
 export default TransactionTable;
+
+const RowActions = ({
+  transaction,
+}: {
+  transaction: TransactionHistoryRow;
+}) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  return (
+    <>
+      {/* component that deletes a particular transaction from this component */}
+      <DeleteTransactionDialog
+        open={showDeleteDialog}
+        setOpen={setShowDeleteDialog}
+        transactionId={transaction.id}
+      />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"ghost"} className="h-8 w-8 p-0">
+            <span className="sr-only">Open Menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="flex items-center gap-2"
+            onSelect={() => {
+              setShowDeleteDialog(!showDeleteDialog);
+            }}
+          >
+            <TrashIcon className="h-4 w-4 text-muted-foreground" />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+  );
+};
