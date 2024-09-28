@@ -164,7 +164,7 @@ const CreateTransactionDialog = ({ trigger, type }: Props) => {
               )}
             />
           </form>
-          {/* This child component maps and displays categories and selecit it also whenever a category is updated or selected it will trigger onChange event and update its name  */}
+          {/* This child component maps and displays categories and select it also whenever a category is updated or selected it will trigger onChange event and update its name  */}
           <div className="flex items-center justify-between gap-2">
             <FormField
               control={form.control}
