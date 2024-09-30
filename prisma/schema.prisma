@@ -32,10 +32,10 @@ model Project {
   tasks    Task[] // Relationship to tasks
   budgetId String? // Optional: Link to a budget (if each project has its own budgeting)
 
-  status        String @default("ONGOING")
-  priority      String @default("Medium")
-  budget        Float?
-  numberOfTasks Int    @default(0)
+  status         String @default("ONGOING")
+  priority       String @default("Medium")
+  budget         Float?
+  numberOfTasks  Int    @default(0)
   completedTasks Int    @default(0)
 }
 

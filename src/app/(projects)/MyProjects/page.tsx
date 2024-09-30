@@ -18,6 +18,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 // Define the Project type with the status field
 type Project = {
@@ -77,6 +78,7 @@ function ProjectsPageContent() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {projects.length === 0
           ? Array.from({ length: PROJECTS_PER_PAGE }).map((_, index) => (
+            // skeleton screen when data is not available
               <Card key={index} className="flex flex-col">
                 <CardHeader>
                   <Skeleton className="h-6 w-3/4" />
@@ -91,47 +93,53 @@ function ProjectsPageContent() {
               </Card>
             ))
           : currentProjects.map((project: Project) => (
-              <Card key={project.id} className="flex flex-col">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-lg text-emerald-500 sm:text-xl">
-                    {project.name}
-                  </CardTitle>
-                  <Badge className={statusColors[project.status]}>
-                    {project.status}
-                  </Badge>
-                </CardHeader>
-                <CardContent className="flex-grow flex flex-col justify-between">
-                  <p className="text-muted-foreground text-sm sm:text-base mb-4">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-col sm:flex-row justify-between text-xs sm:text-sm space-y-2 sm:space-y-0">
-                    <div>
-                      <p className="font-semibold">Start Date:</p>
-                      <p>
-                        {project.startDate
-                          ? new Date(project.startDate).toLocaleDateString()
-                          : "N/A"}
-                      </p>
-                    </div>
-                    <div className="sm:text-right">
-                      <p className="font-semibold">Deadline:</p>
-                      <p>
-                        {project.deadline
-                          ? new Date(project.deadline).toLocaleDateString()
-                          : "N/A"}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between mt-4">
-                    <h4>Priority:</h4>
-                    <Badge className={priorityColors[project.priority]}>
-                      {project.priority}
+            // when data is available the card renders with project details inside link component to direct user on single page
+              <Link href={`/MyProjects/${project.id}`}>
+                <Card key={project.id} className="flex flex-col">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-lg text-emerald-500 sm:text-xl">
+                      {project.name}
+                    </CardTitle>
+                    <Badge className={statusColors[project.status]}>
+                      {project.status}
                     </Badge>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardHeader>
+                  <CardContent className="flex-grow flex flex-col justify-between">
+                    <p className="text-muted-foreground text-sm sm:text-base mb-4">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-col sm:flex-row justify-between text-xs sm:text-sm space-y-2 sm:space-y-0">
+                      <div>
+                        <p className="font-semibold">Start Date:</p>
+                        <p>
+                          {project.startDate
+                            ? new Date(project.startDate).toLocaleDateString()
+                            : "N/A"}
+                        </p>
+                      </div>
+
+                      <div className="sm:text-right">
+                        <p className="font-semibold">Deadline:</p>
+                        <p>
+                          {project.deadline
+                            ? new Date(project.deadline).toLocaleDateString()
+                            : "N/A"}
+                        </p>
+                      </div>
+
+                    </div>
+                    <div className="flex items-center justify-between mt-4">
+                      <h4>Priority:</h4>
+                      <Badge className={priorityColors[project.priority]}>
+                        {project.priority}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
       </div>
+      {/* Pagination logic */}
       <div className="mt-8">
         <Pagination>
           <PaginationContent>

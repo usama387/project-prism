@@ -13,7 +13,7 @@ export const CreateProjectSchema = z.object({
   deadline: z.date().nullable().optional(),
   status: StatusEnum.default("ONGOING"),
   priority: PriorityEnum.default("Medium"),
-  budget: z.number().min(0, "Budget must be a positive number").optional(), // Budget field
+  budget: z.number().min(0, "Budget must be a positive number").optional(),
   numberOfTasks: z
     .number()
     .min(1, "Number of tasks must be at least 1")
@@ -25,3 +25,9 @@ export const CreateProjectSchema = z.object({
 });
 
 export type CreateProjectSchemaType = z.infer<typeof CreateProjectSchema>;
+
+export const DeleteProjectSchema = z.object({
+  projectId: z.string().uuid("Invalid project id"),
+});
+
+export type DeleteProjectSchemaType = z.infer<typeof DeleteProjectSchema>;
