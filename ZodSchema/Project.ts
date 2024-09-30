@@ -18,6 +18,10 @@ export const CreateProjectSchema = z.object({
     .number()
     .min(1, "Number of tasks must be at least 1")
     .optional(),
+  completedTasks: z
+    .number()
+    .min(0, "Number of tasks must be at least 1")
+    .optional(),
 });
 
 export type CreateProjectSchemaType = z.infer<typeof CreateProjectSchema>;

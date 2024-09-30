@@ -32,6 +32,7 @@ export const CreateProject = async (form: CreateProjectSchemaType) => {
     priority,
     budget,
     numberOfTasks,
+    completedTasks,
   } = parsedBody.data;
 
   return await prisma.project.create({
@@ -40,6 +41,7 @@ export const CreateProject = async (form: CreateProjectSchemaType) => {
       description,
       status,
       priority,
+      completedTasks,
       startDate: startDate ?? undefined, // Pass undefined if null
       deadline: deadline ?? undefined, // Pass undefined if null
       budget: budget ?? undefined, // Pass undefined if null

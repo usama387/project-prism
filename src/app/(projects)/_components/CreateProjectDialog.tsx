@@ -79,6 +79,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
           priority: "Medium",
           budget: 0,
           numberOfTasks: 1,
+          completedTasks: 0,
         });
       setOpen(!open);
     },
@@ -192,6 +193,28 @@ const CreateProjectDialog = ({ trigger }: Props) => {
               )}
             />
 
+            {/* Completed Tasks Field */}
+            <FormField
+              control={form.control}
+              name="completedTasks"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Number of Tasks Completed</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter number of completed tasks"
+                      {...field}
+                      value={field.value ?? ""} // Handle null as empty string
+                      onChange={(e) =>
+                        field.onChange(parseInt(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
             {/* Status Field */}
             <FormField
               control={form.control}
@@ -241,6 +264,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
+
             {/* Start Date */}
             <FormField
               control={form.control}
@@ -276,6 +300,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
+
             {/* Deadline */}
             <FormField
               control={form.control}

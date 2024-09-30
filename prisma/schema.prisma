@@ -36,6 +36,7 @@ model Project {
   priority      String @default("Medium")
   budget        Float?
   numberOfTasks Int    @default(0)
+  completedTasks Int    @default(0)
 }
 
 model Task {
