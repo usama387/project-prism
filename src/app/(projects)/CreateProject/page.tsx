@@ -44,7 +44,7 @@ const CreateProject = async () => {
       </div>
       <Separator />
       <Button className="w-full" asChild>
-        <Link href="/projects">
+        <Link href="/MyProjects">
           I&apos;m done! Take me to the Projects Page
         </Link>
       </Button>

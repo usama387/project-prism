@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model UserSettings {
@@ -28,32 +28,23 @@ model Project {
 
   startDate DateTime?
   deadline  DateTime?
-  taskCount Float
 
   tasks    Task[] // Relationship to tasks
   budgetId String? // Optional: Link to a budget (if each project has its own budgeting)
+
+  status        String @default("ONGOING")
+  priority      String @default("Medium")
+  budget        Float?
+  numberOfTasks Int    @default(0)
 }
 
 model Task {
-  id          String     @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String?
-  status      TaskStatus @default(PENDING)
-  riskLevel   RiskLevel  @default(LOW)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now())
+  updatedAt   DateTime @default(now())
   projectId   String // Foreign key for the project
-  project     Project    @relation(fields: [projectId], references: [id])
-}
-
-enum TaskStatus {
-  PENDING
-  COMPLETED
-}
-
-enum RiskLevel {
-  LOW
-  HIGH
+  project     Project  @relation(fields: [projectId], references: [id])
 }
 
 model Category {

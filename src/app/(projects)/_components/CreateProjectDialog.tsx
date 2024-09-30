@@ -36,7 +36,13 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Props {
   trigger: ReactNode;
@@ -69,7 +75,10 @@ const CreateProjectDialog = ({ trigger }: Props) => {
           description: "",
           startDate: undefined,
           deadline: undefined,
-          taskCount: 0,
+          status: "ONGOING",
+          priority: "Medium",
+          budget: 0,
+          numberOfTasks: 1,
         });
       setOpen(!open);
     },
@@ -139,13 +148,106 @@ const CreateProjectDialog = ({ trigger }: Props) => {
               )}
             />
 
+            {/* {Budget Field} */}
+            <FormField
+              control={form.control}
+              name="budget"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Budget</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter your budget"
+                      {...field}
+                      value={field.value ?? ""} // Handle null as empty string
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/* Number of Tasks Field */}
+            <FormField
+              control={form.control}
+              name="numberOfTasks"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Number of Tasks</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter number of tasks"
+                      {...field}
+                      value={field.value ?? ""} // Handle null as empty string
+                      onChange={(e) =>
+                        field.onChange(parseInt(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/* Status Field */}
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value} // Controlled value from the form state
+                      onValueChange={field.onChange} // Update the form state when the user selects a status
+                    >
+                      {/* Add SelectTrigger for the dropdown to work properly */}
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ONGOING">Ongoing</SelectItem>
+                        <SelectItem value="COMPLETED">Completed</SelectItem>
+                        <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/* Priority Field */}
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Priority</FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Priority" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="High">High</SelectItem>
+                        <SelectItem value="Low">Low</SelectItem>
+                        <SelectItem value="Medium">Medium</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
             {/* Start Date */}
             <FormField
               control={form.control}
               name="startDate"
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
-                  <FormLabel>Start Date</FormLabel>
+                  <FormLabel>Start Date:</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -174,14 +276,13 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* Deadline */}
             <FormField
               control={form.control}
               name="deadline"
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
-                  <FormLabel>Deadline</FormLabel>
+                  <FormLabel>Deadline:</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -207,20 +308,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                       />
                     </PopoverContent>
                   </Popover>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="taskCount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Total Tasks</FormLabel>
-                  <FormControl>
-                    <Input defaultValue={1} type="number" {...field} />
-                  </FormControl>
-                  <FormDescription>No of Tasks (optional)</FormDescription>
                 </FormItem>
               )}
             />

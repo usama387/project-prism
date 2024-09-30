@@ -23,15 +23,27 @@ export const CreateProject = async (form: CreateProjectSchemaType) => {
     redirect("/sign-in");
   }
 
-  const { name, description, startDate, deadline, taskCount } = parsedBody.data;
+  const {
+    name,
+    description,
+    startDate,
+    deadline,
+    status,
+    priority,
+    budget,
+    numberOfTasks,
+  } = parsedBody.data;
 
   return await prisma.project.create({
     data: {
       name,
       description,
-      taskCount,
+      status,
+      priority,
       startDate: startDate ?? undefined, // Pass undefined if null
       deadline: deadline ?? undefined, // Pass undefined if null
+      budget: budget ?? undefined, // Pass undefined if null
+      numberOfTasks: numberOfTasks ?? undefined, // Pass undefined if null
       userId: user.id,
     },
   });
