@@ -48,7 +48,8 @@ interface Props {
   trigger: ReactNode;
 }
 const CreateProjectDialog = ({ trigger }: Props) => {
-  // validating form data
+
+  // validating form data with zod and useForm
   const form = useForm<CreateProjectSchemaType>({
     resolver: zodResolver(CreateProjectSchema),
   });

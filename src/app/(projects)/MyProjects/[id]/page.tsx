@@ -179,6 +179,8 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
             </div>
           </CardContent>
         </Card>
+        
+        {/* this div contains a child component that deletes a project taking its id */}
         <div>
           <DeleteProjectDialog
             project={project}
@@ -192,10 +194,32 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
               </Button>
             }
           />
-          {/* <UpdateProjectDialog
-            project={{...project}}
-            trigger={<Button> Update Project</Button>}
-          /> */}
+        </div>
+
+        {/* this div contains a child component that upadates a project taking its all details */}
+        <div className="flex items-center justify-end mt-4">
+          <UpdateProjectDialog
+            project={{
+              projectId: project.id,
+              name: project.name,
+              description: project.description ?? undefined,
+              startDate: project.startDate ?? undefined,
+              deadline: project.deadline ?? undefined,
+              status: project.status as "COMPLETED" | "ONGOING" | "CANCELLED", // Cast status
+              priority: project.priority as "High" | "Medium" | "Low", // Cast priority
+              budget: project.budget ?? undefined,
+              numberOfTasks: project.numberOfTasks,
+              completedTasks: project.completedTasks,
+            }}
+            trigger={
+              <Button
+                className="flex border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                variant={"secondary"}
+              >
+                Update Insights
+              </Button>
+            }
+          />
         </div>
       </div>
     </>
