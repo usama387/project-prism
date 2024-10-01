@@ -7,6 +7,8 @@ import {
   CreateProjectSchemaType,
   DeleteProjectSchema,
   DeleteProjectSchemaType,
+  UpdateProjectSchema,
+  UpdateProjectSchemaType,
 } from "../../../../ZodSchema/Project";
 import prisma from "@/lib/prisma";
 
@@ -69,10 +71,58 @@ export const DeleteProject = async (form: DeleteProjectSchemaType) => {
     redirect("/sign-in");
   }
 
-  const DeleteProject = await prisma.project.delete({
+  return await prisma.project.delete({
     where: {
       userId: user.id,
       id: parsedBody.data.projectId,
+    },
+  });
+};
+
+// this server action updates the project belongs to a particular user using project id from zod schema
+export const UpdateProject = async (form: UpdateProjectSchemaType) => {
+  // validating project id from zod to update a project
+  const parsedBody = UpdateProjectSchema.safeParse(form);
+
+  if (!parsedBody.success) {
+    throw new Error("Invalid data");
+  }
+
+  // getting and validating user
+  const user = await currentUser();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  const {
+    projectId,
+    name,
+    description,
+    startDate,
+    deadline,
+    status,
+    priority,
+    budget,
+    numberOfTasks,
+    completedTasks,
+  } = parsedBody.data;
+
+  return await prisma.project.update({
+    where: {
+      userId: user.id,
+      id: projectId,
+    },
+    data: {
+      name,
+      description,
+      startDate: startDate ?? undefined,
+      deadline: deadline ?? undefined,
+      status,
+      priority,
+      budget: budget ?? undefined,
+      numberOfTasks: numberOfTasks ?? undefined,
+      completedTasks: completedTasks ?? undefined,
     },
   });
 };

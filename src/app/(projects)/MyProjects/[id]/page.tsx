@@ -16,6 +16,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import DeleteProjectDialog from "../../_components/DeleteProjectDialog";
 import React from "react";
+import UpdateProjectDialog from "../../_components/UpdateProjectDialog";
 
 const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
   const user = await currentUser();
@@ -183,7 +184,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
             project={project}
             trigger={
               <Button
-                className="flex w-full border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-400 hover:bg-red-500/20"
+                className="flex w-full border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-500 hover:bg-red-500/20"
                 variant={"secondary"}
               >
                 <TrashIcon className="h-4 w-4 " />
@@ -191,16 +192,10 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
               </Button>
             }
           />
-        </div>
-      </div>
-      <div className="container mx-auto py-4 px-4">
-        <div className="flex items-center justify-end">
-          <Button
-            className="flex border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-400"
-            variant={"secondary"}
-          >
-            Update
-          </Button>
+          {/* <UpdateProjectDialog
+            project={{...project}}
+            trigger={<Button> Update Project</Button>}
+          /> */}
         </div>
       </div>
     </>
