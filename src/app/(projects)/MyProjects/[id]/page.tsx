@@ -17,6 +17,7 @@ import { redirect } from "next/navigation";
 import DeleteProjectDialog from "../../_components/DeleteProjectDialog";
 import React from "react";
 import UpdateProjectDialog from "../../_components/UpdateProjectDialog";
+import BudgetDetailsCard from "../_components/BudgetDetailsCard";
 
 const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
   const user = await currentUser();
@@ -38,6 +39,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
     return { notFound: true };
   }
 
+  // this variable is passed as a value prop in progress component
   const progress = (project.completedTasks / project.numberOfTasks) * 100;
 
   const statusColors = {
@@ -88,18 +90,8 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {/* Project Budget */}
-          <Card className="hover:shadow-xl transform transition-all duration-300">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Budget</CardTitle>
-              <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-xl sm:text-2xl font-bold text-emerald-600">
-                {project.budget ? project.budget.toLocaleString() : "N/A"} pkr
-              </div>
-            </CardContent>
-          </Card>
+          {/* Project Budget child component*/}
+          <BudgetDetailsCard project={project} />
 
           {/* Task Progress */}
           <Card className="hover:shadow-xl transform transition-all duration-300">
@@ -179,7 +171,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
             </div>
           </CardContent>
         </Card>
-        
+
         {/* this div contains a child component that deletes a project taking its id */}
         <div>
           <DeleteProjectDialog

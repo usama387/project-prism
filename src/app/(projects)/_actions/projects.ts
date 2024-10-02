@@ -11,6 +11,7 @@ import {
   UpdateProjectSchemaType,
 } from "../../../../ZodSchema/Project";
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export const CreateProject = async (form: CreateProjectSchemaType) => {
   // validating form data
@@ -35,6 +36,7 @@ export const CreateProject = async (form: CreateProjectSchemaType) => {
     status,
     priority,
     budget,
+    usedBudget,
     numberOfTasks,
     completedTasks,
   } = parsedBody.data;
@@ -49,6 +51,7 @@ export const CreateProject = async (form: CreateProjectSchemaType) => {
       startDate: startDate ?? undefined, // Pass undefined if null
       deadline: deadline ?? undefined, // Pass undefined if null
       budget: budget ?? undefined, // Pass undefined if null
+      usedBudget: budget ?? undefined, // Pass undefined if null
       numberOfTasks: numberOfTasks ?? undefined, // Pass undefined if null
       userId: user.id,
     },
@@ -71,15 +74,18 @@ export const DeleteProject = async (form: DeleteProjectSchemaType) => {
     redirect("/sign-in");
   }
 
-  return await prisma.project.delete({
+  const deletedProject = await prisma.project.delete({
     where: {
       userId: user.id,
       id: parsedBody.data.projectId,
     },
   });
+
+  revalidatePath("/MyProjects");
+
+  return deletedProject;
 };
 
-// this server action updates the project belongs to a particular user using project id from zod schema
 export const UpdateProject = async (form: UpdateProjectSchemaType) => {
   // validating project id from zod to update a project
   const parsedBody = UpdateProjectSchema.safeParse(form);
@@ -104,11 +110,13 @@ export const UpdateProject = async (form: UpdateProjectSchemaType) => {
     status,
     priority,
     budget,
+    usedBudget,
     numberOfTasks,
     completedTasks,
   } = parsedBody.data;
 
-  return await prisma.project.update({
+  // Update the project
+  const updatedProject = await prisma.project.update({
     where: {
       userId: user.id,
       id: projectId,
@@ -121,8 +129,14 @@ export const UpdateProject = async (form: UpdateProjectSchemaType) => {
       status,
       priority,
       budget: budget ?? undefined,
+      usedBudget: budget ?? undefined,
       numberOfTasks: numberOfTasks ?? undefined,
       completedTasks: completedTasks ?? undefined,
     },
   });
+
+  // Revalidate the path for the updated project
+  revalidatePath(`/MyProjects/${projectId}`); // Add this line to revalidate the specific project page
+
+  return updatedProject; // Return the updated project
 };

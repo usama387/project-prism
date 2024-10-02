@@ -15,6 +15,7 @@ export const CreateProjectSchema = z.object({
   status: StatusEnum.default("ONGOING"),
   priority: PriorityEnum.default("Medium"),
   budget: z.number().min(0, "Budget must be a positive number").optional(),
+  usedBudget: z.number().min(0, "Budget must be a positive number").optional(),
   numberOfTasks: z
     .number()
     .min(1, "Number of tasks must be at least 1")
@@ -44,6 +45,7 @@ export const UpdateProjectSchema = z.object({
   status: z.enum(["COMPLETED", "ONGOING", "CANCELLED"]).optional(),
   priority: z.enum(["High", "Medium", "Low"]).optional(),
   budget: z.number().optional(),
+  usedBudget: z.number().optional(),
   numberOfTasks: z.number().optional(),
   completedTasks: z.number().optional(),
 });

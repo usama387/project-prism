@@ -17,7 +17,8 @@ CREATE TABLE "Project" (
     "budgetId" TEXT,
     "status" TEXT NOT NULL DEFAULT 'ONGOING',
     "priority" TEXT NOT NULL DEFAULT 'Medium',
-    "budget" REAL,
+    "budget" INTEGER,
+    "usedBudget" INTEGER,
     "numberOfTasks" INTEGER NOT NULL DEFAULT 0,
     "completedTasks" INTEGER NOT NULL DEFAULT 0
 );

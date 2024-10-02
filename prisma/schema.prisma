@@ -34,7 +34,8 @@ model Project {
 
   status         String @default("ONGOING")
   priority       String @default("Medium")
-  budget         Float?
+  budget         Int?
+  usedBudget     Int?
   numberOfTasks  Int    @default(0)
   completedTasks Int    @default(0)
 }

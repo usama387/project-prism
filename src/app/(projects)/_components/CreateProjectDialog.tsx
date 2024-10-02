@@ -79,6 +79,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
           status: "ONGOING",
           priority: "Medium",
           budget: 0,
+          usedBudget: 0,
           numberOfTasks: 1,
           completedTasks: 0,
         });
@@ -164,7 +165,29 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                       {...field}
                       value={field.value ?? ""} // Handle null as empty string
                       onChange={(e) =>
-                        field.onChange(parseFloat(e.target.value) || 0)
+                        field.onChange(parseInt(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/* Used Budget Field */}
+            <FormField
+              control={form.control}
+              name="usedBudget"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Used Budget</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter your budget"
+                      {...field}
+                      value={field.value ?? ""} // Handle null as empty string
+                      onChange={(e) =>
+                        field.onChange(parseInt(e.target.value) || 0)
                       }
                     />
                   </FormControl>
