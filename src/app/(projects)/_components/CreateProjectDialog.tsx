@@ -48,7 +48,6 @@ interface Props {
   trigger: ReactNode;
 }
 const CreateProjectDialog = ({ trigger }: Props) => {
-
   // validating form data with zod and useForm
   const form = useForm<CreateProjectSchemaType>({
     resolver: zodResolver(CreateProjectSchema),
@@ -116,7 +115,10 @@ const CreateProjectDialog = ({ trigger }: Props) => {
 
         {/* form starts now */}
         <Form {...form}>
-          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            className="grid grid-cols-1 gap-4 md:grid-cols-2"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
             {/* Form field for project name */}
             <FormField
               control={form.control}
