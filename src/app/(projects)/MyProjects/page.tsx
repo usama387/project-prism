@@ -53,6 +53,7 @@ const priorityColors = {
 const queryClient = new QueryClient();
 
 function ProjectsPageContent() {
+  
   // Fetching projects with useQuery
   const { data: projects = [] } = useQuery<Project[]>({
     queryKey: ["projects"],
