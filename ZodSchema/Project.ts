@@ -37,7 +37,7 @@ export type DeleteProjectSchemaType = z.infer<typeof DeleteProjectSchema>;
 
 // schema used to update the project
 export const UpdateProjectSchema = z.object({
-  projectId: z.string().uuid(), // Assuming projectId is a string in UUID format
+  projectId: z.string().uuid(), 
   name: z.string().optional(),
   description: z.string().optional(),
   startDate: z.date().nullable().optional(),

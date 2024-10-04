@@ -23,8 +23,6 @@ const CreateTaskPage = async () => {
     },
   });
 
-  console.log(tasks);
-
   return (
     <>
       <div className="mb-12">
