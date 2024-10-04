@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { CalendarIcon, Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -54,9 +54,13 @@ interface Props {
     id: string;
     name: string;
   }[];
+  tasks: {
+    id: string;
+    name: string;
+  }[];
 }
 
-export default function CreateTaskDialog({ trigger, projects }: Props) {
+export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
   const [open, setOpen] = useState(false);
 
   const form = useForm<CreateTaskSchemaType>({
@@ -133,7 +137,6 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                 </FormItem>
               )}
             />
-
             {/* Task description field */}
             <FormField
               control={form.control}
@@ -148,7 +151,6 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                 </FormItem>
               )}
             />
-
             {/* Task Status Field */}
             <FormField
               control={form.control}
@@ -179,7 +181,6 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                 </FormItem>
               )}
             />
-
             {/* Task Priority Field */}
             <FormField
               control={form.control}
@@ -208,14 +209,12 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                 </FormItem>
               )}
             />
-
             {/* Due Date Field */}
             <FormField
               control={form.control}
               name="dueDate"
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
-                  <FormLabel>Due Date:</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -244,7 +243,6 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                 </FormItem>
               )}
             />
-
             {/* Task Responsible Person */}
             <FormField
               control={form.control}
@@ -261,7 +259,6 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                 </FormItem>
               )}
             />
-
             {/* Estimated Hours Field */}
             <FormField
               control={form.control}
@@ -279,13 +276,9 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                       }
                     />
                   </FormControl>
-                  <FormDescription>
-                    How many hours do you estimate this task will take?
-                  </FormDescription>
                 </FormItem>
               )}
             />
-
             {/* Actual Hours Field */}
             <FormField
               control={form.control}
@@ -303,13 +296,9 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                       }
                     />
                   </FormControl>
-                  <FormDescription>
-                    How many hours has this task actually taken?
-                  </FormDescription>
                 </FormItem>
               )}
             />
-
             {/* Risk Flag Field */}
             <FormField
               control={form.control}
@@ -331,8 +320,7 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                 </FormItem>
               )}
             />
-
-            {/* Project Id Field */}
+            {/* Project relation Field */}
             <FormField
               control={form.control}
               name="projectId"
@@ -355,6 +343,33 @@ export default function CreateTaskDialog({ trigger, projects }: Props) {
                   </FormControl>
                   <FormDescription>
                     Select the project to associate this task with.
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+            {/* Task Dependencies Field */}
+            <FormField
+              control={form.control}
+              name="dependency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Task Dependency</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a dependency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tasks.map((task) => (
+                        <SelectItem key={task.id} value={task.id}>
+                          {task.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select the task that this task depends on.
                   </FormDescription>
                 </FormItem>
               )}

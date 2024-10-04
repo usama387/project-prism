@@ -22,6 +22,12 @@ export const GET = async () => {
           name: true,
         },
       },
+      dependencies: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
 

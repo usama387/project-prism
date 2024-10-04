@@ -10,7 +10,10 @@ export const CreateTaskSchema = z.object({
   estimatedHours: z.number().positive().optional(),
   actualHours: z.number().nonnegative().optional(),
   riskFlag: z.boolean().default(false),
+  // relation with project table using its id
   projectId: z.string().uuid("Invalid project ID"),
+  // Added dependencies field relation with task table itself
+  dependency: z.string().optional(),
 });
 
 export type CreateTaskSchemaType = z.infer<typeof CreateTaskSchema>;

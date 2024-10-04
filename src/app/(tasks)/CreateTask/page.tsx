@@ -14,6 +14,17 @@ const CreateTaskPage = async () => {
     },
   });
 
+  // Fetching tasks and passing as prop to CreateTaskDialog component
+  // to select dependency
+  const tasks = await prisma.task.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  console.log(tasks);
+
   return (
     <>
       <div className="mb-12">
@@ -48,6 +59,7 @@ const CreateTaskPage = async () => {
           {/* Task creation button with dialog */}
           <CreateTaskDialog
             projects={projects}
+            tasks={tasks}
             trigger={
               <Button
                 variant="outline"

@@ -35,6 +35,7 @@ export const CreateTask = async (form: CreateTaskSchemaType) => {
     actualHours,
     riskFlag,
     projectId,
+    dependencies,
   } = parsedBody.data;
 
   const createdTask = await prisma.task.create({
@@ -52,6 +53,11 @@ export const CreateTask = async (form: CreateTaskSchemaType) => {
       project: {
         connect: { id: projectId },
       },
+      dependencies: dependencies
+        ? {
+            connect: dependencies.map((taskId: string) => ({ id: taskId })),
+          }
+        : undefined,
     },
   });
 
