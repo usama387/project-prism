@@ -41,6 +41,12 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           name: true,
         },
       },
+      dependentOn: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
 
@@ -153,13 +159,12 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           </CardHeader>
           <CardContent>
             <p className="text-lg font-medium">{task.project.name}</p>
-            <p className="text-sm font-medium text-gray-500 mt-3">
+            <p className="text-lg font-medium text-gray-500 mt-3">
               {task.project.description}
             </p>
           </CardContent>
         </Card>
 
-        {/* Task Dependency */}
         {/* Task Dependency */}
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -175,6 +180,31 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
                   className="text-lg text-gray-500 font-medium"
                 >
                   {dependency.name}
+                </p>
+              ))
+            ) : (
+              <p className="text-sm font-medium text-gray-500 mt-3">
+                No dependencies assigned.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Task Dependent On */}
+        <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">
+              Dependant Tasks
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {task.dependentOn && task.dependentOn.length > 0 ? (
+              task.dependentOn.map((dependent) => (
+                <p
+                  key={dependent.id}
+                  className="text-lg text-gray-500 font-medium"
+                >
+                  {dependent.name}
                 </p>
               ))
             ) : (

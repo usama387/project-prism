@@ -28,6 +28,12 @@ export const GET = async () => {
           name: true,
         },
       },
+      dependentOn: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
 

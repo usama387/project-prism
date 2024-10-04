@@ -7,6 +7,7 @@ import {
 } from "../../../../ZodSchema/task";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 // import { revalidatePath } from "next/cache";
 
 export const CreateTask = async (form: CreateTaskSchemaType) => {
@@ -35,7 +36,8 @@ export const CreateTask = async (form: CreateTaskSchemaType) => {
     actualHours,
     riskFlag,
     projectId,
-    dependencies,
+    dependency,
+    dependentOn,
   } = parsedBody.data;
 
   const createdTask = await prisma.task.create({
@@ -53,14 +55,19 @@ export const CreateTask = async (form: CreateTaskSchemaType) => {
       project: {
         connect: { id: projectId },
       },
-      dependencies: dependencies
+      dependencies: dependency
         ? {
-            connect: dependencies.map((taskId: string) => ({ id: taskId })),
+            connect: { id: dependency },
+          }
+        : undefined,
+      dependentOn: dependentOn
+        ? {
+            connect: { id: dependentOn },
           }
         : undefined,
     },
   });
 
-  //   revalidatePath("/tasks");
+  revalidatePath("/MyTasks");
   return createdTask;
 };

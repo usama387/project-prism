@@ -118,7 +118,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
         </DialogHeader>
         <Form {...form}>
           <form
-            className="grid grid-cols-1 gap-4 md:grid-cols-2"
+            className="grid grid-cols-1 gap-6 md:grid-cols-2"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             {/* Task name field */}
@@ -170,8 +170,8 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                         <SelectItem value="Ongoing">Ongoing</SelectItem>
                         <SelectItem value="Completed">Completed</SelectItem>
                         <SelectItem value="Cancelled">Cancelled</SelectItem>
-                        <SelectItem value="On Hold">On Hold</SelectItem>
-                        <SelectItem value="To Do">To Do</SelectItem>
+                        <SelectItem value="OnHold">On Hold</SelectItem>
+                        <SelectItem value="Todo">To Do</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -351,6 +351,33 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
             <FormField
               control={form.control}
               name="dependency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Task Dependent</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a dependency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tasks.map((task) => (
+                        <SelectItem key={task.id} value={task.id}>
+                          {task.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select the tasks that depend on this task
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+            {/* Dependent Tasks Field */}
+            <FormField
+              control={form.control}
+              name="dependentOn"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Task Dependency</FormLabel>
