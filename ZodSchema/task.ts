@@ -19,8 +19,23 @@ export const CreateTaskSchema = z.object({
 
 export type CreateTaskSchemaType = z.infer<typeof CreateTaskSchema>;
 
-// export const UpdateTaskSchema = z.object({
-//   taskId: z.string().uuid(),
-//   name: z.string().optional(),
-//   description: z.string().optional(),
-// });
+// Schema for updating a task
+export const UpdateTaskSchema = z.object({
+  taskId: z.string().uuid("Invalid task ID"), // Task ID required for identifying the task
+  name: z.string().min(1, "Task name is Required").optional(),
+  description: z.string().optional(),
+  status: z
+    .enum(["Todo", "Completed", "OnHold", "Ongoing", "Cancelled"])
+    .optional(),
+  priority: z.enum(["Low", "Medium", "High"]).optional(),
+  dueDate: z.date().optional(),
+  assignedTo: z.string().optional(),
+  estimatedHours: z.number().positive().optional(),
+  actualHours: z.number().nonnegative().optional(),
+  riskFlag: z.boolean().optional(),
+  projectId: z.string().uuid("Invalid project ID").optional(),
+  dependency: z.string().optional(),
+  dependentOn: z.string().optional(),
+});
+
+export type UpdateTaskSchemaType = z.infer<typeof UpdateTaskSchema>;

@@ -4,6 +4,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import {
   CreateTaskSchema,
   CreateTaskSchemaType,
+  UpdateTaskSchema,
+  UpdateTaskSchemaType,
 } from "../../../../ZodSchema/task";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
@@ -70,4 +72,55 @@ export const CreateTask = async (form: CreateTaskSchemaType) => {
 
   revalidatePath("/MyTasks");
   return createdTask;
+};
+
+export const UpdateTask = async (form: UpdateTaskSchemaType) => {
+  // validating form data
+  const parsedBody = UpdateTaskSchema.safeParse(form);
+
+  if (!parsedBody.success) {
+    throw new Error("Invalid data");
+  }
+
+  // validating user
+  const user = await currentUser();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  const {
+    taskId,
+    name,
+    description,
+    status,
+    priority,
+    dueDate,
+    assignedTo,
+    estimatedHours,
+    actualHours,
+    riskFlag,
+  } = parsedBody.data;
+
+  const UpdatedTask = await prisma.task.update({
+    where: {
+      userId: user.id,
+      id: taskId,
+    },
+    data: {
+      name,
+      description,
+      status,
+      priority,
+      dueDate,
+      assignedTo,
+      estimatedHours,
+      actualHours,
+      riskFlag,
+    },
+  });
+
+  revalidatePath(`/MyTasks/${taskId}`);
+
+  return Response.json(UpdatedTask);
 };

@@ -12,6 +12,7 @@ import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React from "react";
+import UpdateTaskDialog from "../../_components/UpdateTaskDialog";
 // import UpdateTaskDialog from "../_components/UpdateTaskDialog";
 // import DeleteTaskDialog from "../_components/DeleteTaskDialog";
 
@@ -82,13 +83,33 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          <Button
-            variant="outline"
-            className="w-full sm:w-auto flex items-center justify-center"
-          >
-            <EditIcon className="mr-2 h-4 w-4" />
-            Edit Task
-          </Button>
+          <UpdateTaskDialog
+            task={{
+              taskId: task.id,
+              name: task.name,
+              description: task.description ?? undefined,
+              dueDate: task.dueDate ?? undefined,
+              status: task.status as
+                | "Completed"
+                | "Ongoing"
+                | "Cancelled"
+                | "OnHold"
+                | "Todo",
+              priority: task.priority as "High" | "Medium" | "Low",
+              estimatedHours: task.estimatedHours ?? undefined,
+              actualHours: task.actualHours ?? undefined,
+              projectId: task.projectId,
+            }}
+            trigger={
+              <Button
+                className="flex w-full items-center gap-2 text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                variant={"secondary"}
+              >
+                <EditIcon className="mr-2 h-4 w-4" />
+                Edit Task
+              </Button>
+            }
+          />
         </div>
       </div>
 
@@ -227,30 +248,6 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             >
               <TrashIcon className="h-4 w-4 " />
               Delete Task
-            </Button>
-          }
-        /> */}
-      </div>
-
-      {/* Task Update */}
-      <div className="flex items-center justify-end mt-4">
-        {/* <UpdateTaskDialog
-          task={{
-            taskId: task.id,
-            name: task.name,
-            description: task.description ?? undefined,
-            dueDate: task.dueDate ?? undefined,
-            status: task.status as "COMPLETED" | "ONGOING" | "CANCELLED",
-            priority: task.priority as "High" | "Medium" | "Low",
-            estimatedHours: task.estimatedHours ?? undefined,
-            actualHours: task.actualHours ?? undefined,
-          }}
-          trigger={
-            <Button
-              className="flex items-center gap-2 text-muted-foreground text-emerald-500 hover:bg-red-500/20"
-              variant={"secondary"}
-            >
-              Update Task
             </Button>
           }
         /> */}
