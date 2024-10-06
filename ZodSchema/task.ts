@@ -19,6 +19,11 @@ export const CreateTaskSchema = z.object({
 
 export type CreateTaskSchemaType = z.infer<typeof CreateTaskSchema>;
 
+export const DeleTeTaskSchema = z.object({
+  taskId: z.string().uuid("Invalid task id"),
+});
+export type DeleTeTaskSchemaType = z.infer<typeof DeleTeTaskSchema>;
+
 // Schema for updating a task
 export const UpdateTaskSchema = z.object({
   taskId: z.string().uuid("Invalid task ID"), // Task ID required for identifying the task

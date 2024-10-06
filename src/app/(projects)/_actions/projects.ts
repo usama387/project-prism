@@ -81,7 +81,7 @@ export const DeleteProject = async (form: DeleteProjectSchemaType) => {
     },
   });
 
-  revalidatePath("/MyProjects");
+  redirect("/MyProjects");
 
   return deletedProject;
 };

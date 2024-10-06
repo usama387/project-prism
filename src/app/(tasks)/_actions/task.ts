@@ -4,6 +4,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import {
   CreateTaskSchema,
   CreateTaskSchemaType,
+  DeleTeTaskSchema,
+  DeleTeTaskSchemaType,
   UpdateTaskSchema,
   UpdateTaskSchemaType,
 } from "../../../../ZodSchema/task";
@@ -72,6 +74,31 @@ export const CreateTask = async (form: CreateTaskSchemaType) => {
 
   revalidatePath("/MyTasks");
   return createdTask;
+};
+
+export const DeleteTask = async (form: DeleTeTaskSchemaType) => {
+  const parsedBody = DeleTeTaskSchema.safeParse(form);
+
+  if (!parsedBody.success) {
+    throw new Error("Invalid post id");
+  }
+
+  const user = await currentUser();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  const DeletedTask = await prisma.task.delete({
+    where: {
+      userId: user.id,
+      id: parsedBody.data.taskId,
+    },
+  });
+
+  redirect("/MyTasks");
+
+  return DeletedTask;
 };
 
 export const UpdateTask = async (form: UpdateTaskSchemaType) => {

@@ -13,6 +13,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React from "react";
 import UpdateTaskDialog from "../../_components/UpdateTaskDialog";
+import DeleteTaskDialog from "../../_components/DeleteTaskDialog";
 // import UpdateTaskDialog from "../_components/UpdateTaskDialog";
 // import DeleteTaskDialog from "../_components/DeleteTaskDialog";
 
@@ -107,6 +108,18 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               >
                 <EditIcon className="mr-2 h-4 w-4" />
                 Edit Task
+              </Button>
+            }
+          />
+          <DeleteTaskDialog
+            task={task}
+            trigger={
+              <Button
+                className="flex w-full items-center gap-2 text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                variant={"secondary"}
+              >
+                <TrashIcon className="h-4 w-4 " />
+                Delete Task
               </Button>
             }
           />
@@ -235,22 +248,6 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             )}
           </CardContent>
         </Card>
-      </div>
-
-      {/* Task Deletion */}
-      <div className="mt-6">
-        {/* <DeleteTaskDialog
-          taskId={task.id}
-          trigger={
-            <Button
-              className="flex w-full items-center gap-2 text-muted-foreground text-emerald-500 hover:bg-red-500/20"
-              variant={"secondary"}
-            >
-              <TrashIcon className="h-4 w-4 " />
-              Delete Task
-            </Button>
-          }
-        /> */}
       </div>
     </div>
   );
