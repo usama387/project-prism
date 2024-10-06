@@ -350,7 +350,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
             {/* Task Dependencies Field */}
             <FormField
               control={form.control}
-              name="dependency"
+              name="dependencies"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Task Dependent</FormLabel>

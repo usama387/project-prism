@@ -100,6 +100,8 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               estimatedHours: task.estimatedHours ?? undefined,
               actualHours: task.actualHours ?? undefined,
               projectId: task.projectId,
+              assignedTo: task.assignedTo ?? undefined,
+              riskFlag: task.riskFlag ?? false,
             }}
             trigger={
               <Button

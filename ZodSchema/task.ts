@@ -13,7 +13,7 @@ export const CreateTaskSchema = z.object({
   // relation with project table using its id
   projectId: z.string().uuid("Invalid project ID"),
   // Added dependencies field relation with task table itself
-  dependency: z.string().optional(),
+  dependencies: z.string().optional(),
   dependentOn: z.string().optional(),
 });
 
@@ -39,7 +39,7 @@ export const UpdateTaskSchema = z.object({
   actualHours: z.number().nonnegative().optional(),
   riskFlag: z.boolean().optional(),
   projectId: z.string().uuid("Invalid project ID").optional(),
-  dependency: z.string().optional(),
+  dependencies: z.string().optional(),
   dependentOn: z.string().optional(),
 });
 
