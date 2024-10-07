@@ -59,7 +59,7 @@ export const CreateTask = async (form: CreateTaskSchemaType) => {
       project: {
         connect: { id: projectId },
       },
-      dependencies: dependency
+      dependency: dependency
         ? {
             connect: { id: dependency },
           }
@@ -149,5 +149,5 @@ export const UpdateTask = async (form: UpdateTaskSchemaType) => {
 
   revalidatePath(`/MyTasks/${taskId}`);
 
-  return Response.json(UpdatedTask);
+  return UpdatedTask;
 };

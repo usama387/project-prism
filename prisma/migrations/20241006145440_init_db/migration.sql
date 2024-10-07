@@ -43,6 +43,18 @@ CREATE TABLE "Task" (
 );
 
 -- CreateTable
+CREATE TABLE "TaskHistory" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "taskId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "version" INTEGER NOT NULL,
+    "changes" TEXT NOT NULL,
+    "updatedBy" TEXT NOT NULL,
+    "updatedAt" DATETIME,
+    CONSTRAINT "TaskHistory_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
 CREATE TABLE "Category" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT NOT NULL,

@@ -22,7 +22,7 @@ export const GET = async () => {
           name: true,
         },
       },
-      dependencies: {
+      dependency: {
         select: {
           id: true,
           name: true,

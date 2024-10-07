@@ -56,9 +56,26 @@ model Task {
   assignedTo     String?
   estimatedHours Float?
   actualHours    Float?
-  dependencies   Task[]    @relation("TaskDependencies")
-  dependentOn    Task[]    @relation("TaskDependencies")
-  riskFlag       Boolean   @default(false)
+  
+  dependencyId   String?   @unique
+  dependency     Task?     @relation(name: "TaskDependencies", fields: [dependencyId], references: [id])
+
+  dependentOnId String?       @unique
+  dependentOn   Task?         @relation(name: "TaskDependencies")
+
+  riskFlag      Boolean       @default(false)
+  TaskHistory   TaskHistory[]
+}
+
+model TaskHistory {
+  id        String    @id @default(uuid())
+  taskId    String
+  task      Task      @relation(fields: [taskId], references: [id])
+  userId    String
+  version   Int
+  changes   String
+  updatedBy String
+  updatedAt DateTime?
 }
 
 model Category {

@@ -61,8 +61,10 @@ interface Props {
 }
 
 export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
+  // managing opening state
   const [open, setOpen] = useState(false);
 
+  // form validation with zod and react hook form
   const form = useForm<CreateTaskSchemaType>({
     resolver: zodResolver(CreateTaskSchema),
   });
@@ -259,6 +261,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
+            
             {/* Estimated Hours Field */}
             <FormField
               control={form.control}
@@ -279,6 +282,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
+
             {/* Actual Hours Field */}
             <FormField
               control={form.control}
@@ -320,6 +324,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
+
             {/* Project relation Field */}
             <FormField
               control={form.control}
@@ -347,10 +352,11 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
+
             {/* Task Dependencies Field */}
             <FormField
               control={form.control}
-              name="dependencies"
+              name="dependency"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Task Dependent</FormLabel>

@@ -14,8 +14,6 @@ import { redirect } from "next/navigation";
 import React from "react";
 import UpdateTaskDialog from "../../_components/UpdateTaskDialog";
 import DeleteTaskDialog from "../../_components/DeleteTaskDialog";
-// import UpdateTaskDialog from "../_components/UpdateTaskDialog";
-// import DeleteTaskDialog from "../_components/DeleteTaskDialog";
 
 const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
   const user = await currentUser();
@@ -37,7 +35,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           description: true,
         },
       },
-      dependencies: {
+      dependency: {
         select: {
           id: true,
           name: true,
@@ -100,6 +98,8 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               estimatedHours: task.estimatedHours ?? undefined,
               actualHours: task.actualHours ?? undefined,
               projectId: task.projectId,
+              dependency: task.dependency?.id ?? undefined,
+              dependentOn: task.dependentOn?.id ?? undefined,
               assignedTo: task.assignedTo ?? undefined,
               riskFlag: task.riskFlag ?? false,
             }}
@@ -113,6 +113,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               </Button>
             }
           />
+
           <DeleteTaskDialog
             task={task}
             trigger={
@@ -209,20 +210,14 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {task.dependencies && task.dependencies.length > 0 ? (
-              task.dependencies.map((dependency) => (
-                <p
-                  key={dependency.id}
-                  className="text-lg text-gray-500 font-medium"
-                >
-                  {dependency.name}
-                </p>
-              ))
-            ) : (
+            {task.dependency ? (
+              <p key={task.dependency.id} className="text-lg text-gray-500 font-medium">{task.dependency.name}</p>
+
+            ): (
               <p className="text-sm font-medium text-gray-500 mt-3">
                 No dependencies assigned.
               </p>
-            )}
+            )}            
           </CardContent>
         </Card>
 
@@ -234,15 +229,13 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {task.dependentOn && task.dependentOn.length > 0 ? (
-              task.dependentOn.map((dependent) => (
-                <p
-                  key={dependent.id}
-                  className="text-lg text-gray-500 font-medium"
-                >
-                  {dependent.name}
-                </p>
-              ))
+            {task.dependentOn ? (
+              <p
+                key={task.dependentOn.id}
+                className="text-lg text-gray-500 font-medium"
+              >
+                {task.dependentOn.name}
+              </p>
             ) : (
               <p className="text-sm font-medium text-gray-500 mt-3">
                 No dependencies assigned.

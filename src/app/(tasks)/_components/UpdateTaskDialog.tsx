@@ -1,6 +1,5 @@
 "use client";
 
-
 import React, { ReactNode, useState } from "react";
 import {
   UpdateTaskSchema,
@@ -8,6 +7,7 @@ import {
 } from "../../../../ZodSchema/task";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -51,7 +51,41 @@ interface Props {
   task: UpdateTaskSchemaType;
 }
 
+type Task = {
+  id: string;
+  name: string;
+  status: "Completed" | "Ongoing" | "OnHold" | "Cancelled" | "Todo";
+  priority: "Low" | "Medium" | "High";
+  dueDate: string;
+  assignedTo: string;
+};
+
+type Project = {
+  id: string;
+  name: string;
+  status: "COMPLETED" | "ONGOING" | "CANCELLED";
+  priority: "Low" | "Medium" | "High";
+  deadline: string;
+  startDate: string;
+  budget: number;
+  usedBudget: number;
+  numberOfTasks: number;
+  completedTasks: number;
+};
+
 const UpdateTaskDialog = ({ task, trigger }: Props) => {
+  // fetching task with useQuery
+  const { data: tasks } = useQuery<Task[]>({
+    queryKey: ["Tasks"],
+    queryFn: () => fetch("/api/my-tasks").then((res) => res.json()),
+  });
+
+  // fetching projects with useQuery
+  const { data: projects } = useQuery<Project[]>({
+    queryKey: ["Projects"],
+    queryFn: () => fetch("/api/my-tasks").then((res) => res.json()),
+  });
+
   // opening state for dialog
   const [open, setOpen] = useState(false);
 
@@ -300,9 +334,105 @@ const UpdateTaskDialog = ({ task, trigger }: Props) => {
                 </FormItem>
               )}
             />
+            {/* Project relation Field */}
+            <FormField
+              control={form.control}
+              name="projectId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Select Project</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a project" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {projects &&
+                          projects.map((project) => (
+                            <SelectItem key={project.id} value={project.id}>
+                              {project.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription>
+                    Select the project to associate this task with.
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
+            {/* Task Dependencies Field */}
+            <FormField
+              control={form.control}
+              name="dependency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Task Dependent</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a dependency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tasks &&
+                        tasks.map((task) => (
+                          <SelectItem key={task.id} value={task.id}>
+                            {task.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select the tasks that depend on this task
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+            {/* Dependent Tasks Field */}
+            <FormField
+              control={form.control}
+              name="dependentOn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Task Dependency</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a dependency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tasks &&
+                        tasks.map((task) => (
+                          <SelectItem key={task.id} value={task.id}>
+                            {task.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select the task that this task depends on.
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
           </form>
         </Form>
         <DialogFooter>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                form.reset();
+              }}
+            >
+              Cancel
+            </Button>
+          </DialogClose>
           <Button onClick={form.handleSubmit(onSubmit)} disabled={isPending}>
             {!isPending && "Update"}
             {isPending && <Loader2 className="animate-spin" />}
