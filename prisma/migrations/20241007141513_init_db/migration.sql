@@ -38,8 +38,11 @@ CREATE TABLE "Task" (
     "assignedTo" TEXT,
     "estimatedHours" REAL,
     "actualHours" REAL,
+    "dependencyId" TEXT,
+    "dependentOnId" TEXT,
     "riskFlag" BOOLEAN NOT NULL DEFAULT false,
-    CONSTRAINT "Task_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Task_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Task_dependencyId_fkey" FOREIGN KEY ("dependencyId") REFERENCES "Task" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -47,7 +50,7 @@ CREATE TABLE "TaskHistory" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "taskId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "version" INTEGER NOT NULL,
+    "version" TEXT NOT NULL,
     "changes" TEXT NOT NULL,
     "updatedBy" TEXT NOT NULL,
     "updatedAt" DATETIME,
@@ -100,19 +103,11 @@ CREATE TABLE "YearHistory" (
     PRIMARY KEY ("month", "year", "userId")
 );
 
--- CreateTable
-CREATE TABLE "_TaskDependencies" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL,
-    CONSTRAINT "_TaskDependencies_A_fkey" FOREIGN KEY ("A") REFERENCES "Task" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "_TaskDependencies_B_fkey" FOREIGN KEY ("B") REFERENCES "Task" ("id") ON DELETE CASCADE ON UPDATE CASCADE
-);
+-- CreateIndex
+CREATE UNIQUE INDEX "Task_dependencyId_key" ON "Task"("dependencyId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Task_dependentOnId_key" ON "Task"("dependentOnId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Category_name_userId_type_key" ON "Category"("name", "userId", "type");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_TaskDependencies_AB_unique" ON "_TaskDependencies"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_TaskDependencies_B_index" ON "_TaskDependencies"("B");

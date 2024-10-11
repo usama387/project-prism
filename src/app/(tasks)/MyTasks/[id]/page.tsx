@@ -14,6 +14,8 @@ import { redirect } from "next/navigation";
 import React from "react";
 import UpdateTaskDialog from "../../_components/UpdateTaskDialog";
 import DeleteTaskDialog from "../../_components/DeleteTaskDialog";
+import AddVersionDialog from "../../_components/AddVersionDialog";
+// import CreateTaskVersionDialog from "../../_components/CreateTaskVersionDialog";
 
 const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
   const user = await currentUser();
@@ -126,6 +128,18 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               </Button>
             }
           />
+
+          <AddVersionDialog
+            trigger={
+              <Button
+                className="flex w-full items-center gap-2 text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                variant={"secondary"}
+              >
+                <TrashIcon className="h-4 w-4 " />
+                Add Version
+              </Button>
+            }
+          />
         </div>
       </div>
 
@@ -211,13 +225,17 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           </CardHeader>
           <CardContent>
             {task.dependency ? (
-              <p key={task.dependency.id} className="text-lg text-gray-500 font-medium">{task.dependency.name}</p>
-
-            ): (
+              <p
+                key={task.dependency.id}
+                className="text-lg text-gray-500 font-medium"
+              >
+                {task.dependency.name}
+              </p>
+            ) : (
               <p className="text-sm font-medium text-gray-500 mt-3">
                 No dependencies assigned.
               </p>
-            )}            
+            )}
           </CardContent>
         </Card>
 

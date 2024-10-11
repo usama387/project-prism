@@ -380,6 +380,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
+            
             {/* Dependent Tasks Field */}
             <FormField
               control={form.control}

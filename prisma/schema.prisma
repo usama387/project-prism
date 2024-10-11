@@ -56,15 +56,15 @@ model Task {
   assignedTo     String?
   estimatedHours Float?
   actualHours    Float?
-  
-  dependencyId   String?   @unique
-  dependency     Task?     @relation(name: "TaskDependencies", fields: [dependencyId], references: [id])
 
-  dependentOnId String?       @unique
-  dependentOn   Task?         @relation(name: "TaskDependencies")
+  dependencyId String? @unique
+  dependency   Task?   @relation(name: "TaskDependencies", fields: [dependencyId], references: [id])
 
-  riskFlag      Boolean       @default(false)
-  TaskHistory   TaskHistory[]
+  dependentOnId String? @unique
+  dependentOn   Task?   @relation(name: "TaskDependencies")
+
+  riskFlag    Boolean       @default(false)
+  TaskHistory TaskHistory[]
 }
 
 model TaskHistory {
@@ -72,7 +72,7 @@ model TaskHistory {
   taskId    String
   task      Task      @relation(fields: [taskId], references: [id])
   userId    String
-  version   Int
+  version   String
   changes   String
   updatedBy String
   updatedAt DateTime?
