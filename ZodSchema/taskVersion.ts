@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// schema for adding a version
 export const AddVersionSchema = z.object({
   version: z.string().min(1, "version is Required"),
   changes: z.string(),
@@ -10,3 +11,10 @@ export const AddVersionSchema = z.object({
 });
 
 export type AddVersionSchemaType = z.infer<typeof AddVersionSchema>;
+
+// schema for deleting a version
+export const DeleteVersionSchema = z.object({
+  taskHistoryId: z.string().uuid("Invalid task history id"),
+});
+
+export type DeleteVersionSchemaType = z.infer<typeof DeleteVersionSchema>;
