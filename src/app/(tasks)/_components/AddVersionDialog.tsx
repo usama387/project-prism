@@ -170,7 +170,7 @@ export default function AddVersionDialog({ trigger }: Props) {
               )}
             />
 
-            {/* Due Date Field */}
+            {/* Date Field */}
             <FormField
               control={form.control}
               name="updatedAt"
