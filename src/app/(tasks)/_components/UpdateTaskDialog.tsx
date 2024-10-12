@@ -74,6 +74,7 @@ type Project = {
 };
 
 const UpdateTaskDialog = ({ task, trigger }: Props) => {
+  
   // fetching task with useQuery
   const { data: tasks } = useQuery<Task[]>({
     queryKey: ["Tasks"],
