@@ -1,11 +1,12 @@
 import DeleteVersionDialog from "@/app/(tasks)/_components/DeleteVersionDialog";
+import UpdateVersionDialog from "@/app/(tasks)/_components/UpdateVersionDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import prisma from "@/lib/prisma";
 import { format } from "date-fns";
-import { ArrowLeft, Calendar, TrashIcon, User } from "lucide-react";
+import { ArrowLeft, Calendar, EditIcon, TrashIcon, User } from "lucide-react";
 import Link from "next/link";
 
 const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
@@ -46,7 +47,26 @@ const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
               </CardTitle>
               <Badge>Task Status: {version?.task.status}</Badge>
             </div>
-            <Button variant="outline">Edit Version</Button>
+
+            <UpdateVersionDialog
+              version={{
+                versionId: version.id,
+                version: version.version,
+                changes: version.changes,
+                updatedBy: version.updatedBy,
+                updatedAt: version.updatedAt ?? undefined,
+                taskId: version.taskId,
+              }}
+              trigger={
+                <Button
+                  className="flex w-max items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                  variant={"secondary"}
+                >
+                  <EditIcon className="mr-2 h-4 w-4" />
+                  Edit Version
+                </Button>
+              }
+            />
           </div>
         </CardHeader>
         <CardContent>
@@ -92,7 +112,7 @@ const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
               version={version}
               trigger={
                 <Button
-                  className="flex w-max items-center gap-2 text-muted-foreground text-base text-red-500 hover:bg-red-500/20"
+                  className="flex w-max items-center gap-2 text-muted-foreground text-base text-red-500-500 hover:bg-red-500/20"
                   variant={"secondary"}
                 >
                   <TrashIcon className="h-4 w-4 " />

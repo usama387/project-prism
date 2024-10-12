@@ -135,10 +135,14 @@ const TaskVersionsPage = () => {
                         Actions
                       </DropdownMenuLabel>
                       <DropdownMenuItem className="text-emerald-500 font-bold">
-                        Edit Version
+                        <Link href={`/MyTasks/versions/${version.id}`}>
+                          Edit Version
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem className="text-red-500 font-semibold">
-                        Delete Version
+                        <Link href={`/MyTasks/versions/${version.id}`}>
+                          Delete Version
+                        </Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
