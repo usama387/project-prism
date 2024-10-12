@@ -15,6 +15,14 @@ import React from "react";
 import UpdateTaskDialog from "../../_components/UpdateTaskDialog";
 import DeleteTaskDialog from "../../_components/DeleteTaskDialog";
 import AddVersionDialog from "../../_components/AddVersionDialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 // import CreateTaskVersionDialog from "../../_components/CreateTaskVersionDialog";
 
 const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
@@ -49,6 +57,18 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           name: true,
         },
       },
+      TaskHistory: {
+        select: {
+          id: true,
+          version: true,
+          changes: true,
+          updatedAt: true,
+          updatedBy: true,
+        },
+      },
+    },
+    orderBy: {
+      updatedAt: "desc",
     },
   });
 
@@ -79,7 +99,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           <h1 className="text-3xl sm:text-4xl font-bold text-emerald-500 mb-2">
             {task.name}
           </h1>
-          <p className="text-base sm:text-lg text-gray-500">
+          <p className="text-base sm:text-lg text-gray-700 font-semibold">
             {task.description || "No description available."}
           </p>
         </div>
@@ -107,7 +127,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             }}
             trigger={
               <Button
-                className="flex w-full items-center gap-2 text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
                 variant={"secondary"}
               >
                 <EditIcon className="mr-2 h-4 w-4" />
@@ -120,7 +140,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             task={task}
             trigger={
               <Button
-                className="flex w-full items-center gap-2 text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
                 variant={"secondary"}
               >
                 <TrashIcon className="h-4 w-4 " />
@@ -132,7 +152,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           <AddVersionDialog
             trigger={
               <Button
-                className="flex w-full items-center gap-2 text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
                 variant={"secondary"}
               >
                 <TrashIcon className="h-4 w-4 " />
@@ -147,7 +167,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         {/* Task Status and Priority */}
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Status</CardTitle>
+            <CardTitle className="text-base font-semibold">Status</CardTitle>
             <AlertTriangleIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -173,11 +193,11 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         {/* Task Due Date */}
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Due Date</CardTitle>
+            <CardTitle className="text-base font-semibold">Due Date</CardTitle>
             <CalendarIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <p className="text-lg font-medium">
+            <p className="text-lg font-semibold">
               {task.dueDate
                 ? new Date(task.dueDate).toLocaleDateString()
                 : "N/A"}
@@ -188,7 +208,9 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         {/* Task Estimated and Actual Hours */}
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Time Spent</CardTitle>
+            <CardTitle className="text-base font-semibold">
+              Time Spent
+            </CardTitle>
             <ClockIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -204,7 +226,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         {/* Project Details */}
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-base font-semibold">
               Project Details
             </CardTitle>
           </CardHeader>
@@ -219,7 +241,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         {/* Task Dependency */}
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-base font-medium">
               Task Dependencies
             </CardTitle>
           </CardHeader>
@@ -227,7 +249,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             {task.dependency ? (
               <p
                 key={task.dependency.id}
-                className="text-lg text-gray-500 font-medium"
+                className="text-lg text-gray-700 font-medium"
               >
                 {task.dependency.name}
               </p>
@@ -242,7 +264,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         {/* Task Dependent On */}
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-base font-medium">
               Dependant Tasks
             </CardTitle>
           </CardHeader>
@@ -250,7 +272,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             {task.dependentOn ? (
               <p
                 key={task.dependentOn.id}
-                className="text-lg text-gray-500 font-medium"
+                className="text-lg text-gray-700 font-medium"
               >
                 {task.dependentOn.name}
               </p>
@@ -261,6 +283,58 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             )}
           </CardContent>
         </Card>
+      </div>
+
+      {/* Task History Table */}
+      <div className="mt-12">
+        <h3 className="text-2xl font-bold mb-4">Task Versions</h3>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-gray-700 text-base font-semibold">
+                  Version
+                </TableHead>
+                <TableHead className="text-gray-700 text-base font-semibold">
+                  Changes
+                </TableHead>
+                <TableHead className="text-gray-700 text-base font-semibold">
+                  Updated At
+                </TableHead>
+                <TableHead className="text-gray-700 text-base font-semibold">
+                  Updated By
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {task.TaskHistory.length > 0 ? (
+                task.TaskHistory.map((history) => (
+                  <TableRow key={history.id}>
+                    <TableCell className="font-semibold text-base text-gray-700">
+                      {history.version}
+                    </TableCell>
+                    <TableCell className="font-semibold text-base text-gray-700">
+                      {history.changes}
+                    </TableCell>
+                    <TableCell className="font-semibold text-base text-gray-700">
+                      {history.updatedAt &&
+                        new Date(history.updatedAt).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="font-semibold text-base text-gray-700">
+                      {history.updatedBy}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center">
+                    No history available.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );
