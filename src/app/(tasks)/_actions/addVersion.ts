@@ -8,6 +8,7 @@ import {
   AddVersionSchema,
   AddVersionSchemaType,
 } from "../../../../ZodSchema/taskVersion";
+import { revalidatePath } from "next/cache";
 
 export const AddVersion = async (form: AddVersionSchemaType) => {
   // validating form data
@@ -26,7 +27,7 @@ export const AddVersion = async (form: AddVersionSchemaType) => {
 
   const { version, changes, taskId, updatedBy, updatedAt } = parsedBody.data;
 
-  const createdTask = await prisma.taskHistory.create({
+  const addedVersion = await prisma.taskHistory.create({
     data: {
       version,
       changes,
@@ -39,5 +40,7 @@ export const AddVersion = async (form: AddVersionSchemaType) => {
     },
   });
 
-  return createdTask;
+  revalidatePath("/MyTasks/versions");
+
+  return addedVersion;
 };
