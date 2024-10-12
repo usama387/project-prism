@@ -127,6 +127,9 @@ export const UpdateTask = async (form: UpdateTaskSchemaType) => {
     estimatedHours,
     actualHours,
     riskFlag,
+    projectId,
+    dependency,
+    dependentOn,
   } = parsedBody.data;
 
   const UpdatedTask = await prisma.task.update({
@@ -144,6 +147,21 @@ export const UpdateTask = async (form: UpdateTaskSchemaType) => {
       estimatedHours,
       actualHours,
       riskFlag,
+      project: {
+        connect: {
+          id: projectId,
+        },
+      },
+      dependency: dependency
+        ? {
+            connect: { id: dependency },
+          }
+        : undefined,
+      dependentOn: dependentOn
+        ? {
+            connect: { id: dependentOn },
+          }
+        : undefined,
     },
   });
 

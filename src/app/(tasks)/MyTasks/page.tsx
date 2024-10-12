@@ -18,6 +18,10 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Task = {
+  project?: {
+    id: string;
+    name: string;
+  };
   id: string;
   name: string;
   status: "Completed" | "Ongoing" | "OnHold" | "Cancelled" | "Todo";
@@ -27,7 +31,6 @@ type Task = {
 };
 
 const MyTaskPage = () => {
-  
   // fetching task with useQuery
   const { data: tasks = [], isLoading } = useQuery<Task[]>({
     queryKey: ["Tasks"],
@@ -48,11 +51,13 @@ const MyTaskPage = () => {
 
   // being used in ProjectsPage.status
   const statusColors = {
-    Completed: "border-emerald-500 bg-emerald-950 text-white",
-    Ongoing: "border-rose-500 bg-rose-950 text-white",
-    OnHold: "border-rose-500 bg-rose-950 text-white",
+    Completed: "border-rose-500 bg-rose-950 text-white hover:border-blue-700",
+    Ongoing:
+      "border-emerald-500 bg-emerald-950 text-white hover:border-emerald-700 hover:text-white",
+    OnHold:
+      "border-rose-500 bg-rose-950 text-white hover:border-emerald-700 hover:text-white",
     Cancelled: "border-rose-500 bg-rose-950 text-white",
-    Todo: "border-rose-500 bg-rose-950 text-white",
+    Todo: "border-rose-500 bg-rose-950 text-white hover:border-blue-700",
   };
 
   // pagination logic
@@ -99,11 +104,17 @@ const MyTaskPage = () => {
                 <CardContent>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium">Project:</span>
+                      {task.project?.name}
+                    </div>
+
+                    <div className="flex justify-between items-center">
                       <span className="text-sm font-medium">Status:</span>
                       <span className={statusColors[task.status]}>
                         {task.status}
                       </span>
                     </div>
+
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium">Priority:</span>
                       <Badge className={priorityColors[task.priority]}>
@@ -116,10 +127,7 @@ const MyTaskPage = () => {
                         {format(new Date(task.dueDate), "PP")}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium">Assigned To:</span>
-                      <span className="text-sm">{task.assignedTo}</span>
-                    </div>
+
                     <Link href={`/MyTasks/${task.id}`} className="w-full mt-4">
                       <Button
                         variant="outline"

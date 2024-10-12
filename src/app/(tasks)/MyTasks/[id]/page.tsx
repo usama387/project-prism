@@ -23,7 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-// import CreateTaskVersionDialog from "../../_components/CreateTaskVersionDialog";
 
 const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
   const user = await currentUser();
@@ -104,6 +103,8 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+          
+          {/* Dialog to update task details */}
           <UpdateTaskDialog
             task={{
               taskId: task.id,
@@ -135,7 +136,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               </Button>
             }
           />
-
+          {/* Dialog to delete a task */}
           <DeleteTaskDialog
             task={task}
             trigger={
@@ -149,6 +150,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             }
           />
 
+          {/* Dialog to add a new task version */}
           <AddVersionDialog
             trigger={
               <Button

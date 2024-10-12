@@ -38,7 +38,7 @@ export const UpdateTaskSchema = z.object({
   estimatedHours: z.number().positive().optional(),
   actualHours: z.number().nonnegative().optional(),
   riskFlag: z.boolean().optional(),
-  projectId: z.string().uuid("Invalid project ID").optional(),
+  projectId: z.string().uuid("Invalid project ID"),
   dependency: z.string().optional(),
   dependentOn: z.string().optional(),
 });
