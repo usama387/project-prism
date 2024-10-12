@@ -11,7 +11,7 @@ import prisma from "@/lib/prisma";
 export const DeleteTaskVersion = async (form: DeleteVersionSchemaType) => {
   const parsedBody = DeleteVersionSchema.safeParse(form);
 
-  if (!parsedBody) {
+  if (!parsedBody.success) {
     throw new Error("Invalid id");
   }
 
