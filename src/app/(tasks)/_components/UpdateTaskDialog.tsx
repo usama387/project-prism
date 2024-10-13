@@ -54,7 +54,7 @@ interface Props {
 type Task = {
   id: string;
   name: string;
-  status: "Completed" | "Ongoing" | "OnHold" | "Cancelled" | "Todo";
+  status: "Completed" | "Ongoing" | "Backlog" | "Cancelled" | "Todo"| "Overdue";
   priority: "Low" | "Medium" | "High";
   assignedTo: "Usama" | "Maryam" | "Noor" | "Abdul Wasay";
   dueDate: string;

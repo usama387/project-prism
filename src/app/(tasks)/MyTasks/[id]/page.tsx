@@ -114,8 +114,9 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
                 | "Completed"
                 | "Ongoing"
                 | "Cancelled"
-                | "OnHold"
-                | "Todo",
+                | "Backlog"
+                | "Todo"
+                | "Overdue",
               priority: task.priority as "High" | "Medium" | "Low",
               estimatedHours: task.estimatedHours ?? undefined,
               actualHours: task.actualHours ?? undefined,

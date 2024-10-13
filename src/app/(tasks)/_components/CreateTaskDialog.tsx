@@ -172,8 +172,9 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                         <SelectItem value="Ongoing">Ongoing</SelectItem>
                         <SelectItem value="Completed">Completed</SelectItem>
                         <SelectItem value="Cancelled">Cancelled</SelectItem>
-                        <SelectItem value="OnHold">On Hold</SelectItem>
+                        <SelectItem value="Backlog">Backlog</SelectItem>
                         <SelectItem value="Todo">To Do</SelectItem>
+                        <SelectItem value="Overdue">Overdue</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>

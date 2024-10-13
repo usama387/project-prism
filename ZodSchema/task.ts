@@ -30,7 +30,7 @@ export const UpdateTaskSchema = z.object({
   name: z.string().min(1, "Task name is Required").optional(),
   description: z.string().optional(),
   status: z
-    .enum(["Todo", "Completed", "OnHold", "Ongoing", "Cancelled"])
+    .enum(["Todo", "Completed", "Backlog", "Ongoing", "Cancelled", "Overdue"])
     .optional(),
   priority: z.enum(["Low", "Medium", "High"]).optional(),
   dueDate: z.date().optional(),
