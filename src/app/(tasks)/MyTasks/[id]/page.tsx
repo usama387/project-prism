@@ -90,11 +90,11 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-4xl sm:text-2xl font-bold text-center mb-8 gradient-text">
+      <h1 className="text-4xl sm:text-2xl font-bold mb-8 animate-slideIn">
         Task Overview
-      </h2>
+      </h1>
       <div className="mb-8 flex flex-col space-y-6 sm:flex-row sm:justify-between sm:items-center">
-        <div>
+        <div className="animate-slideIn">
           <h1 className="text-3xl sm:text-4xl font-bold text-emerald-500 mb-2">
             {task.name}
           </h1>
@@ -288,7 +288,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
 
       {/* Task History Table */}
       <div className="mt-12">
-        <h3 className="text-2xl font-bold mb-4">Task Versions</h3>
+        <h3 className="text-2xl font-bold mb-4 animate-slideIn">Task Versions</h3>
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
