@@ -103,7 +103,6 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          
           {/* Dialog to update task details */}
           <UpdateTaskDialog
             task={{
@@ -294,16 +293,16 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="text-gray-700 text-base font-semibold">
+                <TableHead className="text-gray-700 text-base font-extrabold">
                   Version
                 </TableHead>
-                <TableHead className="text-gray-700 text-base font-semibold">
+                <TableHead className="text-gray-700 text-base font-extrabold">
                   Changes
                 </TableHead>
-                <TableHead className="text-gray-700 text-base font-semibold">
+                <TableHead className="text-gray-700 text-base font-extrabold">
                   Updated At
                 </TableHead>
-                <TableHead className="text-gray-700 text-base font-semibold">
+                <TableHead className="text-gray-700 text-base font-extrabold">
                   Updated By
                 </TableHead>
               </TableRow>
@@ -312,17 +311,17 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               {task.TaskHistory.length > 0 ? (
                 task.TaskHistory.map((history) => (
                   <TableRow key={history.id}>
-                    <TableCell className="font-semibold text-base text-gray-700">
+                    <TableCell className="font-semibold text-base text-emerald-500">
                       {history.version}
                     </TableCell>
-                    <TableCell className="font-semibold text-base text-gray-700">
+                    <TableCell className="font-semibold text-base text-emerald-500">
                       {history.changes}
                     </TableCell>
-                    <TableCell className="font-semibold text-base text-gray-700">
+                    <TableCell className="font-semibold text-base text-emerald-500">
                       {history.updatedAt &&
                         new Date(history.updatedAt).toLocaleDateString()}
                     </TableCell>
-                    <TableCell className="font-semibold text-base text-gray-700">
+                    <TableCell className="font-semibold text-base text-emerald-500">
                       {history.updatedBy}
                     </TableCell>
                   </TableRow>
