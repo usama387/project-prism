@@ -183,6 +183,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
+
             {/* Task Priority Field */}
             <FormField
               control={form.control}
@@ -211,6 +212,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
+
             {/* Due Date Field */}
             <FormField
               control={form.control}
@@ -245,6 +247,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
+
             {/* Task Responsible Person */}
             <FormField
               control={form.control}
@@ -253,7 +256,20 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 <FormItem>
                   <FormLabel>Assigned To</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter assignee name" {...field} />
+                    <Select
+                      value={field.value} // Controlled value from the form state
+                      onValueChange={field.onChange} // Update the form state when the user selects a priority
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a person" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="usama">Usama</SelectItem>
+                        <SelectItem value="Maryam">Maryam</SelectItem>
+                        <SelectItem value="Noor">Noor</SelectItem>
+                        <SelectItem value="Abdul Wasay">Abdul Wasay</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormDescription>
                     Who is responsible for this task?
@@ -261,7 +277,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
-            
+
             {/* Estimated Hours Field */}
             <FormField
               control={form.control}
@@ -380,7 +396,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
                 </FormItem>
               )}
             />
-            
+
             {/* Dependent Tasks Field */}
             <FormField
               control={form.control}

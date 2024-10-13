@@ -34,7 +34,7 @@ export const UpdateTaskSchema = z.object({
     .optional(),
   priority: z.enum(["Low", "Medium", "High"]).optional(),
   dueDate: z.date().optional(),
-  assignedTo: z.string().optional(),
+  assignedTo: z.enum(["Usama", "Maryam", "Noor", "Abdul Wasay"]).optional(),
   estimatedHours: z.number().positive().optional(),
   actualHours: z.number().nonnegative().optional(),
   riskFlag: z.boolean().optional(),

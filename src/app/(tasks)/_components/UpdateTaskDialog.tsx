@@ -56,8 +56,8 @@ type Task = {
   name: string;
   status: "Completed" | "Ongoing" | "OnHold" | "Cancelled" | "Todo";
   priority: "Low" | "Medium" | "High";
+  assignedTo: "Usama" | "Maryam" | "Noor" | "Abdul Wasay";
   dueDate: string;
-  assignedTo: string;
 };
 
 type Project = {
@@ -74,7 +74,6 @@ type Project = {
 };
 
 const UpdateTaskDialog = ({ task, trigger }: Props) => {
-  
   // fetching task with useQuery
   const { data: tasks } = useQuery<Task[]>({
     queryKey: ["Tasks"],
