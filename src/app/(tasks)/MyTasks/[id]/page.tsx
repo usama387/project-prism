@@ -122,7 +122,11 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               projectId: task.projectId,
               dependency: task.dependency?.id ?? undefined,
               dependentOn: task.dependentOn?.id ?? undefined,
-              assignedTo: task.assignedTo ?? undefined,
+              assignedTo: task.assignedTo as
+                | "Usama"
+                | "Maryam"
+                | "Noor"
+                | "Abdul Wasay",
               riskFlag: task.riskFlag ?? false,
             }}
             trigger={
@@ -166,7 +170,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {/* Task Status and Priority */}
-        <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
+        <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground flex flex-col gap-4">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-base font-semibold">Status</CardTitle>
             <AlertTriangleIcon className="h-4 w-4 text-muted-foreground" />
@@ -194,16 +198,23 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         {/* Task Due Date */}
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-base font-semibold">Due Date</CardTitle>
-            <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-col gap-4">
+              <CardTitle className="text-base font-semibold">
+                Deadline
+              </CardTitle>
+              <p className="text-lg font-semibold">
+                {task.dueDate
+                  ? new Date(task.dueDate).toLocaleDateString()
+                  : "N/A"}
+              </p>
+            </div>
+            <div className="flex flex-col gap-4">
+              <CardTitle className="text-base font-semibold">
+                Assigned To
+              </CardTitle>
+              <p>{task.assignedTo || "Not assigned"}</p>
+            </div>
           </CardHeader>
-          <CardContent>
-            <p className="text-lg font-semibold">
-              {task.dueDate
-                ? new Date(task.dueDate).toLocaleDateString()
-                : "N/A"}
-            </p>
-          </CardContent>
         </Card>
 
         {/* Task Estimated and Actual Hours */}
@@ -214,13 +225,14 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             </CardTitle>
             <ClockIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-lg">
-              <p className="font-medium">
-                Estimated Hours: {task.estimatedHours}
-              </p>
-              <p className="font-medium">Actual Hours: {task.actualHours}</p>
-            </div>
+          <CardContent className="flex flex-row items-center justify-between pb-2">
+            <p className="text-base font-semibold">
+              Estimated Hours: {task.estimatedHours}
+            </p>
+
+            <p className="font-medium">
+              Actual Hours: {task.actualHours || "N/A"}
+            </p>
           </CardContent>
         </Card>
 
@@ -228,7 +240,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-base font-semibold">
-              Project Details
+              Project Title
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -288,7 +300,9 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
 
       {/* Task History Table */}
       <div className="mt-12">
-        <h3 className="text-2xl font-bold mb-4 animate-slideIn">Task Versions</h3>
+        <h3 className="text-2xl font-bold mb-4 animate-slideIn">
+          Task Versions
+        </h3>
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
