@@ -161,7 +161,8 @@ const UpdateVersionDialog = ({ version, trigger }: Props) => {
               control={form.control}
               name="updatedAt"
               render={({ field }) => (
-                <FormItem className="flex items-center justify-between">
+                <FormItem>
+                  <FormLabel>Updated At</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

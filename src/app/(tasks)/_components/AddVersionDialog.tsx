@@ -66,7 +66,7 @@ type Task = {
 
 export default function AddVersionDialog({ trigger }: Props) {
   // fetching task with useQuery
-  const { data: tasks} = useQuery<Task[]>({
+  const { data: tasks } = useQuery<Task[]>({
     queryKey: ["Tasks"],
     queryFn: () => fetch("/api/my-tasks").then((res) => res.json()),
   });
@@ -175,7 +175,8 @@ export default function AddVersionDialog({ trigger }: Props) {
               control={form.control}
               name="updatedAt"
               render={({ field }) => (
-                <FormItem className="flex items-center justify-between">
+                <FormItem>
+                  <FormLabel>Updated At</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
