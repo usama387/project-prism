@@ -88,8 +88,8 @@ const MyTaskPage = () => {
 
   return (
     <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
-        My Tasks
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 animate-slideIn">
+        All Tasks
       </h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {isLoading
