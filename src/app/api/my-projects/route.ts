@@ -15,6 +15,24 @@ export const GET = async () => {
     where: {
       userId: user.id,
     },
+    include: {
+      tasks: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          status: true,
+          dueDate: true,
+
+          // Count task histories / versions for each task
+          _count: {
+            select: {
+              TaskHistory: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   revalidatePath("/MyProjects");
