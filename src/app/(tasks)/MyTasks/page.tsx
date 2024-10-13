@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +16,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Task = {
   project?: {
@@ -31,16 +38,20 @@ type Task = {
 };
 
 const MyTaskPage = () => {
-  // fetching task with useQuery
+  // fetching api that returns all tasks
   const { data: tasks = [], isLoading } = useQuery<Task[]>({
     queryKey: ["Tasks"],
     queryFn: () => fetch("/api/my-tasks").then((res) => res.json()),
   });
 
-  //   setting first page as default page
+  // pagination logic
   const [currentPage, setCurrentPage] = useState(1);
   const tasksPerPage = 9;
-  const totalPages = Math.ceil(tasks.length / tasksPerPage);
+
+  // added 3 states for filters
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [priorityFilter, setPriorityFilter] = useState<string | null>(null);
+  const [projectFilter, setProjectFilter] = useState<string | null>(null);
 
   const priorityColors = {
     High: "border-emerald-500 bg-emerald-950 text-white hover:border-emerald-700 hover:text-white",
@@ -49,7 +60,6 @@ const MyTaskPage = () => {
       "border-rose-500 bg-rose-950 text-white hover:border-emerald-700 hover:text-white",
   };
 
-  // being used in ProjectsPage.status
   const statusColors = {
     Completed: "border-rose-500 bg-rose-950 text-white hover:border-blue-700",
     Ongoing:
@@ -60,10 +70,25 @@ const MyTaskPage = () => {
     Todo: "border-rose-500 bg-rose-950 text-white hover:border-blue-700",
   };
 
-  // pagination logic
-  const indexOfLastTask = currentPage * tasksPerPage;
-  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
-  const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
+  // Added filteredTasks using useMemo for performance
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((task) => {
+      const statusMatch = !statusFilter || task.status === statusFilter;
+      const priorityMatch = !priorityFilter || task.priority === priorityFilter;
+      const projectMatch =
+        !projectFilter || task.project?.name === projectFilter;
+      return statusMatch && priorityMatch && projectMatch;
+    });
+  }, [tasks, statusFilter, priorityFilter, projectFilter]);
+
+  // Updated to use filteredTasks instead of tasks which was before filtration
+  const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
+
+  // pagination calculation logic
+  const currentTasks = filteredTasks.slice(
+    (currentPage - 1) * tasksPerPage,
+    currentPage * tasksPerPage
+  );
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -91,6 +116,64 @@ const MyTaskPage = () => {
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 animate-slideIn">
         All Tasks
       </h1>
+
+      {/* div that implements filter ui */}
+      <div className="flex flex-wrap gap-4 mb-6">
+        <Select
+          onValueChange={(value) =>
+            setStatusFilter(value === "all" ? null : value)
+          }
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="Completed">Completed</SelectItem>
+            <SelectItem value="Ongoing">Ongoing</SelectItem>
+            <SelectItem value="On Hold">On Hold</SelectItem>
+            <SelectItem value="Cancelled">Cancelled</SelectItem>
+            <SelectItem value="Todo">Todo</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          onValueChange={(value) =>
+            setPriorityFilter(value === "all" ? null : value)
+          }
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by Priority" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Priorities</SelectItem>
+            <SelectItem value="Low">Low</SelectItem>
+            <SelectItem value="Medium">Medium</SelectItem>
+            <SelectItem value="High">High</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          onValueChange={(value) =>
+            setProjectFilter(value === "all" ? null : value)
+          }
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by Project" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Projects</SelectItem>
+            {Array.from(new Set(tasks.map((task) => task.project?.name))).map(
+              (projectName) => (
+                <SelectItem key={projectName} value={projectName || "unnamed"}>
+                  {projectName || "Unnamed Project"}
+                </SelectItem>
+              )
+            )}
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {isLoading
           ? [...Array(9)].map((_, index) => <TaskSkeleton key={index} />)
@@ -143,7 +226,6 @@ const MyTaskPage = () => {
             ))}
       </div>
 
-      {/* pagination logic starts from here */}
       {!isLoading && (
         <Pagination className="mt-8">
           <PaginationContent>
