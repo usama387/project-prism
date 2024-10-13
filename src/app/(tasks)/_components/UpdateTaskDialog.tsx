@@ -54,7 +54,7 @@ interface Props {
 type Task = {
   id: string;
   name: string;
-  status: "Completed" | "Ongoing" | "Backlog" | "Cancelled" | "Todo"| "Overdue";
+  status: "Completed" | "Ongoing" | "On Hold" | "Cancelled" | "Todo"| "Overdue";
   priority: "Low" | "Medium" | "High";
   assignedTo: "Usama" | "Maryam" | "Noor" | "Abdul Wasay";
   dueDate: string;
@@ -183,7 +183,7 @@ const UpdateTaskDialog = ({ task, trigger }: Props) => {
                         <SelectItem value="Ongoing">Ongoing</SelectItem>
                         <SelectItem value="Completed">Completed</SelectItem>
                         <SelectItem value="Cancelled">Cancelled</SelectItem>
-                        <SelectItem value="OnHold">On Hold</SelectItem>
+                        <SelectItem value="On Hold">On Hold</SelectItem>
                         <SelectItem value="Todo">To Do</SelectItem>
                       </SelectContent>
                     </Select>
