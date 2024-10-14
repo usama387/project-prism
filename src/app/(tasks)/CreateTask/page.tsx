@@ -25,7 +25,7 @@ const CreateTaskPage = async () => {
 
   return (
     <>
-      <div className="mb-12">
+      <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <h2 className="mt-4 text-center text-base text-muted-foreground">
           Let's get started by setting up your task
         </h2>
