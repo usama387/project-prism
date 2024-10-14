@@ -54,7 +54,13 @@ interface Props {
 type Task = {
   id: string;
   name: string;
-  status: "Completed" | "Ongoing" | "On Hold" | "Cancelled" | "Todo"| "Overdue";
+  status:
+    | "Completed"
+    | "Ongoing"
+    | "On Hold"
+    | "Cancelled"
+    | "Todo"
+    | "Overdue";
   priority: "Low" | "Medium" | "High";
   assignedTo: "Usama" | "Maryam" | "Noor" | "Abdul Wasay";
   dueDate: string;
@@ -229,6 +235,7 @@ const UpdateTaskDialog = ({ task, trigger }: Props) => {
               name="dueDate"
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
+                  <FormLabel>Deadline:</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -265,14 +272,28 @@ const UpdateTaskDialog = ({ task, trigger }: Props) => {
                 <FormItem>
                   <FormLabel>Assigned To</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter assignee name" {...field} />
+                    <Select
+                      value={field.value} // Controlled value from the form state
+                      onValueChange={field.onChange} // Update the form state when the user selects a priority
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a priority" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Usama">Usama</SelectItem>
+                        <SelectItem value="Maryam">Maryam</SelectItem>
+                        <SelectItem value="Noor">Noor</SelectItem>
+                        <SelectItem value="Abdul Wasay">Abdul Wasay</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormDescription>
-                    Who is responsible for this task?
+                    Who is responsible for the task?
                   </FormDescription>
                 </FormItem>
               )}
             />
+
             {/* Estimated Hours Field */}
             <FormField
               control={form.control}
