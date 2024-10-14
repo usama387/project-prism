@@ -61,9 +61,9 @@ const TaskVersionsPage = () => {
   if (error) return <div>An error occurred: {error.message}</div>;
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-lg md:text-xl font-semibold">Versions</h1>
+        <h1 className="text-lg md:text-xl font-bold animate-slideIn ">Versions</h1>
 
         {/* child component to add a version of task */}
         <AddVersionDialog
@@ -76,7 +76,7 @@ const TaskVersionsPage = () => {
       </div>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="animate-slideIn">
             <TableHead className="text-left text-sm md:text-base">
               Version
             </TableHead>
