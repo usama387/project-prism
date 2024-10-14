@@ -296,7 +296,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
               control={form.control}
               name="startDate"
               render={({ field }) => (
-                <FormItem className="flex items-center justify-between">
+                <FormItem>
                   <FormLabel>Start Date:</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -332,7 +332,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
               control={form.control}
               name="deadline"
               render={({ field }) => (
-                <FormItem className="flex items-center justify-between">
+                <FormItem>
                   <FormLabel>Deadline:</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
