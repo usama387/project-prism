@@ -191,6 +191,7 @@ const UpdateTaskDialog = ({ task, trigger }: Props) => {
                         <SelectItem value="Cancelled">Cancelled</SelectItem>
                         <SelectItem value="On Hold">On Hold</SelectItem>
                         <SelectItem value="Todo">To Do</SelectItem>
+                        <SelectItem value="Overdue">Overdue</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
