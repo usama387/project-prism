@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import RootProvider from "@/providers/RootProvider";
 import { Toaster } from "@/components/ui/sonner";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
         <Toaster richColors position="bottom-right" />
         <RootProvider>
           <body className={inter.className}>
+            <Navbar />
             {children}
             <Footer />
           </body>
