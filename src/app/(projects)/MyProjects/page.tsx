@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,14 @@ import {
 } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 
 // Define the Project type with the status field
 type Project = {
@@ -53,7 +61,6 @@ const priorityColors = {
 const queryClient = new QueryClient();
 
 function ProjectsPageContent() {
-  
   // Fetching projects with useQuery
   const { data: projects = [] } = useQuery<Project[]>({
     queryKey: ["projects"],
@@ -63,23 +70,116 @@ function ProjectsPageContent() {
   // Managing page state
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Calculating total pages
-  const totalPages = Math.ceil(projects.length / PROJECTS_PER_PAGE);
+  // added 3 states for filters
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [priorityFilter, setPriorityFilter] = useState<string | null>(null);
+  const [monthFilter, setMonthFilter] = useState<string | null>(null);
+
+  const filteredProjects = useMemo(() => {
+    return projects.filter((project) => {
+      const statusMatch = !statusFilter || project.status === statusFilter;
+      const priorityMatch =
+        !priorityFilter || project.priority === priorityFilter;
+
+      let monthMatch = true;
+      if (monthFilter) {
+        const deadline = project.deadline ? new Date(project.deadline) : null;
+        const currentYear = new Date().getFullYear();
+        const filterMonth = parseInt(monthFilter, 10) - 1; // JavaScript months are 0-indexed
+        monthMatch =
+          deadline?.getMonth() === filterMonth &&
+          deadline.getFullYear() === currentYear;
+      }
+      return statusMatch && priorityMatch && monthMatch;
+    });
+  }, [projects, statusFilter, priorityFilter, monthFilter]);
+
+  // Calculating total pages with filtered projects
+  const totalPages = Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE);
 
   // Slicing the projects for pagination
   const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE;
   const endIndex = startIndex + PROJECTS_PER_PAGE;
-  const currentProjects = projects.slice(startIndex, endIndex);
+  const currentProjects = filteredProjects.slice(startIndex, endIndex);
+
+  const resetPage = () => setCurrentPage(1);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-center sm:text-left">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-center sm:text-left animate-slideIn">
         Projects
       </h1>
+
+      {/* div that implements filter ui for projects*/}
+      <div className="flex flex-wrap gap-4 mb-6 animate-slideIn">
+        {/* Status Filter */}
+        <Select
+          onValueChange={(value) => {
+            setStatusFilter(value === "all" ? null : value);
+            resetPage();
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="COMPLETED">COMPLETED</SelectItem>
+            <SelectItem value="ONGOING">ONGOING</SelectItem>
+            <SelectItem value="CANCELLED">CANCELLED</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Priority Filter */}
+        <Select
+          onValueChange={(value) => {
+            setPriorityFilter(value === "all" ? null : value);
+            resetPage();
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by Priority" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Priorities</SelectItem>
+            <SelectItem value="Low">Low</SelectItem>
+            <SelectItem value="Medium">Medium</SelectItem>
+            <SelectItem value="High">High</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Deadline Filter */}
+        <Select
+          onValueChange={(value) => {
+            setMonthFilter(value === "all" ? null : value);
+            resetPage();
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by Deadline" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Months</SelectItem>
+            <SelectItem value="1">January</SelectItem>
+            <SelectItem value="2">February</SelectItem>
+            <SelectItem value="3">March</SelectItem>
+            <SelectItem value="4">April</SelectItem>
+            <SelectItem value="5">May</SelectItem>
+            <SelectItem value="6">June</SelectItem>
+            <SelectItem value="7">July</SelectItem>
+            <SelectItem value="8">August</SelectItem>
+            <SelectItem value="9">September</SelectItem>
+            <SelectItem value="10">October</SelectItem>
+            <SelectItem value="11">November</SelectItem>
+            <SelectItem value="12">December</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {/*  skeleton screen when data is not available */}
         {projects.length === 0
           ? Array.from({ length: PROJECTS_PER_PAGE }).map((_, index) => (
-            // skeleton screen when data is not available
               <Card key={index} className="flex flex-col">
                 <CardHeader>
                   <Skeleton className="h-6 w-3/4" />
@@ -94,7 +194,7 @@ function ProjectsPageContent() {
               </Card>
             ))
           : currentProjects.map((project: Project) => (
-            // when data is available the card renders with project details inside link component to direct user on single page
+              // when data is available the card renders with project details inside link component to direct user on single page
               <Link href={`/MyProjects/${project.id}`}>
                 <Card key={project.id} className="flex flex-col">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -127,7 +227,6 @@ function ProjectsPageContent() {
                             : "N/A"}
                         </p>
                       </div>
-
                     </div>
                     <div className="flex items-center justify-between mt-4">
                       <h4>Priority:</h4>
@@ -174,6 +273,7 @@ function ProjectsPageContent() {
             </PaginationItem>
           </PaginationContent>
         </Pagination>
+        <Separator className="mt-8" />
       </div>
     </div>
   );
