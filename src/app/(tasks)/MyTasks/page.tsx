@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 
 type Task = {
   project?: {
@@ -48,10 +49,11 @@ const MyTaskPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const tasksPerPage = 9;
 
-  // added 3 states for filters
+  // useState hook for all filters
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [priorityFilter, setPriorityFilter] = useState<string | null>(null);
   const [projectFilter, setProjectFilter] = useState<string | null>(null);
+  const [monthFilter, setMonthFilter] = useState<string | null>(null);
 
   const priorityColors = {
     High: "border-emerald-500 bg-emerald-950 text-white hover:border-emerald-700 hover:text-white",
@@ -77,9 +79,20 @@ const MyTaskPage = () => {
       const priorityMatch = !priorityFilter || task.priority === priorityFilter;
       const projectMatch =
         !projectFilter || task.project?.name === projectFilter;
-      return statusMatch && priorityMatch && projectMatch;
+
+      let monthMatch = true;
+      if (monthFilter) {
+        const dueDate = task.dueDate ? new Date(task.dueDate) : null;
+        const currentYear = new Date().getFullYear();
+        const filterMonth = parseInt(monthFilter, 10) - 1; // JavaScript months are 0-indexed
+        monthMatch =
+          dueDate?.getMonth() === filterMonth &&
+          dueDate.getFullYear() === currentYear;
+      }
+
+      return statusMatch && priorityMatch && projectMatch && monthMatch;
     });
-  }, [tasks, statusFilter, priorityFilter, projectFilter]);
+  }, [tasks, statusFilter, priorityFilter, projectFilter, monthFilter]);
 
   // Updated to use filteredTasks instead of tasks which was before filtration
   const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
@@ -91,6 +104,8 @@ const MyTaskPage = () => {
   );
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const resetPage = () => setCurrentPage(1);
 
   const TaskSkeleton = () => (
     <Card>
@@ -114,15 +129,16 @@ const MyTaskPage = () => {
   return (
     <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 animate-slideIn">
-        All Tasks
+        Tasks
       </h1>
 
       {/* div that implements filter ui */}
       <div className="flex flex-wrap gap-4 mb-6">
         <Select
-          onValueChange={(value) =>
-            setStatusFilter(value === "all" ? null : value)
-          }
+          onValueChange={(value) => {
+            setStatusFilter(value === "all" ? null : value);
+            resetPage();
+          }}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter by Status" />
@@ -138,9 +154,10 @@ const MyTaskPage = () => {
         </Select>
 
         <Select
-          onValueChange={(value) =>
-            setPriorityFilter(value === "all" ? null : value)
-          }
+          onValueChange={(value) => {
+            setPriorityFilter(value === "all" ? null : value);
+            resetPage();
+          }}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter by Priority" />
@@ -154,9 +171,10 @@ const MyTaskPage = () => {
         </Select>
 
         <Select
-          onValueChange={(value) =>
-            setProjectFilter(value === "all" ? null : value)
-          }
+          onValueChange={(value) => {
+            setProjectFilter(value === "all" ? null : value);
+            resetPage();
+          }}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter by Project" />
@@ -172,10 +190,38 @@ const MyTaskPage = () => {
             )}
           </SelectContent>
         </Select>
+
+        {/* DueDate Filter */}
+        <Select
+          onValueChange={(value) => {
+            setMonthFilter(value === "all" ? null : value);
+            resetPage();
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by Deadline" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Months</SelectItem>
+            <SelectItem value="1">January</SelectItem>
+            <SelectItem value="2">February</SelectItem>
+            <SelectItem value="3">March</SelectItem>
+            <SelectItem value="4">April</SelectItem>
+            <SelectItem value="5">May</SelectItem>
+            <SelectItem value="6">June</SelectItem>
+            <SelectItem value="7">July</SelectItem>
+            <SelectItem value="8">August</SelectItem>
+            <SelectItem value="9">September</SelectItem>
+            <SelectItem value="10">October</SelectItem>
+            <SelectItem value="11">November</SelectItem>
+            <SelectItem value="12">December</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {isLoading
+        // [...Array(9)] spreads the array into an array of 9 undefined values to show 9 skeletons
           ? [...Array(9)].map((_, index) => <TaskSkeleton key={index} />)
           : currentTasks.map((task) => (
               <Card key={task.id}>
@@ -266,6 +312,7 @@ const MyTaskPage = () => {
           </PaginationContent>
         </Pagination>
       )}
+      <Separator className="mt-4" />
     </div>
   );
 };
