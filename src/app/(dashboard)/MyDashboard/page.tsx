@@ -1,16 +1,24 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
-import { CheckCircle, Circle, ListTodo } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";
-import ProjectsCard from "./_components/TotalProjectsCard";
 import TotalProjectsCard from "./_components/TotalProjectsCard";
 import CompletedProjectsCard from "./_components/CompletedProjectsCard";
 import OnGoingProjectsCard from "./_components/OnGoingProjectsCard";
 import CancelledProjectsCard from "./_components/CancelledProjectsCard";
+import TotalTasksCard from "./_components/TotalTasksCard";
+import { endOfWeek, startOfWeek } from "date-fns";
+import CompletedTasksCard from "./_components/CompletedTasksCard";
+import PendingTasksCard from "./_components/PendingTasksCard";
+import OverdueTasksCard from "./_components/OverdueTasksCard";
 
 const MyDashboardPage = async () => {
+  // getting date methods from date fns to pass in queries
+  const now = new Date();
+  const startOfThisWeek = startOfWeek(now);
+  const endOfThisWeek = endOfWeek(now);
+
   const user = await currentUser();
   if (!user) {
     redirect("/sign-in");
@@ -46,37 +54,90 @@ const MyDashboardPage = async () => {
     },
   });
 
+  // Fetch all tasks for the user
+  const TotalTasks = await prisma.task.count({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  // Count completed tasks this week
+  const CompletedTasksThisWeek = await prisma.task.count({
+    where: {
+      userId: user.id,
+      status: "Completed",
+      updatedAt: {
+        gte: startOfThisWeek,
+        lte: endOfThisWeek,
+      },
+    },
+  });
+
+  // count all the completed tasks in the table
+  const CompletedTasks = await prisma.task.count({
+    where: {
+      userId: user.id,
+      status: "Completed",
+    },
+  });
+
+  // count all the pending tasks in the table
+  const PendingTasksThisWeek = await prisma.task.count({
+    where: {
+      userId: user.id,
+      status: "On Hold",
+      updatedAt: {
+        gte: startOfThisWeek,
+        lte: endOfThisWeek,
+      },
+    },
+  });
+
+  const OverdueTasks = await prisma.task.count({
+    where: {
+      userId: user.id,
+      status: "Overdue",
+    },
+  });
+
   return (
     <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 gap-6 flex flex-col">
-      <h1 className="text-3xl font-bold tracking-tight animate-slideIn">
-        Projects Analytics
-      </h1>
+      {/* Project Analytics section */}
+      <h1 className="text-3xl font-bold tracking-tight">Projects Analytics</h1>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {/* this child component uses react countup which uses useRef behind the scenes and requires client component to render */}
+
+        {/* first card */}
         <TotalProjectsCard projects={projects} />
 
-        {/* similarly for completed projects card */}
+        {/* second card */}
         <CompletedProjectsCard CompletedProjects={CompletedProjects} />
 
-        {/* similarly for ongoing projects card */}
+        {/* third card */}
         <OnGoingProjectsCard OnGoingProjects={OnGoingProjects} />
 
-        {/* similarly for cancelled projects card */}
+        {/* fourth card */}
         <CancelledProjectsCard CancelledProjects={CancelledProjects} />
+      </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Tasks</CardTitle>
-            <ListTodo className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">132</div>
-            <p className="text-xs text-muted-foreground">
-              24 tasks completed this week
-            </p>
-          </CardContent>
-        </Card>
+      {/* Task Analytics section */}
+      <h1 className="text-3xl font-bold tracking-tight">Task Analytics</h1>
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* first card */}
+        <TotalTasksCard
+          TotalTasks={TotalTasks}
+          CompletedTasksThisWeek={CompletedTasksThisWeek}
+        />
+
+        {/* second card */}
+        <CompletedTasksCard CompletedTasks={CompletedTasks} />
+
+        {/* third card */}
+        <PendingTasksCard PendingTasksThisWeek={PendingTasksThisWeek} />
+
+        {/* fourth card */}
+        <OverdueTasksCard OverdueTasks={OverdueTasks} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
