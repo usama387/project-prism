@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ListTodo } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 import CountUp from "react-countup";
 
@@ -17,7 +17,7 @@ const CompletedTasksCard = ({ CompletedTasks }: Props) => {
           <CardTitle className="text-base font-medium text-emerald-500">
             Completed Tasks
           </CardTitle>
-          <ListTodo className="h-4 w-4 text-muted-foreground" />
+          <CheckCircle className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
