@@ -28,6 +28,9 @@ const CompletedProjectsCard = ({ CompletedProjects }: Props) => {
               separator=","
             />
           </div>
+          <p className="text-base text-muted-foreground">
+            Completed and delivered
+          </p>
         </CardContent>
       </Card>
     </Link>
