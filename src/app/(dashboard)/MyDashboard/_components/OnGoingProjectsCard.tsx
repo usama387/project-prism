@@ -28,6 +28,7 @@ const OnGoingProjectsCard = ({ OnGoingProjects }: Props) => {
               separator=","
             />
           </div>
+          <p className="text-base text-muted-foreground">In Progress</p>
         </CardContent>
       </Card>
     </Link>
