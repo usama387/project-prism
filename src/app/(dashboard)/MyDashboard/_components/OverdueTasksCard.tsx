@@ -12,7 +12,7 @@ interface Props {
 const OverdueTasksCard = ({ OverdueTasks }: Props) => {
   return (
     <Link href="/MyTasks">
-      <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
+      <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground animate-slideIn">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-base font-medium text-emerald-500">
             Overdue Tasks
