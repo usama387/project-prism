@@ -1,15 +1,19 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle } from "lucide-react";
+import { Diameter } from "lucide-react";
 import Link from "next/link";
 import CountUp from "react-countup";
 
 interface Props {
   CancelledProjects: number;
+  CancelledProjectsThisMonth: number;
 }
 
-const CancelledProjectsCard = ({ CancelledProjects }: Props) => {
+const CancelledProjectsCard = ({
+  CancelledProjects,
+  CancelledProjectsThisMonth,
+}: Props) => {
   return (
     <Link href={"/CancelledProjects"}>
       <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground animate-slideIn">
@@ -17,7 +21,7 @@ const CancelledProjectsCard = ({ CancelledProjects }: Props) => {
           <CardTitle className="text-base font-medium text-emerald-500">
             Cancelled Projects
           </CardTitle>
-          <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          <Diameter className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
@@ -28,6 +32,9 @@ const CancelledProjectsCard = ({ CancelledProjects }: Props) => {
               separator=","
             />
           </div>
+          <p className="text-base text-muted-foreground">
+            {CancelledProjectsThisMonth || 0} cancelled projects this month
+          </p>
         </CardContent>
       </Card>
     </Link>
