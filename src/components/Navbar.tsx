@@ -26,16 +26,38 @@ const items = [
   {
     id: 1,
     name: "Dashboard",
-    link: "/",
+    link: "/MyDashboard",
   },
   {
     id: 2,
-    name: "Transactions",
-    link: "/transactions",
+    name: "Projects",
+    link: "/MyProjects",
   },
 
   {
     id: 3,
+    name: "Tasks",
+    link: "/MyTasks",
+  },
+
+  {
+    id: 4,
+    name: "Versions",
+    link: "/MyTasks/versions",
+  },
+
+  {
+    id: 5,
+    name: "Budgeting",
+    link: "/",
+  },
+  {
+    id: 6,
+    name: "Transactions",
+    link: "/transactions",
+  },
+  {
+    id: 7,
     name: "Manage",
     link: "/manage",
   },
