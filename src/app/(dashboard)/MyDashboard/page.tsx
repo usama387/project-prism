@@ -8,16 +8,26 @@ import CompletedProjectsCard from "./_components/CompletedProjectsCard";
 import OnGoingProjectsCard from "./_components/OnGoingProjectsCard";
 import CancelledProjectsCard from "./_components/CancelledProjectsCard";
 import TotalTasksCard from "./_components/TotalTasksCard";
-import { endOfWeek, startOfWeek } from "date-fns";
+import { endOfMonth, endOfWeek, startOfMonth, startOfWeek } from "date-fns";
 import CompletedTasksCard from "./_components/CompletedTasksCard";
 import PendingTasksCard from "./_components/PendingTasksCard";
 import OverdueTasksCard from "./_components/OverdueTasksCard";
+import RecentProjectsCard from "./_components/SecondSection/RecentProjectsCard";
+import UpcomingDeadlinesCard from "./_components/SecondSection/UpcomingDeadlinesCard";
+import TeamPerformanceCard from "./_components/SecondSection/TeamPerformanceCard";
+import { Separator } from "@/components/ui/separator";
 
 const MyDashboardPage = async () => {
   // getting date methods from date fns to pass in queries
   const now = new Date();
+
+  // to filter data weekly for tasks
   const startOfThisWeek = startOfWeek(now);
   const endOfThisWeek = endOfWeek(now);
+
+  // to filter data monthly for projects
+  const startOfThisMonth = startOfMonth(now);
+  const endOfThisMonth = endOfMonth(now);
 
   const user = await currentUser();
   if (!user) {
@@ -28,6 +38,17 @@ const MyDashboardPage = async () => {
   const projects = await prisma.project.count({
     where: {
       userId: user.id,
+    },
+  });
+
+  const projectsCompletedThisMonth = await prisma.project.count({
+    where: {
+      userId: user.id,
+      status: "COMPLETED",
+      updatedAt: {
+        gte: startOfThisMonth,
+        lte: endOfThisMonth,
+      },
     },
   });
 
@@ -47,10 +68,23 @@ const MyDashboardPage = async () => {
     },
   });
 
-  // query for cancelled projects card
+  // query for cancelled projects
   const CancelledProjects = await prisma.project.count({
     where: {
+      userId: user.id,
       status: "CANCELLED",
+    },
+  });
+
+  // query for cancelled projects card
+  const CancelledProjectsThisMonth = await prisma.project.count({
+    where: {
+      userId: user.id,
+      status: "CANCELLED",
+      updatedAt: {
+        gte: startOfThisMonth,
+        lte: endOfThisMonth,
+      },
     },
   });
 
@@ -93,12 +127,77 @@ const MyDashboardPage = async () => {
     },
   });
 
+  // count all the overdue tasks in the table
   const OverdueTasks = await prisma.task.count({
     where: {
       userId: user.id,
       status: "Overdue",
     },
   });
+
+  // query for fetching recent projects
+  const RecentProjects = await prisma.project.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 4,
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  // query for fetching upcoming deadlines
+  const UpComingDeadlines = await prisma.project.findMany({
+    where: {
+      deadline: {
+        not: null,
+      },
+    },
+    orderBy: {
+      deadline: "asc",
+    },
+    select: {
+      id: true,
+      name: true,
+      deadline: true,
+    },
+  });
+
+  // query for fetching team performance based task completed, client satisfaction and delivered
+  const AllTasks = await prisma.task.count({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  const CompletedTasksByTeam = await prisma.task.count({
+    where: {
+      userId: user.id,
+      status: "Completed",
+    },
+  });
+
+  // now calculate percentage of completed tasks
+  const PercentageOfCompletedTasks =
+    AllTasks > 0 ? (CompletedTasksByTeam / AllTasks) * 100 : 0;
+
+  // query for delivered projects and percentage calculation
+  const AllProjects = await prisma.project.count({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  const CompletedProjectsByTeam = await prisma.project.count({
+    where: {
+      userId: user.id,
+      status: "COMPLETED",
+    },
+  });
+
+  const PercentageOfCompletedProjects =
+    AllProjects > 0 ? (CompletedProjectsByTeam / AllProjects) * 100 : 0;
 
   return (
     <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 gap-6 flex flex-col">
@@ -109,7 +208,10 @@ const MyDashboardPage = async () => {
         {/* this child component uses react countup which uses useRef behind the scenes and requires client component to render */}
 
         {/* first card */}
-        <TotalProjectsCard projects={projects} />
+        <TotalProjectsCard
+          projects={projects}
+          projectsCompletedThisMonth={projectsCompletedThisMonth}
+        />
 
         {/* second card */}
         <CompletedProjectsCard CompletedProjects={CompletedProjects} />
@@ -118,8 +220,13 @@ const MyDashboardPage = async () => {
         <OnGoingProjectsCard OnGoingProjects={OnGoingProjects} />
 
         {/* fourth card */}
-        <CancelledProjectsCard CancelledProjects={CancelledProjects} />
+        <CancelledProjectsCard
+          CancelledProjects={CancelledProjects}
+          CancelledProjectsThisMonth={CancelledProjectsThisMonth}
+        />
       </div>
+
+      <Separator />
 
       {/* Task Analytics section */}
       <h1 className="text-3xl font-bold tracking-tight">Task Analytics</h1>
@@ -140,46 +247,22 @@ const MyDashboardPage = async () => {
         <OverdueTasksCard OverdueTasks={OverdueTasks} />
       </div>
 
+      <Separator />
+
+      {/* Second Section */}
+      <h1 className="text-3xl font-bold tracking-tight">Updates</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Projects</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              <li>E-commerce Platform</li>
-              <li>Mobile App Redesign</li>
-              <li>API Integration</li>
-              <li>Data Analytics Dashboard</li>
-            </ul>
-          </CardContent>
-        </Card>
+        {/* first card */}
+        <RecentProjectsCard RecentProjects={RecentProjects} />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Upcoming Deadlines</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              <li>Website Redesign - 15 May</li>
-              <li>User Authentication System - 22 May</li>
-              <li>Payment Gateway Integration - 1 June</li>
-            </ul>
-          </CardContent>
-        </Card>
+        {/* second card */}
+        <UpcomingDeadlinesCard UpComingDeadlines={UpComingDeadlines} />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Team Performance</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              <li>Tasks Completed: 78%</li>
-              <li>On-time Delivery: 92%</li>
-              <li>Client Satisfaction: 4.7/5</li>
-            </ul>
-          </CardContent>
-        </Card>
+        {/* third card */}
+        <TeamPerformanceCard
+          PercentageOfCompletedTasks={PercentageOfCompletedTasks}
+          PercentageOfCompletedProjects={PercentageOfCompletedProjects}
+        />
       </div>
     </div>
   );
