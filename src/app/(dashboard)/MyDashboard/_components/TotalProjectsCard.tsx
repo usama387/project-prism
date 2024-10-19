@@ -8,10 +8,10 @@ import CountUp from "react-countup";
 
 interface Props {
   projects: number;
+  projectsCompletedThisMonth: number;
 }
 
-const TotalProjectsCard = ({ projects }: Props) => {
-
+const TotalProjectsCard = ({ projects, projectsCompletedThisMonth }: Props) => {
   return (
     <Link href={"/MyProjects"}>
       <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground animate-slideIn">
@@ -25,6 +25,9 @@ const TotalProjectsCard = ({ projects }: Props) => {
           <div className="text-2xl font-bold text-start">
             <CountUp start={0} end={projects || 0} duration={2} separator="," />
           </div>
+          <p className="text-base text-muted-foreground">
+            {projectsCompletedThisMonth || 0} projects completed this month
+          </p>
         </CardContent>
       </Card>
     </Link>
