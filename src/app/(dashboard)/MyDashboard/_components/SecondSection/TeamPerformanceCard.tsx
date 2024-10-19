@@ -4,11 +4,13 @@ import { Users } from "lucide-react";
 interface Props {
   PercentageOfCompletedTasks: number;
   PercentageOfCompletedProjects: number;
+  AverageSatisfaction: number;
 }
 
 const TeamPerformanceCard = ({
   PercentageOfCompletedTasks,
   PercentageOfCompletedProjects,
+  AverageSatisfaction,
 }: Props) => {
   return (
     <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground animate-slideIn">
@@ -22,7 +24,7 @@ const TeamPerformanceCard = ({
         <ul className="space-y-2 text-base text-muted-foreground">
           <p>Tasks Completed: {PercentageOfCompletedTasks || 0} %</p>
           <p>On-time Delivery: {PercentageOfCompletedProjects || 0}%</p>
-          <p>Client Satisfaction: 4.7/5</p>
+          <p>Client Satisfaction: {AverageSatisfaction}/5</p>
         </ul>
       </CardContent>
     </Card>

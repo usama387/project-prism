@@ -154,6 +154,7 @@ const MyDashboardPage = async () => {
         not: null,
       },
     },
+    take: 4,
     orderBy: {
       deadline: "asc",
     },
@@ -196,8 +197,34 @@ const MyDashboardPage = async () => {
     },
   });
 
+  // now calculate percentage of completed projects
   const PercentageOfCompletedProjects =
     AllProjects > 0 ? (CompletedProjectsByTeam / AllProjects) * 100 : 0;
+
+  // query for fetching projects with client ratings
+  const ClientSatisfactionRatings = await prisma.project.findMany({
+    where: {
+      userId: user.id,
+      clientSatisfaction: {
+        not: null,
+      },
+    },
+    select: {
+      clientSatisfaction: true,
+    },
+  });
+
+  // Calculate the average client satisfaction rating and its length is stored in TotalRatings variable
+  const TotalRatings = ClientSatisfactionRatings.length;
+
+  // reduce function: Sums up all the client satisfaction ratings and divides by the total number of ratings to get the average
+  const AverageSatisfaction =
+    TotalRatings > 0
+      ? ClientSatisfactionRatings.reduce(
+          (acc, project) => acc + project.clientSatisfaction!,
+          0
+        ) / TotalRatings
+      : 0;
 
   return (
     <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 gap-6 flex flex-col">
@@ -262,6 +289,7 @@ const MyDashboardPage = async () => {
         <TeamPerformanceCard
           PercentageOfCompletedTasks={PercentageOfCompletedTasks}
           PercentageOfCompletedProjects={PercentageOfCompletedProjects}
+          AverageSatisfaction={AverageSatisfaction}
         />
       </div>
     </div>
