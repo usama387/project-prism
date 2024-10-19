@@ -39,6 +39,7 @@ export const CreateProject = async (form: CreateProjectSchemaType) => {
     usedBudget,
     numberOfTasks,
     completedTasks,
+    clientSatisfaction,
   } = parsedBody.data;
 
   return await prisma.project.create({
@@ -54,6 +55,7 @@ export const CreateProject = async (form: CreateProjectSchemaType) => {
       usedBudget: budget ?? undefined, // Pass undefined if null
       numberOfTasks: numberOfTasks ?? undefined, // Pass undefined if null
       userId: user.id,
+      clientSatisfaction: clientSatisfaction ?? undefined,
     },
   });
 };
@@ -113,6 +115,7 @@ export const UpdateProject = async (form: UpdateProjectSchemaType) => {
     usedBudget,
     numberOfTasks,
     completedTasks,
+    clientSatisfaction,
   } = parsedBody.data;
 
   // Update the project
@@ -132,6 +135,7 @@ export const UpdateProject = async (form: UpdateProjectSchemaType) => {
       usedBudget: budget ?? undefined,
       numberOfTasks: numberOfTasks ?? undefined,
       completedTasks: completedTasks ?? undefined,
+      clientSatisfaction: clientSatisfaction ?? undefined,
     },
   });
 

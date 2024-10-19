@@ -19,18 +19,19 @@ model UserSettings {
 }
 
 model Project {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  userId      String // Foreign key for the user
+  id                 String   @id @default(uuid())
+  name               String
+  description        String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now())
+  userId             String // Foreign key for the user
+  clientSatisfaction Float?
 
   startDate DateTime?
   deadline  DateTime?
 
   tasks    Task[] // Relationship to tasks
-  budgetId String? // Optional: Link to a budget (if each project has its own budgeting)
+  budgetId String?
 
   status         String @default("ONGOING")
   priority       String @default("Medium")

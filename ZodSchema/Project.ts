@@ -24,6 +24,11 @@ export const CreateProjectSchema = z.object({
     .number()
     .min(0, "Number of tasks must be at least 1")
     .optional(),
+  clientSatisfaction: z
+    .number()
+    .min(1, "Client satisfaction must be at least 1")
+    .max(5, "Client satisfaction cant be more than 5")
+    .optional(),
 });
 
 export type CreateProjectSchemaType = z.infer<typeof CreateProjectSchema>;
@@ -37,7 +42,7 @@ export type DeleteProjectSchemaType = z.infer<typeof DeleteProjectSchema>;
 
 // schema used to update the project
 export const UpdateProjectSchema = z.object({
-  projectId: z.string().uuid(), 
+  projectId: z.string().uuid(),
   name: z.string().optional(),
   description: z.string().optional(),
   startDate: z.date().nullable().optional(),
@@ -48,6 +53,11 @@ export const UpdateProjectSchema = z.object({
   usedBudget: z.number().optional(),
   numberOfTasks: z.number().optional(),
   completedTasks: z.number().optional(),
+  clientSatisfaction: z
+    .number()
+    .min(1, "Client satisfaction must be at least 1")
+    .max(5, "Client satisfaction cant be more than 5")
+    .optional(),
 });
 
 export type UpdateProjectSchemaType = z.infer<typeof UpdateProjectSchema>;

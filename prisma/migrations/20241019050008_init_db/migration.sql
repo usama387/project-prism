@@ -12,6 +12,7 @@ CREATE TABLE "Project" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" TEXT NOT NULL,
+    "clientSatisfaction" REAL,
     "startDate" DATETIME,
     "deadline" DATETIME,
     "budgetId" TEXT,

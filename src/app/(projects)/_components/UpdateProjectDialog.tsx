@@ -343,6 +343,28 @@ const UpdateProjectDialog = ({
                   </FormItem>
                 )}
               />
+
+              {/* Rating from client Field */}
+              <FormField
+                control={form.control}
+                name="clientSatisfaction"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Client Rating </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Enter (1.0 to 5.0)"
+                        {...field}
+                        value={field.value ?? ""} // Handle null as empty string
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value) || 0)
+                        }
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
             </div>
 
             {/* Contains logic for form submission */}

@@ -81,6 +81,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
           usedBudget: 0,
           numberOfTasks: 1,
           completedTasks: 0,
+          clientSatisfaction: undefined,
         });
       setOpen(!open);
     },
@@ -135,7 +136,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* Form field for project description */}
             <FormField
               control={form.control}
@@ -152,7 +152,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* {Budget Field} */}
             <FormField
               control={form.control}
@@ -174,7 +173,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* Used Budget Field */}
             <FormField
               control={form.control}
@@ -196,7 +194,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* Number of Tasks Field */}
             <FormField
               control={form.control}
@@ -218,7 +215,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* Completed Tasks Field */}
             <FormField
               control={form.control}
@@ -240,7 +236,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* Status Field */}
             <FormField
               control={form.control}
@@ -267,7 +262,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* Priority Field */}
             <FormField
               control={form.control}
@@ -290,7 +284,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* Start Date */}
             <FormField
               control={form.control}
@@ -326,7 +319,6 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                 </FormItem>
               )}
             />
-
             {/* Deadline */}
             <FormField
               control={form.control}
@@ -359,6 +351,28 @@ const CreateProjectDialog = ({ trigger }: Props) => {
                       />
                     </PopoverContent>
                   </Popover>
+                </FormItem>
+              )}
+            />
+
+            {/* Rating from client Field */}
+            <FormField
+              control={form.control}
+              name="clientSatisfaction"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Client Rating </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter (1.0 to 5.0)"
+                      {...field}
+                      value={field.value ?? ""} // Handle null as empty string
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
