@@ -33,6 +33,8 @@ export const AddVersion = async (form: AddVersionSchemaType) => {
     updatedAt,
     dueDate,
     hoursConsumed,
+    status,
+    priority,
   } = parsedBody.data;
 
   const addedVersion = await prisma.taskHistory.create({
@@ -43,6 +45,8 @@ export const AddVersion = async (form: AddVersionSchemaType) => {
       updatedAt: updatedAt ?? undefined,
       dueDate: dueDate ?? undefined,
       hoursConsumed: hoursConsumed ?? undefined,
+      status,
+      priority,
       userId: user.id,
       task: {
         connect: { id: taskId },

@@ -33,6 +33,8 @@ type TaskHistory = {
   version: string;
   changes: string;
   updatedBy: string;
+  status: string;
+  priority: string;
   updatedAt: string | null;
   dueDate: string | null;
 };
@@ -79,13 +81,19 @@ const TaskVersionsPage = () => {
         />
       </div>
       <Table>
-        <TableHeader>
+        <TableHeader className="items-center">
           <TableRow>
             <TableHead className="text-left text-sm md:text-base">
               Version
             </TableHead>
             <TableHead className="text-left text-sm md:text-base">
               Changes
+            </TableHead>
+            <TableHead className="text-left text-sm md:text-base">
+              Status
+            </TableHead>
+            <TableHead className="text-left text-sm md:text-base">
+              Priority
             </TableHead>
             <TableHead className="text-left text-sm md:text-base">
               Updated By
@@ -104,7 +112,7 @@ const TaskVersionsPage = () => {
             </TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="animate-slideIn">
+        <TableBody className="animate-slideIn items-center">
           {versions &&
             versions.map((version) => (
               <TableRow key={version.id}>
@@ -115,6 +123,12 @@ const TaskVersionsPage = () => {
                 </TableCell>
                 <TableCell className="text-sm md:text-base px-4 py-2">
                   {version.changes}
+                </TableCell>
+                <TableCell className="text-sm md:text-base px-4 py-2">
+                  {version.status}
+                </TableCell>
+                <TableCell className="text-sm md:text-base px-4 py-2">
+                  {version.priority}
                 </TableCell>
                 <TableCell className="text-sm md:text-base px-4 py-2">
                   {version.updatedBy}

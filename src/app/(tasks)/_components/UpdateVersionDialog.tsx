@@ -144,6 +144,67 @@ const UpdateVersionDialog = ({ version, trigger }: Props) => {
               )}
             />
 
+            {/* Task Status Field */}
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value} // Controlled value from the form state
+                      onValueChange={field.onChange} // Update the form state when the user selects a status
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Ongoing">Ongoing</SelectItem>
+                        <SelectItem value="Completed">Completed</SelectItem>
+                        <SelectItem value="Cancelled">Cancelled</SelectItem>
+                        <SelectItem value="On Hold">On Hold</SelectItem>
+                        <SelectItem value="Todo">To Do</SelectItem>
+                        <SelectItem value="Overdue">Overdue</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription>
+                    Select current status of the task
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
+            {/* Task Priority Field */}
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Priority</FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value} // Controlled value from the form state
+                      onValueChange={field.onChange} // Update the form state when the user selects a priority
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a priority" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Low">Low</SelectItem>
+                        <SelectItem value="Medium">Medium</SelectItem>
+                        <SelectItem value="High">High</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription>
+                    Select priority for the task
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
             {/* UpdatedBy Field */}
             <FormField
               control={form.control}

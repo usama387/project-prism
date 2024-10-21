@@ -31,6 +31,8 @@ export const UpdateTaskVersion = async (form: UpdateVersionSchemaType) => {
     updatedAt,
     dueDate,
     hoursConsumed,
+    status,
+    priority,
     taskId,
   } = parsedBody.data;
 
@@ -43,6 +45,8 @@ export const UpdateTaskVersion = async (form: UpdateVersionSchemaType) => {
       version,
       changes,
       updatedBy,
+      status,
+      priority,
       updatedAt: updatedAt ?? undefined,
       dueDate: dueDate ?? undefined,
       hoursConsumed: hoursConsumed ?? undefined,

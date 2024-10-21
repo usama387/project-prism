@@ -56,6 +56,8 @@ CREATE TABLE "TaskHistory" (
     "assignedTo" TEXT,
     "hoursConsumed" REAL,
     "changes" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'Ongoing',
+    "priority" TEXT NOT NULL DEFAULT 'Medium',
     "updatedBy" TEXT NOT NULL,
     "updatedAt" DATETIME,
     CONSTRAINT "TaskHistory_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task" ("id") ON DELETE RESTRICT ON UPDATE CASCADE

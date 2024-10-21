@@ -42,7 +42,7 @@ const items = [
 
   {
     id: 4,
-    name: "Versions",
+    name: "Activity Logs",
     link: "/MyTasks/versions",
   },
 
