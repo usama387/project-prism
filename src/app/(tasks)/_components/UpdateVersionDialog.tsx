@@ -114,6 +114,7 @@ const UpdateVersionDialog = ({ version, trigger }: Props) => {
             className="grid grid-cols-1 gap-6 md:grid-cols-2"
             onSubmit={form.handleSubmit(onSubmit)}
           >
+            {/* Version Field */}
             <FormField
               control={form.control}
               name="version"
@@ -128,20 +129,22 @@ const UpdateVersionDialog = ({ version, trigger }: Props) => {
               )}
             />
 
+            {/* Trigger Field */}
             <FormField
               control={form.control}
               name="changes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Changes</FormLabel>
+                  <FormLabel>Trigger</FormLabel>
                   <FormControl>
                     <Input defaultValue={""} {...field} />
                   </FormControl>
-                  <FormDescription>Changes (Required)</FormDescription>
+                  <FormDescription>Reason (Required)</FormDescription>
                 </FormItem>
               )}
             />
 
+            {/* UpdatedBy Field */}
             <FormField
               control={form.control}
               name="updatedBy"
@@ -149,14 +152,84 @@ const UpdateVersionDialog = ({ version, trigger }: Props) => {
                 <FormItem>
                   <FormLabel>Updated By</FormLabel>
                   <FormControl>
-                    <Input defaultValue={""} {...field} />
+                    <Select
+                      value={field.value} // Controlled value from the form state
+                      onValueChange={field.onChange} // Update the form state when the user selects a priority
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a person" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="usama">Usama</SelectItem>
+                        <SelectItem value="Maryam">Maryam</SelectItem>
+                        <SelectItem value="Noor">Noor</SelectItem>
+                        <SelectItem value="Abdul Wasay">Abdul Wasay</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormDescription>who made changes (Required)</FormDescription>
                 </FormItem>
               )}
             />
 
-            {/* Date Field */}
+            {/* Due Date Field */}
+            <FormField
+              control={form.control}
+              name="dueDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-between mb-4">
+                  <FormLabel className="mt-8">Deadline</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button variant="outline">
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span className="mr-4">Select a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <Calendar
+                        mode="single"
+                        selected={field.value ?? undefined} // Handle null by passing undefined
+                        onSelect={(value) => {
+                          if (!value) return;
+                          field.onChange(value);
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormItem>
+              )}
+            />
+
+            {/* Hours consumed field */}
+            <FormField
+              control={form.control}
+              name="hoursConsumed"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Time Consumed</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter hours consumed by tasks"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/*UpdatedAt Date Field */}
             <FormField
               control={form.control}
               name="updatedAt"
@@ -215,7 +288,7 @@ const UpdateVersionDialog = ({ version, trigger }: Props) => {
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Select the task that this task depends on.
+                    Select the task that this version depends on.
                   </FormDescription>
                 </FormItem>
               )}

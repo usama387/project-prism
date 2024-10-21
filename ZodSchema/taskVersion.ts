@@ -4,8 +4,10 @@ import { z } from "zod";
 export const AddVersionSchema = z.object({
   version: z.string().min(1, "version is Required"),
   changes: z.string(),
-  updatedBy: z.string().min(1, "person name is Required"),
+  updatedBy: z.enum(["Usama", "Maryam", "Noor", "Abdul Wasay"]),
+  dueDate: z.date().optional(),
   updatedAt: z.date().optional(),
+  hoursConsumed: z.number().nonnegative().optional(),
   // relation with task table using its id
   taskId: z.string().uuid("Invalid task ID"),
 });
@@ -23,10 +25,11 @@ export type DeleteVersionSchemaType = z.infer<typeof DeleteVersionSchema>;
 export const UpdateVersionSchema = z.object({
   versionId: z.string().uuid("Invalid task history id"),
   version: z.string().min(1, "version is Required"),
+  dueDate: z.date().optional(),
   changes: z.string(),
-  updatedBy: z.string().min(1, "person name is Required"),
+  updatedBy: z.enum(["Usama", "Maryam", "Noor", "Abdul Wasay"]),
   updatedAt: z.date().optional(),
-
+  hoursConsumed: z.number().nonnegative().optional(),
   // relation with task table using its id
   taskId: z.string().uuid("Invalid task ID"),
 });

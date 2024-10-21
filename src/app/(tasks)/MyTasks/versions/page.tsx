@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
 
 // Adjusted TaskHistory type to include task.name
 type TaskHistory = {
@@ -33,6 +34,7 @@ type TaskHistory = {
   changes: string;
   updatedBy: string;
   updatedAt: string | null;
+  dueDate: string | null;
 };
 
 const TaskVersionsPage = () => {
@@ -63,7 +65,9 @@ const TaskVersionsPage = () => {
   return (
     <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-lg md:text-xl font-bold animate-slideIn ">Versions</h1>
+        <h1 className="text-lg md:text-xl font-bold animate-slideIn ">
+          Versions
+        </h1>
 
         {/* child component to add a version of task */}
         <AddVersionDialog
@@ -76,7 +80,7 @@ const TaskVersionsPage = () => {
       </div>
       <Table>
         <TableHeader>
-          <TableRow className="animate-slideIn">
+          <TableRow>
             <TableHead className="text-left text-sm md:text-base">
               Version
             </TableHead>
@@ -90,6 +94,9 @@ const TaskVersionsPage = () => {
               Updated At
             </TableHead>
             <TableHead className="text-left text-sm md:text-base">
+              Deadline
+            </TableHead>
+            <TableHead className="text-left text-sm md:text-base">
               Related Task
             </TableHead>
             <TableHead className="text-right text-sm md:text-base">
@@ -97,7 +104,7 @@ const TaskVersionsPage = () => {
             </TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="animate-slideIn">
           {versions &&
             versions.map((version) => (
               <TableRow key={version.id}>
@@ -115,6 +122,9 @@ const TaskVersionsPage = () => {
                 <TableCell className="text-sm md:text-base px-4 py-2">
                   {version.updatedAt &&
                     format(new Date(version.updatedAt), "PPP")}
+                </TableCell>
+                <TableCell className="text-sm md:text-base px-4 py-2">
+                  {version.dueDate && format(new Date(version.dueDate), "PPP")}
                 </TableCell>
                 <TableCell className="hidden md:table-cell text-sm md:text-base px-4 py-2">
                   {version.task.name}
@@ -151,6 +161,7 @@ const TaskVersionsPage = () => {
             ))}
         </TableBody>
       </Table>
+      <Separator />
     </div>
   );
 };

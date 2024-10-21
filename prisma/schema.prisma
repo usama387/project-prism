@@ -69,14 +69,17 @@ model Task {
 }
 
 model TaskHistory {
-  id        String    @id @default(uuid())
-  taskId    String
-  task      Task      @relation(fields: [taskId], references: [id])
-  userId    String
-  version   String
-  changes   String
-  updatedBy String
-  updatedAt DateTime?
+  id            String    @id @default(uuid())
+  taskId        String
+  task          Task      @relation(fields: [taskId], references: [id])
+  userId        String
+  version       String
+  dueDate       DateTime?
+  assignedTo    String?
+  hoursConsumed Float?
+  changes       String
+  updatedBy     String
+  updatedAt     DateTime?
 }
 
 model Category {

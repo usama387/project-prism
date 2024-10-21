@@ -53,7 +53,11 @@ const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
                 versionId: version.id,
                 version: version.version,
                 changes: version.changes,
-                updatedBy: version.updatedBy,
+                updatedBy: version.updatedBy as
+                  | "Usama"
+                  | "Maryam"
+                  | "Noor"
+                  | "Abdul Wasay",
                 updatedAt: version.updatedAt ?? undefined,
                 taskId: version.taskId,
               }}
@@ -86,11 +90,15 @@ const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
       </Card>
 
       <Card className="mb-8">
-        <CardHeader>
-          <CardTitle className="text-xl">Changes</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-xl">Trigger</CardTitle>
+          <CardTitle className="text-xl">Deadline</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-row items-center justify-between">
           <p className="text-gray-700 font-semibold">{version?.changes}</p>
+          <p className="text-gray-700 font-semibold">
+            {version.dueDate && format(new Date(version.dueDate), "PPP")}
+          </p>
         </CardContent>
       </Card>
 

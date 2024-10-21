@@ -25,7 +25,15 @@ export const AddVersion = async (form: AddVersionSchemaType) => {
     redirect("/sign-in");
   }
 
-  const { version, changes, taskId, updatedBy, updatedAt } = parsedBody.data;
+  const {
+    version,
+    changes,
+    taskId,
+    updatedBy,
+    updatedAt,
+    dueDate,
+    hoursConsumed,
+  } = parsedBody.data;
 
   const addedVersion = await prisma.taskHistory.create({
     data: {
@@ -33,6 +41,8 @@ export const AddVersion = async (form: AddVersionSchemaType) => {
       changes,
       updatedBy,
       updatedAt: updatedAt ?? undefined,
+      dueDate: dueDate ?? undefined,
+      hoursConsumed: hoursConsumed ?? undefined,
       userId: user.id,
       task: {
         connect: { id: taskId },

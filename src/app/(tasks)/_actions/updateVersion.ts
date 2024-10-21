@@ -23,8 +23,16 @@ export const UpdateTaskVersion = async (form: UpdateVersionSchemaType) => {
     redirect("/sign-in");
   }
 
-  const { versionId, version, changes, updatedBy, updatedAt, taskId } =
-    parsedBody.data;
+  const {
+    versionId,
+    version,
+    changes,
+    updatedBy,
+    updatedAt,
+    dueDate,
+    hoursConsumed,
+    taskId,
+  } = parsedBody.data;
 
   const UpdatedTaskVersion = await prisma.taskHistory.update({
     where: {
@@ -35,7 +43,9 @@ export const UpdateTaskVersion = async (form: UpdateVersionSchemaType) => {
       version,
       changes,
       updatedBy,
-      updatedAt,
+      updatedAt: updatedAt ?? undefined,
+      dueDate: dueDate ?? undefined,
+      hoursConsumed: hoursConsumed ?? undefined,
       task: {
         connect: {
           id: taskId,
