@@ -60,6 +60,7 @@ const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
                   | "Abdul Wasay",
                 updatedAt: version.updatedAt ?? undefined,
                 taskId: version.taskId,
+                priority: version.priority as "Low" | "Medium" | "High",
               }}
               trigger={
                 <Button
