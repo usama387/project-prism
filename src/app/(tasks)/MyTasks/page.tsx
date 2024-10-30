@@ -24,6 +24,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import CreateTaskDialog from "../_components/CreateTaskDialog";
+import { Plus } from "lucide-react";
 
 type Task = {
   project?: {
@@ -37,12 +39,28 @@ type Task = {
   dueDate: string;
   assignedTo: string;
 };
+// project type safety
+type Project = {
+  id: string;
+  name: string;
+  description: string;
+  startDate: string | null;
+  deadline: string | null;
+  status: "COMPLETED" | "ONGOING" | "CANCELLED";
+  priority: "High" | "Low" | "Medium";
+};
 
 const MyTaskPage = () => {
   // fetching api that returns all tasks
   const { data: tasks = [], isLoading } = useQuery<Task[]>({
     queryKey: ["Tasks"],
     queryFn: () => fetch("/api/my-tasks").then((res) => res.json()),
+  });
+
+  // fetching api that returns all projects
+  const { data: projects = [] } = useQuery<Project[]>({
+    queryKey: ["projects"],
+    queryFn: () => fetch("/api/my-projects").then((res) => res.json()),
   });
 
   // pagination logic
@@ -219,10 +237,25 @@ const MyTaskPage = () => {
         </Select>
       </div>
 
+      <div className="flex items-center justify-start md:justify-end mb-4">
+        <CreateTaskDialog
+          projects={projects}
+          tasks={tasks}
+          trigger={
+            <Button
+              variant="outline"
+              className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
+            >
+              <span>New Task</span>
+            </Button>
+          }
+        />
+      </div>
+
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {isLoading
-        // [...Array(9)] spreads the array into an array of 9 undefined values to show 9 skeletons
-          ? [...Array(9)].map((_, index) => <TaskSkeleton key={index} />)
+          ? // [...Array(9)] spreads the array into an array of 9 undefined values to show 9 skeletons
+            [...Array(9)].map((_, index) => <TaskSkeleton key={index} />)
           : currentTasks.map((task) => (
               <Card key={task.id}>
                 <CardHeader>

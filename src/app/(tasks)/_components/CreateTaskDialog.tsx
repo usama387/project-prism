@@ -114,13 +114,13 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-full sm:max-w-lg max-h-[90vh] overflow-y-auto rounded-lg p-6 sm:p-8">
         <DialogHeader>
           <DialogTitle>Create a new task</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
-            className="grid grid-cols-1 gap-6 md:grid-cols-2"
+            className="grid grid-cols-1 gap-4 md:grid-cols-2"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             {/* Task name field */}
@@ -219,7 +219,8 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
               control={form.control}
               name="dueDate"
               render={({ field }) => (
-                <FormItem className="flex items-center justify-between">
+                <FormItem className="flex flex-col">
+                  <FormItem>DeadLine</FormItem>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

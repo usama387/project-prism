@@ -131,7 +131,7 @@ const UpdateTaskDialog = ({ task, trigger }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-full sm:max-w-lg max-h-[90vh] overflow-y-auto rounded-lg p-6 sm:p-8">
         <DialogHeader>Edit Task Details</DialogHeader>
         <Form {...form}>
           <form
@@ -235,8 +235,8 @@ const UpdateTaskDialog = ({ task, trigger }: Props) => {
               control={form.control}
               name="dueDate"
               render={({ field }) => (
-                <FormItem className="flex items-center justify-between">
-                  <FormLabel>Deadline:</FormLabel>
+                <FormItem className="flex flex-col">
+                  <FormLabel>Deadline</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
