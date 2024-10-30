@@ -111,7 +111,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-full sm:max-w-lg max-h-[90vh] overflow-y-auto rounded-lg p-6 sm:p-8">
         <DialogHeader>Create a new Project</DialogHeader>
 
         {/* form starts now */}
@@ -289,7 +289,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
               control={form.control}
               name="startDate"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col">
                   <FormLabel>Start Date:</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -324,7 +324,7 @@ const CreateProjectDialog = ({ trigger }: Props) => {
               control={form.control}
               name="deadline"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col">
                   <FormLabel>Deadline:</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>

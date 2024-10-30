@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import CreateProjectDialog from "../_components/CreateProjectDialog";
 
 // Define the Project type with the status field
 type Project = {
@@ -174,6 +175,19 @@ function ProjectsPageContent() {
             <SelectItem value="12">December</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="flex items-center justify-start md:justify-end  mb-4">
+        <CreateProjectDialog
+          trigger={
+            <Button
+              variant={"outline"}
+              className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
+            >
+              New Project
+            </Button>
+          }
+        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
