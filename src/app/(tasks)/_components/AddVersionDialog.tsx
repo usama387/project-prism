@@ -104,7 +104,7 @@ export default function AddVersionDialog({ trigger }: Props) {
 
   const onSubmit = useCallback(
     (values: AddVersionSchemaType) => {
-      toast.loading("Creating Task...", {
+      toast.loading("Creating Log...", {
         id: "create-task",
       });
       mutate(values, {
@@ -121,7 +121,7 @@ export default function AddVersionDialog({ trigger }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-full sm:max-w-lg max-h-[90vh] overflow-y-auto rounded-lg p-6 sm:p-8">
         <DialogHeader>
           <DialogTitle>Add a new version</DialogTitle>
         </DialogHeader>
@@ -311,7 +311,7 @@ export default function AddVersionDialog({ trigger }: Props) {
               control={form.control}
               name="updatedAt"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col">
                   <FormLabel>Updated At</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
