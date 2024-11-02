@@ -1,5 +1,11 @@
 import Logo from "@/components/Logo";
+import { Metadata } from "next";
 import React, { ReactNode } from "react";
+
+export const metadata: Metadata = {
+  title: "Prism Authentication",
+  description: "DevelopedByUsama",
+};
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
