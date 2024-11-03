@@ -1,79 +1,84 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING") 
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id             String         @id @default(uuid())
+  username       String         @unique
+  name           String?
+  createdAt      DateTime       @default(now())
+  settings       UserSettings?
+  projects       Project[]
+  tasks          Task[]
+  taskHistories  TaskHistory[]
+  categories     Category[]
+  transactions   Transaction[]
+  monthHistories MonthHistory[]
+  yearHistories  YearHistory[]
 }
 
 model UserSettings {
-  userId   String @id
+  userId   String @id @unique
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   currency String
 }
 
 model Project {
-  id                 String   @id @default(uuid())
+  id                 String    @id @default(uuid())
   name               String
   description        String?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @default(now())
-  userId             String // Foreign key for the user
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @default(now())
+  userId             String
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   clientSatisfaction Float?
-
-  startDate DateTime?
-  deadline  DateTime?
-
-  tasks    Task[] // Relationship to tasks
-  budgetId String?
-
-  status         String @default("ONGOING")
-  priority       String @default("Medium")
-  budget         Int?
-  usedBudget     Int?
-  numberOfTasks  Int    @default(0)
-  completedTasks Int    @default(0)
+  startDate          DateTime?
+  deadline           DateTime?
+  tasks              Task[]
+  budgetId           String?
+  status             String    @default("ONGOING")
+  priority           String    @default("Medium")
+  budget             Int?
+  usedBudget         Int?
+  numberOfTasks      Int       @default(0)
+  completedTasks     Int       @default(0)
 }
 
 model Task {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  userId      String // Foreign key for the user
-  projectId   String // Foreign key for the project
-  project     Project  @relation(fields: [projectId], references: [id])
-
-  status         String    @default("Ongoing")
-  priority       String    @default("Medium")
+  id             String        @id @default(uuid())
+  name           String
+  description    String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @default(now())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId      String
+  project        Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  status         String        @default("Ongoing")
+  priority       String        @default("Medium")
   dueDate        DateTime?
   assignedTo     String?
   estimatedHours Float?
   actualHours    Float?
-
-  dependencyId String? @unique
-  dependency   Task?   @relation(name: "TaskDependencies", fields: [dependencyId], references: [id])
-
-  dependentOnId String? @unique
-  dependentOn   Task?   @relation(name: "TaskDependencies")
-
-  riskFlag    Boolean       @default(false)
-  TaskHistory TaskHistory[]
+  dependencyId   String?       @unique
+  dependency     Task?         @relation(name: "TaskDependencies", fields: [dependencyId], references: [id])
+  dependentOnId  String?       @unique
+  dependentOn    Task?         @relation(name: "TaskDependencies")
+  riskFlag       Boolean       @default(false)
+  TaskHistory    TaskHistory[]
 }
 
 model TaskHistory {
   id            String    @id @default(uuid())
   taskId        String
-  task          Task      @relation(fields: [taskId], references: [id])
+  task          Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
   userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   version       String
   dueDate       DateTime?
   assignedTo    String?
@@ -86,9 +91,11 @@ model TaskHistory {
 }
 
 model Category {
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   name      String
   userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   icon      String
   type      String   @default("income")
 
@@ -96,41 +103,38 @@ model Category {
 }
 
 model Transaction {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
   amount       Float
   description  String
   date         DateTime
   userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   type         String   @default("income")
   category     String
   categoryIcon String
-
-  // Relationship: A transaction is associated with a user via userId
-  // Relationship: A transaction is associated with a category via category and categoryIcon
 }
 
 model MonthHistory {
   userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   day     Int
   month   Int
   year    Int
   income  Float
   expense Float
-  // Relationship: MonthHistory is associated with a user via userId
 
   @@id([day, month, year, userId])
 }
 
 model YearHistory {
   userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   month   Int
   year    Int
   income  Float
   expense Float
-  // Relationship: YearHistory is associated with a user via userId
 
   @@id([month, year, userId])
 }
