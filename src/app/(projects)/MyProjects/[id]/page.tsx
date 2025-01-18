@@ -28,12 +28,17 @@ import {
 } from "@/components/ui/table";
 
 const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
+  // getting user from clerk to get its role
   const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in");
   }
 
+  // extracting role so that ony admin can access crud buttons
+  const role = user?.publicMetadata.role;
+
+  // getting project id url params
   const id = params.id;
 
   const project = await prisma.project.findFirst({
@@ -95,13 +100,13 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          <Link href={`/projects/${project.id}/budgeting`} passHref>
+          <Link href="/" passHref>
             <Button className="w-full sm:w-auto flex items-center justify-center text-white bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600">
               <DollarSignIcon className="mr-2 h-4 w-4" />
               Budgeting
             </Button>
           </Link>
-          <Link href={`/projects/${project.id}/tasks`} passHref>
+          <Link href="/MyTasks"passHref>
             <Button
               variant="outline"
               className="w-full sm:w-auto flex items-center justify-center"
@@ -115,41 +120,45 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
 
       {/* this div contains a child component that updates a project taking its all details */}
       <div className="flex items-center justify-start mt-4 gap-4 p-4">
-        <UpdateProjectDialog
-          project={{
-            projectId: project.id,
-            name: project.name,
-            description: project.description ?? undefined,
-            startDate: project.startDate ?? undefined,
-            deadline: project.deadline ?? undefined,
-            status: project.status as "COMPLETED" | "ONGOING" | "CANCELLED", // Cast status
-            priority: project.priority as "High" | "Medium" | "Low", // Cast priority
-            budget: project.budget ?? undefined,
-            numberOfTasks: project.numberOfTasks,
-            completedTasks: project.completedTasks,
-          }}
-          trigger={
-            <Button
-              className="flex border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-500 hover:bg-red-500/20"
-              variant={"secondary"}
-            >
-              Update Insights
-            </Button>
-          }
-        />
+        {role === "admin" && (
+          <UpdateProjectDialog
+            project={{
+              projectId: project.id,
+              name: project.name,
+              description: project.description ?? undefined,
+              startDate: project.startDate ?? undefined,
+              deadline: project.deadline ?? undefined,
+              status: project.status as "COMPLETED" | "ONGOING" | "CANCELLED", // Cast status
+              priority: project.priority as "High" | "Medium" | "Low", // Cast priority
+              budget: project.budget ?? undefined,
+              numberOfTasks: project.numberOfTasks,
+              completedTasks: project.completedTasks,
+            }}
+            trigger={
+              <Button
+                className="flex border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                variant={"secondary"}
+              >
+                Update Insights
+              </Button>
+            }
+          />
+        )}
         {/* this dialog contains a child component that deletes a project taking its id */}
-        <DeleteProjectDialog
-          project={project}
-          trigger={
-            <Button
-              className="flex w-max border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-500 hover:bg-red-500/20"
-              variant={"secondary"}
-            >
-              <TrashIcon className="h-4 w-4 " />
-              Delete Project
-            </Button>
-          }
-        />
+        {role === "admin" && (
+          <DeleteProjectDialog
+            project={project}
+            trigger={
+              <Button
+                className="flex w-max border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                variant={"secondary"}
+              >
+                <TrashIcon className="h-4 w-4 " />
+                Delete Project
+              </Button>
+            }
+          />
+        )}
       </div>
 
       {/* Project details Cards */}
