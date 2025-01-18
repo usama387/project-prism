@@ -11,8 +11,14 @@ const DashboardPage = async () => {
   // getting user to display its details
   const user = await currentUser();
 
-  // when no user found
   if (!user) {
+    redirect("/sign-in");
+  }
+
+  const role = user?.publicMetadata.role;
+
+  // when no user found
+  if (role !== "admin" && role !== "member") {
     redirect("/sign-in");
   }
 
@@ -35,29 +41,33 @@ const DashboardPage = async () => {
           <p className="text-3xl font-bold">Hello, {user.firstName}! 👋</p>
           <div className="flex items-center gap-3">
             {/* create transaction dialog is a child client component which creates transactions for project the type is passed as props which is either income or expense  */}
-            <CreateTransactionDialog
-              trigger={
-                <Button
-                  variant={"outline"}
-                  className="border-emerald-500 bg-emerald-950 text-white hover:border-emerald-700 hover:text-white"
-                >
-                  New Income
-                </Button>
-              }
-              type="income"
-            />
+            {role === "admin" && (
+              <CreateTransactionDialog
+                trigger={
+                  <Button
+                    variant={"outline"}
+                    className="border-emerald-500 bg-emerald-950 text-white hover:border-emerald-700 hover:text-white"
+                  >
+                    New Income
+                  </Button>
+                }
+                type="income"
+              />
+            )}
 
-            <CreateTransactionDialog
-              trigger={
-                <Button
-                  variant={"outline"}
-                  className="border-rose-500 bg-rose-950 text-white hover:border-emerald-700 hover:text-white"
-                >
-                  New Expense
-                </Button>
-              }
-              type="expense"
-            />
+            {role === "admin" && (
+              <CreateTransactionDialog
+                trigger={
+                  <Button
+                    variant={"outline"}
+                    className="border-rose-500 bg-rose-950 text-white hover:border-emerald-700 hover:text-white"
+                  >
+                    New Expense
+                  </Button>
+                }
+                type="expense"
+              />
+            )}
           </div>
         </div>
       </div>
