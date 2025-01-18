@@ -79,7 +79,7 @@ const TaskVersionsPage = () => {
         </h1>
 
         {/* child component to add a version of task */}
-        {role === "admin" && (
+        {role === "admin" || role === "member" && (
           <AddVersionDialog
             trigger={
               <Button className="text-sm md:text-base px-4 py-2 md:px-6 md:py-3">
