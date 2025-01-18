@@ -1,21 +1,27 @@
+"use client";
+
+
 import { Button } from "@/components/ui/button";
 import CreateProjectDialog from "../_components/CreateProjectDialog";
 import Logo from "@/components/Logo";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 const CreateProject = async () => {
-  // getting user from clerk
-  const user = await currentUser();
+  // getting user from clerk for role based access
+  const { user } = useUser();
 
   if (!user) {
     redirect("/sign-in");
   }
 
+  // extracting role from user object
+  const role = user?.publicMetadata.role;
+
   return (
-    <div className="container flex max-w-2xl flex-col items-center justify-between gap-4">
+    <div className="container flex max-w-2xl flex-col items-center justify-between gap-4 p-4">
       <div>
         <h1 className="text-center text-3xl">
           Welcome, <span className="ml-3 font-bold">{user.firstName}! 👋</span>
@@ -30,16 +36,21 @@ const CreateProject = async () => {
       <Separator />
       <div className="border-b bg-card">
         <div className="container flex flex-wrap items-center justify-between gap-6 py-8">
-          <CreateProjectDialog
-            trigger={
-              <Button
-                variant={"outline"}
-                className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
-              >
-                New Project
-              </Button>
-            }
-          />
+          {role !== "admin" && (
+            <span>You are not authorized to create a new project</span>
+          )}
+          {role === "admins" && (
+            <CreateProjectDialog
+              trigger={
+                <Button
+                  variant={"outline"}
+                  className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
+                >
+                  New Project
+                </Button>
+              }
+            />
+          )}
         </div>
       </div>
       <Separator />
