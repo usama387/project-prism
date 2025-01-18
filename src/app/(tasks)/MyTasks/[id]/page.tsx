@@ -25,11 +25,15 @@ import {
 } from "@/components/ui/table";
 
 const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
+  // getting user from clerk
   const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in");
   }
+
+  // extracting user role from its metadata
+  const role = user?.publicMetadata.role;
 
   const task = await prisma.task.findFirst({
     where: {
@@ -104,68 +108,74 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
           {/* Dialog to update task details */}
-          <UpdateTaskDialog
-            task={{
-              taskId: task.id,
-              name: task.name,
-              description: task.description ?? undefined,
-              dueDate: task.dueDate ?? undefined,
-              status: task.status as
-                | "Completed"
-                | "Ongoing"
-                | "Cancelled"
-                | "On Hold"
-                | "Todo"
-                | "Overdue",
-              priority: task.priority as "High" | "Medium" | "Low",
-              estimatedHours: task.estimatedHours ?? undefined,
-              actualHours: task.actualHours ?? undefined,
-              projectId: task.projectId,
-              dependency: task.dependency?.id ?? undefined,
-              dependentOn: task.dependentOn?.id ?? undefined,
-              assignedTo: task.assignedTo as
-                | "Usama"
-                | "Maryam"
-                | "Noor"
-                | "Abdul Wasay",
-              riskFlag: task.riskFlag ?? false,
-            }}
-            trigger={
-              <Button
-                className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
-                variant={"secondary"}
-              >
-                <EditIcon className="mr-2 h-4 w-4" />
-                Edit Task
-              </Button>
-            }
-          />
+          {role === "admin" && (
+            <UpdateTaskDialog
+              task={{
+                taskId: task.id,
+                name: task.name,
+                description: task.description ?? undefined,
+                dueDate: task.dueDate ?? undefined,
+                status: task.status as
+                  | "Completed"
+                  | "Ongoing"
+                  | "Cancelled"
+                  | "On Hold"
+                  | "Todo"
+                  | "Overdue",
+                priority: task.priority as "High" | "Medium" | "Low",
+                estimatedHours: task.estimatedHours ?? undefined,
+                actualHours: task.actualHours ?? undefined,
+                projectId: task.projectId,
+                dependency: task.dependency?.id ?? undefined,
+                dependentOn: task.dependentOn?.id ?? undefined,
+                assignedTo: task.assignedTo as
+                  | "Usama"
+                  | "Maryam"
+                  | "Noor"
+                  | "Abdul Wasay",
+                riskFlag: task.riskFlag ?? false,
+              }}
+              trigger={
+                <Button
+                  className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                  variant={"secondary"}
+                >
+                  <EditIcon className="mr-2 h-4 w-4" />
+                  Edit Task
+                </Button>
+              }
+            />
+          )}
           {/* Dialog to delete a task */}
-          <DeleteTaskDialog
-            task={task}
-            trigger={
-              <Button
-                className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
-                variant={"secondary"}
-              >
-                <TrashIcon className="h-4 w-4 " />
-                Delete Task
-              </Button>
-            }
-          />
+          {role === "admin" && (
+            <DeleteTaskDialog
+              task={task}
+              trigger={
+                <Button
+                  className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                  variant={"secondary"}
+                >
+                  <TrashIcon className="h-4 w-4 " />
+                  Delete Task
+                </Button>
+              }
+            />
+          )}
 
           {/* Dialog to add a new task version */}
-          <AddVersionDialog
-            trigger={
-              <Button
-                className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
-                variant={"secondary"}
-              >
-                <TrashIcon className="h-4 w-4 " />
-                Add Version
-              </Button>
-            }
-          />
+          {role === "admin" && (
+            <AddVersionDialog
+              trigger={
+                <Button
+                  className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                  variant={"secondary"}
+                >
+                  <TrashIcon className="h-4 w-4 " />
+                  Add Version
+                </Button>
+              }
+            />
+          )}
         </div>
       </div>
 
