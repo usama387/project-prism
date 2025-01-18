@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import CreateProjectDialog from "../_components/CreateProjectDialog";
+import { useUser } from "@clerk/nextjs";
 
 // Define the Project type with the status field
 type Project = {
@@ -60,7 +61,6 @@ const priorityColors = {
 
 // Create a client
 const queryClient = new QueryClient();
-
 
 function ProjectsPageContent() {
   // Fetching projects with useQuery
@@ -105,6 +105,11 @@ function ProjectsPageContent() {
   const currentProjects = filteredProjects.slice(startIndex, endIndex);
 
   const resetPage = () => setCurrentPage(1);
+
+  // getting user from clerk for role based access
+  const { user } = useUser();
+
+  const role = user?.publicMetadata.role;
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -179,16 +184,18 @@ function ProjectsPageContent() {
       </div>
 
       <div className="flex items-center justify-start md:justify-end  mb-4">
-        <CreateProjectDialog
-          trigger={
-            <Button
-              variant={"outline"}
-              className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
-            >
-              New Project
-            </Button>
-          }
-        />
+        {role === "admin" && (
+          <CreateProjectDialog
+            trigger={
+              <Button
+                variant={"outline"}
+                className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
+              >
+                New Project
+              </Button>
+            }
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
