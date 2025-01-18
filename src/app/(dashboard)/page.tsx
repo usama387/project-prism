@@ -6,6 +6,7 @@ import React from "react";
 import CreateTransactionDialog from "./_components/CreateTransactionDialog";
 import Overview from "./_components/Overview";
 import History from "./_components/History";
+import { toast } from "sonner";
 
 const DashboardPage = async () => {
   // getting user to display its details
@@ -19,7 +20,7 @@ const DashboardPage = async () => {
 
   // when no user found
   if (role !== "admin" && role !== "member") {
-    redirect("/sign-in");
+    toast.error("Only admin and member can access budgeting route");
   }
 
   // now fetching details User Settings table to display currency settings of user
