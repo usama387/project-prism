@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { useUser } from "@clerk/nextjs";
 
 // Adjusted TaskHistory type to include task.name
 type TaskHistory = {
@@ -40,6 +41,12 @@ type TaskHistory = {
 };
 
 const TaskVersionsPage = () => {
+  // getting user from clerk for role based access
+  const { user } = useUser();
+
+  // getting role from user metadata
+  const role = user?.publicMetadata.role;
+
   // fetching my api
   const {
     data: versions,
@@ -72,13 +79,15 @@ const TaskVersionsPage = () => {
         </h1>
 
         {/* child component to add a version of task */}
-        <AddVersionDialog
-          trigger={
-            <Button className="text-sm md:text-base px-4 py-2 md:px-6 md:py-3">
-              <Plus className="mr-2 h-4 w-4 md:h-5 md:w-5" /> Add Version
-            </Button>
-          }
-        />
+        {role === "admin" && (
+          <AddVersionDialog
+            trigger={
+              <Button className="text-sm md:text-base px-4 py-2 md:px-6 md:py-3">
+                <Plus className="mr-2 h-4 w-4 md:h-5 md:w-5" /> Add Version
+              </Button>
+            }
+          />
+        )}
       </div>
       <Table>
         <TableHeader className="items-center">
