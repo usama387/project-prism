@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import CreateTaskDialog from "../_components/CreateTaskDialog";
-import { Plus } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 type Task = {
   project?: {
@@ -73,6 +73,7 @@ const MyTaskPage = () => {
   const [projectFilter, setProjectFilter] = useState<string | null>(null);
   const [monthFilter, setMonthFilter] = useState<string | null>(null);
 
+  //logic for dynamic colors for different priorities
   const priorityColors = {
     High: "border-emerald-500 bg-emerald-950 text-white hover:border-emerald-700 hover:text-white",
     Low: "border-rose-500 bg-rose-950 text-white hover:border-blue-700",
@@ -80,6 +81,7 @@ const MyTaskPage = () => {
       "border-rose-500 bg-rose-950 text-white hover:border-emerald-700 hover:text-white",
   };
 
+  //logic for  dynamic colors for different statuses
   const statusColors = {
     Completed: "border-rose-500 bg-rose-950 text-white hover:border-blue-700",
     Ongoing:
@@ -124,6 +126,11 @@ const MyTaskPage = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const resetPage = () => setCurrentPage(1);
+
+  // getting user from clerk for role based access
+  const { user } = useUser();
+
+  const role = user?.publicMetadata.role;
 
   const TaskSkeleton = () => (
     <Card>
@@ -238,18 +245,20 @@ const MyTaskPage = () => {
       </div>
 
       <div className="flex items-center justify-start md:justify-end mb-4">
-        <CreateTaskDialog
-          projects={projects}
-          tasks={tasks}
-          trigger={
-            <Button
-              variant="outline"
-              className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
-            >
-              <span>New Task</span>
-            </Button>
-          }
-        />
+        {role === "admin" && (
+          <CreateTaskDialog
+            projects={projects}
+            tasks={tasks}
+            trigger={
+              <Button
+                variant="outline"
+                className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
+              >
+                <span>New Task</span>
+              </Button>
+            }
+          />
+        )}
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
