@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import { Plus, CheckCircle2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { role } from "@/lib/role";
+import { currentUser } from "@clerk/nextjs/server";
 
 const CreateTaskPage = async () => {
   // Fetching projects and passing to CreateTaskDialog component
@@ -23,6 +23,12 @@ const CreateTaskPage = async () => {
       name: true,
     },
   });
+
+  // getting user to display its details
+  const user = await currentUser();
+
+  // getting role from user metadata
+  const role = user?.publicMetadata.role;
   
   return (
     <>
