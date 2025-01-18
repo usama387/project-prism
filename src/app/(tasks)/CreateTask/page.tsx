@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import { Plus, CheckCircle2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { role } from "@/lib/role";
 
 const CreateTaskPage = async () => {
   // Fetching projects and passing to CreateTaskDialog component
@@ -22,7 +23,7 @@ const CreateTaskPage = async () => {
       name: true,
     },
   });
-
+  
   return (
     <>
       <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -55,19 +56,21 @@ const CreateTaskPage = async () => {
           </div>
 
           {/* Task creation button with dialog */}
-          <CreateTaskDialog
-            projects={projects}
-            tasks={tasks}
-            trigger={
-              <Button
-                variant="outline"
-                className="h-full flex flex-col items-center justify-center space-y-4 border-2 border-dashed border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-900 transition-colors duration-300"
-              >
-                <Plus className="h-8 w-8" />
-                <span>Create New Task</span>
-              </Button>
-            }
-          />
+          {role === "admin" && (
+            <CreateTaskDialog
+              projects={projects}
+              tasks={tasks}
+              trigger={
+                <Button
+                  variant="outline"
+                  className="h-full flex flex-col items-center justify-center space-y-4 border-2 border-dashed border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-900 transition-colors duration-300"
+                >
+                  <Plus className="h-8 w-8" />
+                  <span>Create New Task</span>
+                </Button>
+              }
+            />
+          )}
         </div>
       </div>
     </>
