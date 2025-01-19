@@ -13,7 +13,10 @@ export const GET = async () => {
 
   const userTasks = await prisma.task.findMany({
     where: {
-      userId: user.id,
+      OR: [
+        { userId: user.id }, // Tasks created by the current user
+        { userId: { not: user.id } }, // Tasks created by other users
+      ],
     },
     include: {
       project: {
