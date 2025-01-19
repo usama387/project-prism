@@ -6,7 +6,6 @@ import React from "react";
 import CreateTransactionDialog from "./_components/CreateTransactionDialog";
 import Overview from "./_components/Overview";
 import History from "./_components/History";
-import { toast } from "sonner";
 
 const DashboardPage = async () => {
   // getting user to display its details
@@ -16,12 +15,8 @@ const DashboardPage = async () => {
     redirect("/sign-in");
   }
 
+  // to extract role from user
   const role = user?.publicMetadata.role;
-
-  // when no user found
-  if (role !== "admin" && role !== "member") {
-    toast.error("Only admin and member can access budgeting route");
-  }
 
   // now fetching details User Settings table to display currency settings of user
   const UserSettings = await prisma.userSettings.findUnique({
@@ -49,7 +44,7 @@ const DashboardPage = async () => {
                     variant={"outline"}
                     className="border-emerald-500 bg-emerald-950 text-white hover:border-emerald-700 hover:text-white"
                   >
-                    New Income
+                    New Budget
                   </Button>
                 }
                 type="income"
