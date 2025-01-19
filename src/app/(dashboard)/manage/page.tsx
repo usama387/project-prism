@@ -20,8 +20,14 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Category } from "@prisma/client";
 import DeleteCategoryDialog from "../_components/DeleteCategoryDialog";
+import { useUser } from "@clerk/nextjs";
 
 const ManageCategories = () => {
+  // getting user from clerk for role based access
+  const { user } = useUser();
+
+  const role = user?.publicMetadata.role;
+
   return (
     <>
       {/* HEADER */}
@@ -47,7 +53,7 @@ const ManageCategories = () => {
           </CardHeader>
           <CardContent>
             {/* this component lets user customize the currency */}
-            <CurrencyComboBox />
+            {role === "admin" && <CurrencyComboBox />}
           </CardContent>
         </Card>
 
@@ -71,6 +77,11 @@ const CategoryList = ({ type }: { type: TransactionType }) => {
   //   this variable ensures the availability of data in the api and then pass it to the div to display it
   const dataAvailable = categoriesQuery.data && categoriesQuery.data.length > 0;
 
+  // getting user from clerk for role based access
+  const { user } = useUser();
+
+  const role = user?.publicMetadata.role;
+
   return (
     <SkeletonWrapper isLoading={categoriesQuery.isLoading}>
       <Card>
@@ -93,16 +104,18 @@ const CategoryList = ({ type }: { type: TransactionType }) => {
             </div>
 
             {/* this component lets user create a new category based on type on success it will refetch categoriesQuery api to show new category created*/}
-            <CreateCategoryDialog
-              type={type}
-              SuccessCallback={() => categoriesQuery.refetch()}
-              trigger={
-                <Button className="gap-2 text-sm text-emerald-500 bg-black font-semibold">
-                  <PlusSquare className="h-4 w-4" />
-                  Create Category
-                </Button>
-              }
-            />
+            {role === "admin" && (
+              <CreateCategoryDialog
+                type={type}
+                SuccessCallback={() => categoriesQuery.refetch()}
+                trigger={
+                  <Button className="gap-2 text-sm text-emerald-500 bg-black font-semibold">
+                    <PlusSquare className="h-4 w-4" />
+                    Create Category
+                  </Button>
+                }
+              />
+            )}
           </CardTitle>
         </CardHeader>
         <Separator />
@@ -146,6 +159,11 @@ const CategoryList = ({ type }: { type: TransactionType }) => {
 };
 
 const CategoryCard = ({ category }: { category: Category }) => {
+  // getting user from clerk for role based access
+  const { user } = useUser();
+
+  const role = user?.publicMetadata.role;
+
   return (
     <div className="flex flex-col border-separate justify-between rounded-md border shadow-md shadow-black/[0.1] dark:shadow-white/[0.1]">
       <div className="flex flex-col items-center gap-2 p-4">
@@ -155,18 +173,20 @@ const CategoryCard = ({ category }: { category: Category }) => {
         <span>{category.name}</span>
       </div>
 
-      <DeleteCategoryDialog
-        category={category}
-        trigger={
-          <Button
-            className="flex w-full border-separate items-center gap-2 rounded-t-none text-muted-foreground hover:bg-red-500/20"
-            variant={"secondary"}
-          >
-            <TrashIcon className="h-4 w-4 " />
-            Delete
-          </Button>
-        }
-      />
+      {role === "admin" && (
+        <DeleteCategoryDialog
+          category={category}
+          trigger={
+            <Button
+              className="flex w-full border-separate items-center gap-2 rounded-t-none text-muted-foreground hover:bg-red-500/20"
+              variant={"secondary"}
+            >
+              <TrashIcon className="h-4 w-4 " />
+              Delete
+            </Button>
+          }
+        />
+      )}
     </div>
   );
 };
