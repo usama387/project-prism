@@ -1,9 +1,17 @@
 import prisma from "@/lib/prisma";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 // this api fetches categories and is being used in categories picker component
 export const GET = async (request: Request) => {
+  // Get the current user using Clerk authentication
+  const user = await currentUser();
 
+  // If no user is found (not authenticated), redirect to the sign-in page
+  if (!user) {
+    redirect("/sign-in");
+  }
 
   // Extract query parameters from the request URL
   const { searchParams } = new URL(request.url);
@@ -27,10 +35,11 @@ export const GET = async (request: Request) => {
   // Extract the validated "type" data
   const type = queryParams.data;
 
-  // Query the database to find categories 
+  // Query the database to find categories that belong to the current user
   // and optionally filter by the "type" (if provided)
   const categories = await prisma.category.findMany({
     where: {
+      userId: user.id, // Filter categories by the current user's ID
       ...(type && { type }), // Add the "type" filter if it exists
     },
     orderBy: {
