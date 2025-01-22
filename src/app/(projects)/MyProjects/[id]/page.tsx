@@ -44,7 +44,6 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
   const project = await prisma.project.findFirst({
     where: {
       id,
-      userId: user.id,
     },
     include: {
       tasks: {
@@ -106,7 +105,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
               Budgeting
             </Button>
           </Link>
-          <Link href="/MyTasks"passHref>
+          <Link href="/MyTasks" passHref>
             <Button
               variant="outline"
               className="w-full sm:w-auto flex items-center justify-center"
