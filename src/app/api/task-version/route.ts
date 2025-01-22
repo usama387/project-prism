@@ -10,10 +10,6 @@ export const GET = async () => {
   }
 
   const TaskVersions = await prisma.taskHistory.findMany({
-    where: {
-      userId: user.id,
-    },
-
     // task history table has relation with task table so fetching its id and name
     include: {
       task: {
