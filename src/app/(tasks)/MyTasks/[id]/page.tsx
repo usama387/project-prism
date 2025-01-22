@@ -38,7 +38,6 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
   const task = await prisma.task.findFirst({
     where: {
       id: params.id,
-      userId: user.id,
     },
     include: {
       project: {
