@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
@@ -22,8 +23,9 @@ export const GET = async () => {
 
     revalidatePath("/MyProjects");
 
-    return Response.json(announcements);
+    return NextResponse.json(announcements);
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching announcements:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 };
