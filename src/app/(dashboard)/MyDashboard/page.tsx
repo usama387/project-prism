@@ -16,6 +16,8 @@ import RecentProjectsCard from "./_components/SecondSection/RecentProjectsCard";
 import UpcomingDeadlinesCard from "./_components/SecondSection/UpcomingDeadlinesCard";
 import TeamPerformanceCard from "./_components/SecondSection/TeamPerformanceCard";
 import { Separator } from "@/components/ui/separator";
+import { Megaphone } from "lucide-react";
+import Link from "next/link";
 
 const MyDashboardPage = async () => {
   // getting date methods from date fns to pass in queries
@@ -228,8 +230,16 @@ const MyDashboardPage = async () => {
 
   return (
     <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 gap-6 flex flex-col">
-      {/* Project Analytics section */}
-      <h1 className="text-3xl font-bold tracking-tight">Projects Analytics</h1>
+      <div className="flex justify-between items-center">
+        {/* Project Analytics section */}
+        <h1 className="text-3xl font-bold tracking-tight">
+          Projects Analytics
+        </h1>
+
+        <Link href="/Announcements">
+          <Megaphone className="announcement-icon text-emerald-500" size={24} />
+        </Link>
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {/* this child component uses react countup which uses useRef behind the scenes and requires client component to render */}
