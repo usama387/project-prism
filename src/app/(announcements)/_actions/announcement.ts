@@ -6,9 +6,12 @@ import {
   CreateAnnouncementSchemaType,
   DeleteAnnouncementSchema,
   DeleteAnnouncementSchemaType,
+  UpdateAnnouncementSchema,
+  UpdateAnnouncementSchemaType,
 } from "../../../../ZodSchema/announcement";
 import { revalidatePath } from "next/cache";
 
+// server action to create announcement
 export const CreateAnnouncement = async (
   form: CreateAnnouncementSchemaType
 ) => {
@@ -45,6 +48,7 @@ export const CreateAnnouncement = async (
   }
 };
 
+// server action to delete announcement
 export const DeleteAnnouncement = async (
   form: DeleteAnnouncementSchemaType
 ) => {
@@ -60,6 +64,45 @@ export const DeleteAnnouncement = async (
         id: parsedBody.data?.announcementId,
       },
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// server action to update announcement
+export const UpdateAnnouncement = async (
+  form: UpdateAnnouncementSchemaType
+) => {
+  try {
+    const parsedBody = UpdateAnnouncementSchema.safeParse(form);
+
+    if (!parsedBody.success) {
+      throw new Error("Invalid data");
+    }
+
+    const { announcementId, title, description, projectId, taskId, date } =
+      parsedBody.data;
+
+    const UpdatedAnnouncement = await prisma.announcement.update({
+      where: {
+        id: announcementId,
+      },
+      data: {
+        title,
+        description,
+        project: {
+          connect: { id: projectId },
+        },
+        task: {
+          connect: { id: taskId },
+        },
+        date: date ?? undefined,
+      },
+    });
+
+    revalidatePath("/Announcements");
+
+    return UpdatedAnnouncement;
   } catch (error) {
     console.log(error);
   }

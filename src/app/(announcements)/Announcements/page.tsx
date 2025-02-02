@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import DeleteAnnouncementDialog from "../_components/DeleteAnnouncementDialog";
-import { TrashIcon } from "lucide-react";
+import { EditIcon, TrashIcon } from "lucide-react";
+import UpdateAnnouncementDialog from "../_components/UpdateAnnouncementDialog";
 
 // project type safety
 type Project = {
@@ -102,33 +103,33 @@ const AnnouncementsPage = () => {
               </CardHeader>
               <CardContent className="flex-grow flex flex-col justify-between p-4">
                 <SkeletonWrapper isLoading={isLoading}>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <p className="text-xl text-gray-900 dark:text-gray-100 mb-4">
                     {announcement?.description}
                   </p>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-300">
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                         Project:
                       </span>
                       <h3 className="text-base font-semibold text-gray-500">
                         {announcement?.project.name}
                       </h3>
-                      <h3 className="text-base font-semibold text-gray-500 lowercase">
-                        <span className="text-gray-300 text-sm font-medium">
+                      <h3 className="text-base text-gray-500 lowercase">
+                        <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
                           Status
                         </span>
                         : {announcement?.project?.status}
                       </h3>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-300">
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                         Task:
                       </span>
-                      <h3 className="text-base font-semibold text-gray-500">
+                      <h3 className="text-base  text-gray-500">
                         {announcement?.task.name}
                       </h3>
-                      <h3 className="text-base font-semibold text-gray-500 lowercase">
-                        <span className="text-gray-300 text-sm font-medium">
+                      <h3 className="text-base text-gray-500 lowercase">
+                        <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
                           Status
                         </span>
                         : {announcement?.task?.status}
@@ -136,8 +137,8 @@ const AnnouncementsPage = () => {
                     </div>
                   </div>
 
-                  {/* Only admin can delete announcements with the following component */}
-                  <div className="text-end p-2">
+                  {/* Only admin can delete & update announcements with the following components */}
+                  <div className="flex p-2 gap-2 items-center justify-end">
                     {role === "admin" && (
                       <DeleteAnnouncementDialog
                         announcement={announcement}
@@ -151,15 +152,28 @@ const AnnouncementsPage = () => {
                         }
                       />
                     )}
+
+                    {role === "admin" && (
+                      <UpdateAnnouncementDialog
+                      announcement={{ ...announcement, announcementId: announcement.id }}                        projects={projects}
+                        tasks={tasks}
+                        trigger={
+                          <Button
+                            variant="outline"
+                            className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
+                          >
+                            <EditIcon className="mr-2 h-4 w-4" />
+                          </Button>
+                        }
+                      />
+                    )}
                   </div>
                 </SkeletonWrapper>
               </CardContent>
             </Card>
           ))
         ) : (
-          <p className="items-center">
-            No announcements available.
-          </p>
+          <p className="items-center">No announcements available.</p>
         )}
       </div>
     </div>
