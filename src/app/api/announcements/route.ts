@@ -21,7 +21,7 @@ export const GET = async () => {
       },
     });
 
-    revalidatePath("/MyProjects");
+    revalidatePath("/Announcements");
 
     return NextResponse.json(announcements);
   } catch (error) {
