@@ -235,17 +235,32 @@ const MyDashboardPage = async () => {
         <h1 className="text-3xl font-bold tracking-tight">
           Projects Analytics
         </h1>
-
-        <div className="flex items-center gap-3">
-          <Link href="/Announcements">
+        {/* Issues and Announcements Links */}
+        <div className="flex items-center gap-6">
+          {/* Increased gap between items */}
+          <Link
+            href="/Announcements"
+            className="flex items-center gap-2 group hover:text-emerald-600 transition-colors"
+          >
             <Megaphone
-              className="announcement-icon text-emerald-500"
-              size={24}
+              className="text-emerald-500 group-hover:text-emerald-600 transition-colors"
+              size={28} // Increased from 24
             />
+            <span className="text-sm font-medium hidden sm:inline-block">
+              Announcements
+            </span>
           </Link>
-
-          <Link href="/Issues">
-            <AlertTriangle className="text-red-500 w-5 h-5" />
+          <Link
+            href="/Issues"
+            className="flex items-center gap-2 group hover:text-red-600 transition-colors"
+          >
+            <AlertTriangle
+              className="text-red-500 group-hover:text-red-600 transition-colors"
+              size={28} // Increased from w-5/h-5 (now using size prop)
+            />
+            <span className="text-sm font-medium hidden sm:inline-block">
+              Issues
+            </span>
           </Link>
         </div>
       </div>
