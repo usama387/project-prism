@@ -46,6 +46,7 @@ model Project {
   numberOfTasks  Int            @default(0)
   completedTasks Int            @default(0)
   Announcement   Announcement[]
+  Issue          Issue[]
 }
 
 model Task {
@@ -74,6 +75,7 @@ model Task {
   riskFlag     Boolean        @default(false)
   TaskHistory  TaskHistory[]
   Announcement Announcement[]
+  Issue        Issue[]
 }
 
 model TaskHistory {
@@ -147,6 +149,19 @@ model Announcement {
   date        DateTime?
   title       String
   description String
+  projectId   String?
+  project     Project?  @relation(fields: [projectId], references: [id])
+  taskId      String?
+  task        Task?     @relation(fields: [taskId], references: [id])
+}
+
+model Issue {
+  id          String    @id @default(uuid())
+  date        DateTime?
+  title       String
+  description String
+  status      String    @default("Unresolved")
+  priority    String    @default("Medium")
   projectId   String?
   project     Project?  @relation(fields: [projectId], references: [id])
   taskId      String?

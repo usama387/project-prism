@@ -11,33 +11,33 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Announcement } from "@prisma/client";
+import { Issue } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { DeleteAnnouncement } from "../_actions/announcement";
+import { DeleteIssue } from "../_actions/issue";
 
 interface Props {
   trigger: React.ReactNode;
-  announcement: Announcement;
+  issue: Issue;
 }
 
-const DeleteAnnouncementDialog = ({ trigger, announcement }: Props) => {
+const DeleteIssueDialog = ({ trigger, issue }: Props) => {
   const queryClient = useQueryClient();
 
-  const deleteAnnouncementMutation = useMutation({
-    mutationFn: DeleteAnnouncement,
+  const deleteIssueMutation = useMutation({
+    mutationFn: DeleteIssue,
     onSuccess: () => {
-      toast.success("Deleted announcement successfully", {
-        id: "delete-announcement",
+      toast.success("Deleted issue successfully", {
+        id: "delete-issue",
       });
       queryClient.invalidateQueries({
-        queryKey: ["announcements"],
+        queryKey: ["issues"],
       });
     },
 
     onError: () => {
       toast.error("Something went wrong", {
-        id: "delete-announcement",
+        id: "delete-issue",
       });
     },
   });
@@ -48,7 +48,7 @@ const DeleteAnnouncementDialog = ({ trigger, announcement }: Props) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you sure to delete this announcement?
+            Are you sure to delete this issue?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone
@@ -58,11 +58,11 @@ const DeleteAnnouncementDialog = ({ trigger, announcement }: Props) => {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              toast.loading("Deleting Announcement...", {
-                id: "delete-task",
+              toast.loading("Deleting Issue...", {
+                id: "delete-issue",
               });
-              deleteAnnouncementMutation.mutate({
-                announcementId: announcement.id,
+              deleteIssueMutation.mutate({
+                issueId: issue.id,
               });
             }}
           >
@@ -74,4 +74,4 @@ const DeleteAnnouncementDialog = ({ trigger, announcement }: Props) => {
   );
 };
 
-export default DeleteAnnouncementDialog;
+export default DeleteIssueDialog;

@@ -16,7 +16,7 @@ import RecentProjectsCard from "./_components/SecondSection/RecentProjectsCard";
 import UpcomingDeadlinesCard from "./_components/SecondSection/UpcomingDeadlinesCard";
 import TeamPerformanceCard from "./_components/SecondSection/TeamPerformanceCard";
 import { Separator } from "@/components/ui/separator";
-import { Megaphone } from "lucide-react";
+import { AlertTriangle, Megaphone } from "lucide-react";
 import Link from "next/link";
 
 const MyDashboardPage = async () => {
@@ -236,9 +236,18 @@ const MyDashboardPage = async () => {
           Projects Analytics
         </h1>
 
-        <Link href="/Announcements">
-          <Megaphone className="announcement-icon text-emerald-500" size={24} />
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/Announcements">
+            <Megaphone
+              className="announcement-icon text-emerald-500"
+              size={24}
+            />
+          </Link>
+
+          <Link href="/Issues">
+            <AlertTriangle className="text-red-500 w-5 h-5" />
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
