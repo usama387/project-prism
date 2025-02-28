@@ -174,8 +174,11 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
             <ListTodoIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-xl sm:text-2xl font-bold">
-              {project.completedTasks}/{project.numberOfTasks} Tasks Completed
+            <div className="flex items-center space-x-2">
+              <Badge>Completed</Badge>
+              <span className="text-xl sm:text-2xl font-bold">
+                {project.completedTasks}/{project.numberOfTasks}
+              </span>
             </div>
             <Progress value={progress} className="mt-2" />
           </CardContent>
