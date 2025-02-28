@@ -175,10 +175,10 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-2">
-              <Badge>Completed</Badge>
               <span className="text-xl sm:text-2xl font-bold">
                 {project.completedTasks}/{project.numberOfTasks}
               </span>
+              <Badge className="text-end">Completed</Badge>
             </div>
             <Progress value={progress} className="mt-2" />
           </CardContent>
