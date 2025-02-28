@@ -52,7 +52,7 @@ export const CreateProject = async (form: CreateProjectSchemaType) => {
       startDate: startDate ?? undefined, // Pass undefined if null
       deadline: deadline ?? undefined, // Pass undefined if null
       budget: budget ?? undefined, // Pass undefined if null
-      usedBudget: budget ?? undefined, // Pass undefined if null
+      usedBudget: usedBudget ?? undefined, // Pass undefined if null
       numberOfTasks: numberOfTasks ?? undefined, // Pass undefined if null
       userId: user.id,
       clientSatisfaction: clientSatisfaction ?? undefined,
