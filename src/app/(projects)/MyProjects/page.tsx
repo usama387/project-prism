@@ -112,7 +112,7 @@ function ProjectsPageContent() {
   const role = user?.publicMetadata.role;
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 h-screen">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-center sm:text-left animate-slideIn">
         Projects
       </h1>

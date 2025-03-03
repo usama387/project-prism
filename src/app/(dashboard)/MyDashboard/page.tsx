@@ -229,7 +229,7 @@ const MyDashboardPage = async () => {
       : 0;
 
   return (
-    <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 gap-6 flex flex-col">
+    <div className="flex flex-col h-screen container mx-auto py-6 px-4 sm:px-6 lg:px-8 gap-6">
       <div className="flex justify-between items-center">
         {/* Project Analytics section */}
         <h1 className="text-3xl font-bold tracking-tight">
