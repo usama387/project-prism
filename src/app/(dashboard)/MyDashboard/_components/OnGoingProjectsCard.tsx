@@ -14,7 +14,7 @@ const OnGoingProjectsCard = ({ OnGoingProjects }: Props) => {
     <Link href={"/OnGoingProjects"}>
       <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground animate-slideIn">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-base font-medium text-emerald-500">
+          <CardTitle className="text-base font-medium text-emerald-600 dark:text-emerald-500">
             Ongoing Projects
           </CardTitle>
           <Circle className="h-4 w-4 text-muted-foreground" />
@@ -28,7 +28,7 @@ const OnGoingProjectsCard = ({ OnGoingProjects }: Props) => {
               separator=","
             />
           </div>
-          <p className="text-base text-muted-foreground">In Progress</p>
+          <p className="text-base font-semibold text-muted-foreground">In Progress</p>
         </CardContent>
       </Card>
     </Link>

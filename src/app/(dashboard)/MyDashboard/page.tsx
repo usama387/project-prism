@@ -244,9 +244,9 @@ const MyDashboardPage = async () => {
           >
             <Megaphone
               className="text-emerald-500 group-hover:text-emerald-600 transition-colors"
-              size={28} // Increased from 24
+              size={28}
             />
-            <span className="text-sm font-medium hidden sm:inline-block">
+            <span className="text-base font-semibold hidden sm:inline-block">
               Announcements
             </span>
           </Link>
@@ -256,9 +256,9 @@ const MyDashboardPage = async () => {
           >
             <AlertTriangle
               className="text-red-500 group-hover:text-red-600 transition-colors"
-              size={28} // Increased from w-5/h-5 (now using size prop)
+              size={28}
             />
-            <span className="text-sm font-medium hidden sm:inline-block">
+            <span className="text-base font-semibold hidden sm:inline-block">
               Issues
             </span>
           </Link>

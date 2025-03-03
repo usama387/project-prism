@@ -11,12 +11,12 @@ interface Props {
   projectsCompletedThisMonth: number;
 }
 
-const TotalProjectsCard = ({ projects, projectsCompletedThisMonth }: Props) => {
+const TotalProjectsCard = ({ projects }: Props) => {
   return (
     <Link href={"/MyProjects"}>
       <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground animate-slideIn">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-base font-medium text-emerald-500">
+          <CardTitle className="text-base font-medium text-emerald-600 dark:text-emerald-500">
             Total Projects
           </CardTitle>
           <LayoutGrid className="h-4 w-4 text-muted-foreground" />
@@ -25,9 +25,7 @@ const TotalProjectsCard = ({ projects, projectsCompletedThisMonth }: Props) => {
           <div className="text-2xl font-bold text-start">
             <CountUp start={0} end={projects || 0} duration={2} separator="," />
           </div>
-          <p className="text-base text-muted-foreground">
-            {projectsCompletedThisMonth || 0} projects completed this month
-          </p>
+          <p className="text-base font-semibold text-muted-foreground">All Project Portfolios</p>
         </CardContent>
       </Card>
     </Link>

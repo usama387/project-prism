@@ -9,7 +9,7 @@ const RecentProjectsCard = ({ RecentProjects }: Props) => {
   return (
     <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground animate-slideIn">
       <CardHeader>
-        <CardTitle className="text-base font-medium text-emerald-500 flex flex-row items-center justify-between">
+        <CardTitle className="text-base font-medium text-emerald-600 dark:text-emerald-500 flex flex-row items-center justify-between">
           Recent Projects
           <LayoutGrid />
         </CardTitle>
@@ -23,7 +23,7 @@ const RecentProjectsCard = ({ RecentProjects }: Props) => {
               </li>
             ))
           ) : (
-            <li>No recent projects found</li>
+            <li className="font-semibold text-base text-muted-foreground">No recent projects found</li>
           )}
         </ul>
       </CardContent>
