@@ -52,6 +52,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
           name: true,
           description: true,
           status: true,
+          dueDate: true,
 
           _count: {
             select: {
@@ -86,7 +87,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-4xl sm:text-2xl font-bold text-center mb-8 gradient-text">
-        Project Overview
+        Project Details
       </h2>
 
       <div className="mb-8 flex flex-col space-y-6 sm:flex-row sm:justify-between sm:items-center">
@@ -100,7 +101,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
           <Link href="/" passHref>
-            <Button className="w-full sm:w-auto flex items-center justify-center text-white bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600">
+            <Button className="w-full sm:w-auto flex items-center justify-center text-white bg-gradient-to-r  to-blue-500 from-green-500 hover:to-blue-600 transition duration-300 hover:scale-105">
               <DollarSignIcon className="mr-2 h-4 w-4" />
               Budgeting
             </Button>
@@ -108,7 +109,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
           <Link href="/MyTasks" passHref>
             <Button
               variant="outline"
-              className="w-full sm:w-auto flex items-center justify-center"
+              className="w-full sm:w-auto flex items-center justify-center transition duration-300 hover:scale-105"
             >
               <ListTodoIcon className="mr-2 h-4 w-4" />
               Tasks
@@ -135,7 +136,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
             }}
             trigger={
               <Button
-                className="flex border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                className="flex border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-600 dark:text-emerald-500 hover:bg-red-500/20 font-semibold transition duration-300 hover:scale-105"
                 variant={"secondary"}
               >
                 Update Insights
@@ -149,7 +150,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
             project={project}
             trigger={
               <Button
-                className="flex w-max border-separate items-center gap-2 rounded-t-none text-muted-foreground text-emerald-500 hover:bg-red-500/20"
+                className="flex w-max border-separate items-center gap-2 rounded-t-none text-muted-foreground  hover:bg-red-500/20 text-emerald-600 dark:text-emerald-500 font-semibold transition duration-300 hover:scale-105"
                 variant={"secondary"}
               >
                 <TrashIcon className="h-4 w-4 " />
@@ -174,11 +175,11 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
             <ListTodoIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center">
               <span className="text-xl sm:text-2xl font-bold">
                 {project.completedTasks}/{project.numberOfTasks}
               </span>
-              <Badge className="text-end">Completed</Badge>
+              <Badge className="ml-auto">Completed</Badge>
             </div>
             <Progress value={progress} className="mt-2" />
           </CardContent>
@@ -215,8 +216,9 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
 
       {/* Project Timeline */}
       <Card className="mt-6 hover:shadow-xl transform transition-all duration-300">
-        <CardHeader>
+        <CardHeader className="flex flex-row justify-between items-center">
           <CardTitle>Timeline</CardTitle>
+          <ClockIcon className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
@@ -231,7 +233,6 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
                 </p>
               </div>
             </div>
-            <ClockIcon className="hidden sm:block h-4 w-4 text-muted-foreground" />
             <div className="flex items-center">
               <div className="text-left sm:text-right">
                 <p className="text-sm font-medium">Deadline</p>
@@ -254,16 +255,34 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="text-gray-700 text-base font-extrabold">
+                <TableHead
+                  className="text-gray-700 text-base font-extrabold"
+                  scope="col"
+                >
                   Name
                 </TableHead>
-                <TableHead className="text-gray-700 text-base font-extrabold">
+                <TableHead
+                  className="text-gray-700 text-base font-extrabold"
+                  scope="col"
+                >
                   Description
                 </TableHead>
-                <TableHead className="text-gray-700 text-base font-extrabold">
+                <TableHead
+                  className="text-gray-700 text-base font-extrabold"
+                  scope="col"
+                >
                   Status
                 </TableHead>
-                <TableHead className="text-gray-700 text-base font-extrabold">
+                <TableHead
+                  className="text-gray-700 text-base font-extrabold"
+                  scope="col"
+                >
+                  Due Date
+                </TableHead>
+                <TableHead
+                  className="text-gray-700 text-base font-extrabold text-center"
+                  scope="col"
+                >
                   Versions
                 </TableHead>
               </TableRow>
@@ -281,17 +300,20 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
                     <TableCell className="font-semibold text-base text-emerald-500">
                       {task.status}
                     </TableCell>
-
-                    {/* centering count in container since its a number */}
-                    <TableCell className="font-semibold text-base text-emerald-500 flex items-center justify-center">
+                    <TableCell className="font-semibold text-base text-emerald-500">
+                      {task.dueDate
+                        ? new Date(task.dueDate).toLocaleDateString()
+                        : "N/A"}
+                    </TableCell>
+                    <TableCell className="font-semibold text-base text-emerald-500 text-center">
                       {task._count.TaskHistory}
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center">
-                    No history available.
+                  <TableCell colSpan={5} className="text-center">
+                    No tasks available.
                   </TableCell>
                 </TableRow>
               )}
