@@ -36,7 +36,7 @@ export default function BudgetDetailsCard({ project }: { project: Project }) {
           {formatCurrency(project.budget)}
         </div>
         <Progress value={budgetUsedPercentage} className="mt-2" />
-        <p className="text-sm text-muted-foreground mt-2">
+        <p className="text-base font-semibold dark:text-gray-500 text-muted-foreground mt-2">
           {budgetUsedPercentage.toFixed(1)}% of budget used
         </p>
       </CardContent>
