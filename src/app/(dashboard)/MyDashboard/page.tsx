@@ -232,9 +232,11 @@ const MyDashboardPage = async () => {
     <div className="flex flex-col h-screen container mx-auto py-6 px-4 sm:px-6 lg:px-8 gap-6">
       <div className="flex justify-between items-center">
         {/* Project Analytics section */}
-        <h1 className="text-3xl font-bold tracking-tight">
-          Projects Analytics
-        </h1>
+        <Link href="/ProjectChart">
+          <h1 className="text-3xl font-bold tracking-tight">
+            Projects Analytics
+          </h1>
+        </Link>
         {/* Issues and Announcements Links */}
         <div className="flex items-center gap-6">
           {/* Increased gap between items */}
