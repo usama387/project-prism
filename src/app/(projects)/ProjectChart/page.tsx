@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { TrendingUp } from "lucide-react";
+import { Loader2, TrendingUp } from "lucide-react";
 import { Label, Pie, PieChart } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -19,6 +19,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
+import ProjectDeadlinePieChart from "../MyProjects/_components/ProjectDeadlinePieChart";
 
 const chartConfig = {
   COMPLETED: {
@@ -56,23 +57,21 @@ const ProjectStatusChart = () => {
 
   // Skeleton loading component
   const ChartSkeleton = () => (
-    <div className="flex flex-col items-center">
-      <Skeleton className="w-[300px] h-[300px] rounded-full mb-4" />
-      <Skeleton className="w-24 h-8 mb-2" />
-      <Skeleton className="w-32 h-4" />
+    <div>
+      <Loader2 className="animate-spin h-8 w-8 text-primary" />
     </div>
   );
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <Card className="flex flex-col w-[500px] mx-6">
+    <div className="flex flex-col md:flex-row gap-4 justify-between mt-8 px-4 md:px-8 lg:px-16">
+      <Card className="flex flex-col w-full lg:w-[48%] xl:w-[45%] mx-0 lg:mx-2">
         <CardHeader className="items-center pb-0">
           <CardTitle>Project Status Distribution</CardTitle>
           <CardDescription>Current project health overview</CardDescription>
         </CardHeader>
-        <CardContent className="flex-1 pb-0">
+        <CardContent className="flex-1 pb-0 h-[300px] sm:h-[400px]">
           {isLoading ? (
-            <div className="flex items-center justify-center h-[300px]">
+            <div className="flex items-center justify-center h-full">
               <ChartSkeleton />
             </div>
           ) : (
@@ -136,7 +135,8 @@ const ProjectStatusChart = () => {
           ) : (
             <>
               <div className="flex items-center gap-2 font-medium leading-none">
-                Project Portfolios Health Summary <TrendingUp className="h-4 w-4" />
+                Project Portfolios Health Summary{" "}
+                <TrendingUp className="h-4 w-4" />
               </div>
               <div className="leading-none text-muted-foreground text-base font-semibold text-blue-500">
                 Showing real-time status distribution across all projects
@@ -145,6 +145,8 @@ const ProjectStatusChart = () => {
           )}
         </CardFooter>
       </Card>
+      {/* Pie Chart With Project Deadlines */}
+      <ProjectDeadlinePieChart />
     </div>
   );
 };
