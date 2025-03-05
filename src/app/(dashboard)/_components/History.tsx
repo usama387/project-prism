@@ -68,7 +68,7 @@ const History = ({ userSettings }: { userSettings: UserSettings }) => {
               {/* Display badge for income */}
               <Badge className="flex gap-2 items-center text-sm" variant={"outline"}>
                 <div className="h-4 w-4 rounded-full bg-emerald-500"></div>
-                Income
+                Budget
               </Badge>
 
               {/* Display badge for expense */}

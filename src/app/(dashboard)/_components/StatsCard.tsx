@@ -43,7 +43,7 @@ const StatsCard = ({ userSettings, from, to }: Props) => {
         <StatCard
           formatter={formatter}
           value={income}
-          title="Income"
+          title="Budget"
           icon={
             <TrendingDown className="h-12 w-12 items-center rounded-lg p-2 text-red-500 bg-emerald-400/10 " />
           }
