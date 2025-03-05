@@ -10,6 +10,7 @@ import {
   AlertTriangleIcon,
   ClockIcon,
   TrashIcon,
+  Radar,
 } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
@@ -26,6 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import RadarChartDialog from "../_components/RadarChartDialog";
 
 const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
   // getting user from clerk to get its role
@@ -119,7 +121,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
       </div>
 
       {/* this div contains a child component that updates a project taking its all details */}
-      <div className="flex items-center justify-start mt-4 gap-4 p-4">
+      <div className="flex flex-col md:flex-row items-center justify-start mt-4 gap-4 p-4">
         {role === "admin" && (
           <UpdateProjectDialog
             project={{
@@ -159,6 +161,18 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
             }
           />
         )}
+
+        <RadarChartDialog
+          project={project}
+          trigger={
+            <Button
+              className="flex w-max border-separate items-center gap-2 rounded-t-none text-muted-foreground  hover:bg-red-500/20 text-emerald-600 dark:text-emerald-500 font-semibold transition duration-300 hover:scale-105"
+              variant={"secondary"}
+            >
+              <Radar className="h-4 w-4" /> Radar Chart
+            </Button>
+          }
+        />
       </div>
 
       {/* Project details Cards */}
