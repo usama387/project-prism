@@ -23,9 +23,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query"; // Import useQueryClient
 import { Loader2, TrendingUp } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   trigger: ReactNode;
@@ -68,7 +69,6 @@ const IssuesAnalyticsDialog = ({ trigger }: Props) => {
     );
   }, [data]);
 
-//   returns no of issues from api
   const totalIssues = data?.totalIssues || 0;
 
   // Skeleton loading component
@@ -81,9 +81,7 @@ const IssuesAnalyticsDialog = ({ trigger }: Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent
-        className="w-[95vw] max-w-[400px] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] max-h-[90vh] overflow-y-auto rounded-lg p-4 sm:p-6 md:p-8"
-      >
+      <DialogContent className="w-[95vw] max-w-[400px] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] max-h-[90vh] overflow-y-auto rounded-lg p-4 sm:p-6 md:p-8">
         <DialogHeader>
           <DialogTitle className="text-lg sm:text-xl md:text-2xl">
             Issues Status Analysis
@@ -139,7 +137,7 @@ const IssuesAnalyticsDialog = ({ trigger }: Props) => {
                               <tspan
                                 x={viewBox.cx}
                                 y={(viewBox.cy || 0) + 20}
-                                className="fill-muted-foreground text-xs sm:text-sm md:text-base"
+                                className="fill-muted-foreground text-xs sm:text-sm md:text-base mt-4"
                               >
                                 Total Issues
                               </tspan>
