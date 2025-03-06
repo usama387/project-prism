@@ -106,7 +106,10 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
                   content={
                     <ChartTooltipContent
                       label={(payload: any) => payload?.payload?.metric}
-                      value={(payload: any) => `${Math.round(payload.value)}%`}
+                      // Replace 'value' with the correct prop name, e.g., 'formatter'
+                      formatter={(payload: any) =>
+                        `${Math.round(payload.value)}%`
+                      }
                     />
                   }
                 />
