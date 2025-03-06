@@ -7,6 +7,7 @@ import {
   ClockIcon,
   TrashIcon,
   EditIcon,
+  Radar,
 } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
@@ -23,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import TaskRadarChart from "../../_components/TaskRadarChart";
 
 const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
   // getting user from clerk
@@ -106,6 +108,19 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+          <TaskRadarChart
+            task={task}
+            trigger={
+              <Button
+                className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                variant={"secondary"}
+              >
+                <Radar className="h-4 w-4" />
+                Radar Chart
+              </Button>
+            }
+          />
+
           {/* Dialog to update task details */}
           {role === "admin" && (
             <UpdateTaskDialog
