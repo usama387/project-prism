@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import DeleteIssueDialog from "../_components/DeleteIssueDialog";
 import { EditIcon, TrashIcon } from "lucide-react";
 import UpdateIssueDialog from "../_components/UpdateIssueDialog";
-import IssueChartDialog from "../_components/IssueChartDialog";
+import IssuesAnalyticsDialog from "../_components/IssuesAnalyticsDialog";
 
 // project type safety
 type Project = {
@@ -82,7 +82,7 @@ const IssuesPage = () => {
           tasks={tasks}
         />
 
-        <IssueChartDialog
+        <IssuesAnalyticsDialog
           trigger={
             <Button
               variant="outline"
