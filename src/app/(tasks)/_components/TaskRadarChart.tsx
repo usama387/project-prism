@@ -136,6 +136,12 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
             <div className="flex items-center gap-2 text-muted-foreground">
               {task.riskFlag && "⚠️ High Risk Task"}
             </div>
+            <div className="flex items-center gap-2 leading-none text-muted-foreground">
+              Data updated as of
+              <span className="dark:text-blue-500 font-semibold text-base text-gray-500">
+                {new Date().toLocaleDateString()}
+              </span>
+            </div>
           </CardFooter>
         </Card>
       </DialogContent>
