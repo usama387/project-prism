@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
@@ -105,11 +106,15 @@ const RadarChartDialog = ({ trigger, project }: Props) => {
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-w-full sm:max-w-xl max-h-[90vh] overflow-y-auto rounded-lg p-6 sm:p-8">
-        <DialogHeader>Project Radar Chart</DialogHeader>
+        <DialogHeader>
+          <DialogTitle>{project.name} Analysis</DialogTitle>
+        </DialogHeader>
         <Card className="w-full">
           <CardHeader className="items-center pb-4">
             <CardTitle>Project Performance Radar</CardTitle>
-            <CardDescription>Key metrics for the project health</CardDescription>
+            <CardDescription>
+              Key metrics for the project health
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer
@@ -132,6 +137,9 @@ const RadarChartDialog = ({ trigger, project }: Props) => {
             </ChartContainer>
           </CardContent>
           <CardFooter className="flex-col gap-2 pt-4 text-sm">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              Priority: {project.priority} | Status: {project.status}
+            </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
               Data updated as of
               <span className="dark:text-blue-500 font-semibold text-base text-gray-500">
