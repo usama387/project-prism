@@ -86,7 +86,7 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-full sm:max-w-xl max-h-[90vh] overflow-y-auto rounded-lg p-6 sm:p-8">
         <DialogHeader>
           <DialogTitle>{task.name} Analysis</DialogTitle>
         </DialogHeader>
