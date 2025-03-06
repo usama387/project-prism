@@ -132,7 +132,7 @@ export const UpdateProject = async (form: UpdateProjectSchemaType) => {
       status,
       priority,
       budget: budget ?? undefined,
-      usedBudget: budget ?? undefined,
+      usedBudget: usedBudget ?? undefined,
       numberOfTasks: numberOfTasks ?? undefined,
       completedTasks: completedTasks ?? undefined,
       clientSatisfaction: clientSatisfaction ?? undefined,
