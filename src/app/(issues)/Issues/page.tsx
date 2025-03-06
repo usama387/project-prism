@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import DeleteIssueDialog from "../_components/DeleteIssueDialog";
 import { EditIcon, TrashIcon } from "lucide-react";
 import UpdateIssueDialog from "../_components/UpdateIssueDialog";
+import IssueChartDialog from "../_components/IssueChartDialog";
 
 // project type safety
 type Project = {
@@ -67,7 +68,7 @@ const IssuesPage = () => {
       </h1>
 
       {/* New Issue Logic */}
-      <div className="flex items-center justify-start md:justify-end mb-4">
+      <div className="flex items-center justify-start md:justify-end gap-4 mb-4">
         <CreateIssueDialog
           trigger={
             <Button
@@ -79,6 +80,17 @@ const IssuesPage = () => {
           }
           projects={projects}
           tasks={tasks}
+        />
+
+        <IssueChartDialog
+          trigger={
+            <Button
+              variant="outline"
+              className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
+            >
+              <span>Open Analytics</span>
+            </Button>
+          }
         />
       </div>
 
