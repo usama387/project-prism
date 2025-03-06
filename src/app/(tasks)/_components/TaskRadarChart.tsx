@@ -22,7 +22,6 @@ import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
 
 interface Props {
@@ -31,7 +30,7 @@ interface Props {
 }
 
 const TaskRadarChart = ({ trigger, task }: Props) => {
-  // putting in a memo to prevent expensive calculations
+  // Memoize chartData to prevent expensive recalculations
   const chartData = useMemo(() => {
     const calculateUrgency = () => {
       if (!task.dueDate) return 0;
@@ -48,30 +47,28 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
     return [
       {
         metric: "Priority",
-        value: { Low: 33, Medium: 66, High: 100 }[task.priority] || 0,
+        value: ({ Low: 33, Medium: 66, High: 100 }[task.priority] ||
+          0) as number,
       },
       {
         metric: "Progress",
-        value:
-          { "Not Started": 0, Ongoing: 50, Completed: 100 }[task.status] || 0,
+        value: ({ "Not Started": 0, Ongoing: 50, Completed: 100 }[
+          task.status
+        ] || 0) as number,
       },
       {
         metric: "Efficiency",
-        value:
-          task.estimatedHours && task.estimatedHours > 0
-            ? Math.min(
-                ((task.actualHours || 0) / task.estimatedHours) * 100,
-                100
-              )
-            : 0,
+        value: (task.estimatedHours && task.estimatedHours > 0
+          ? Math.min(((task.actualHours || 0) / task.estimatedHours) * 100, 100)
+          : 0) as number,
       },
       {
         metric: "Risk",
-        value: task.riskFlag ? 100 : 0,
+        value: (task.riskFlag ? 100 : 0) as number,
       },
       {
         metric: "Urgency",
-        value: calculateUrgency(),
+        value: (calculateUrgency() || 0) as number,
       },
     ];
   }, [task]);
@@ -82,6 +79,26 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
       color: "hsl(var(--chart-1))",
     },
   } satisfies ChartConfig;
+
+  // Define a custom tooltip component
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: any[];
+  }) => {
+    if (active && payload && payload.length) {
+      const { metric, value } = payload[0].payload;
+      return (
+        <div className="custom-tooltip bg-background p-2 border border-border rounded shadow">
+          <p className="font-bold text-foreground">{metric}</p>
+          <p className="text-foreground">{`${Math.round(value)}%`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <Dialog>
@@ -101,18 +118,7 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
               className="mx-auto aspect-square max-h-[250px]"
             >
               <RadarChart data={chartData}>
-                <ChartTooltip
-                  cursor={false}
-                  content={
-                    <ChartTooltipContent
-                      label={(payload: any) => payload?.payload?.metric}
-                      // Replace 'value' with the correct prop name, e.g., 'formatter'
-                      formatter={(payload: any) =>
-                        `${Math.round(payload.value)}%`
-                      }
-                    />
-                  }
-                />
+                <ChartTooltip cursor={false} content={CustomTooltip} />
                 <PolarGrid className="fill-[--color-metrics] opacity-20" />
                 <PolarAngleAxis dataKey="metric" />
                 <Radar
