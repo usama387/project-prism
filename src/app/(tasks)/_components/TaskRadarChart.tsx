@@ -30,8 +30,8 @@ interface Props {
 }
 
 const TaskRadarChart = ({ trigger, task }: Props) => {
-  // Memoize chartData to prevent expensive recalculations
-  const chartData = useMemo(() => {
+  // Calculate metrics
+  const metrics = useMemo(() => {
     const calculateUrgency = () => {
       if (!task.dueDate) return 0;
       const now = new Date();
@@ -40,38 +40,55 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
 
       if (now > due) return 100;
       const totalDuration = due.getTime() - created.getTime();
+      if (totalDuration <= 0) return 0;
       const elapsed = now.getTime() - created.getTime();
       return (elapsed / totalDuration) * 100;
     };
 
-    return [
-      {
-        metric: "Priority",
-        value: ({ Low: 33, Medium: 66, High: 100 }[task.priority] ||
-          0) as number,
-      },
-      {
-        metric: "Progress",
-        value: ({ "Not Started": 0, Ongoing: 50, Completed: 100 }[
-          task.status
-        ] || 0) as number,
-      },
-      {
-        metric: "Efficiency",
-        value: (task.estimatedHours && task.estimatedHours > 0
-          ? Math.min(((task.actualHours || 0) / task.estimatedHours) * 100, 100)
-          : 0) as number,
-      },
-      {
-        metric: "Risk",
-        value: (task.riskFlag ? 100 : 0) as number,
-      },
-      {
-        metric: "Urgency",
-        value: (calculateUrgency() || 0) as number,
-      },
-    ];
+    return {
+      priorityValue: { Low: 33, Medium: 66, High: 100 }[task.priority] || 0,
+      progressValue: { "Not Started": 0, "Ongoing": 50, "Completed": 100 }[task.status] || 0,
+      efficiencyValue: task.estimatedHours && task.estimatedHours > 0
+        ? ((task.actualHours || 0) / task.estimatedHours) * 100
+        : 0,
+      riskValue: task.riskFlag ? 100 : 0,
+      urgencyValue: calculateUrgency() || 0,
+    };
   }, [task]);
+
+  // Define chart data
+  const chartData = [
+    { metric: "Priority", value: metrics.priorityValue },
+    { metric: "Progress", value: metrics.progressValue },
+    { metric: "Efficiency", value: metrics.efficiencyValue },
+    { metric: "Risk", value: metrics.riskValue },
+    { metric: "Urgency", value: metrics.urgencyValue },
+  ];
+
+  // Generate suggestions
+  const suggestions = useMemo(() => {
+    if (metrics.progressValue >= 100) return []; // No suggestions for completed tasks
+
+    const suggestionsList: string[] = [];
+
+    if (metrics.urgencyValue > 70) {
+      suggestionsList.push("The task is approaching its due date. Prioritize its completion.");
+    }
+
+    if (metrics.efficiencyValue > 100) {
+      suggestionsList.push("The task is taking longer than estimated. Consider reviewing the task's scope or allocating additional resources.");
+    }
+
+    if (metrics.riskValue === 100) {
+      suggestionsList.push("This task has a high risk flag. Take immediate action to mitigate the risk.");
+    }
+
+    if (metrics.priorityValue === 100) {
+      suggestionsList.push("This is a high-priority task. Ensure it is completed on time.");
+    }
+
+    return suggestionsList;
+  }, [metrics]);
 
   const chartConfig = {
     metrics: {
@@ -80,7 +97,7 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
     },
   } satisfies ChartConfig;
 
-  // Define a custom tooltip component
+  // Custom tooltip component
   const CustomTooltip = ({
     active,
     payload,
@@ -133,9 +150,21 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
             <div className="flex items-center gap-2 text-muted-foreground">
               Priority: {task.priority} | Status: {task.status}
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              {task.riskFlag && "⚠️ High Risk Task"}
-            </div>
+            {task.riskFlag && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                ⚠️ High Risk Task
+              </div>
+            )}
+            {suggestions.length > 0 && (
+              <div className="mt-2">
+                <h4 className="font-semibold">Suggestions:</h4>
+                <ul className="list-disc list-inside text-muted-foreground">
+                  {suggestions.map((suggestion, index) => (
+                    <li key={index}>{suggestion}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
               Data updated as of
               <span className="dark:text-blue-500 font-semibold text-base text-gray-500">
