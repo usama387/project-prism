@@ -33,9 +33,17 @@ interface Props {
 const RadarChartDialog = ({ trigger, project }: Props) => {
   // Calculate metric values using useMemo for optimization
   const metrics = useMemo(() => {
-    if (!project) return { priorityValue: 0, progressValue: 0, budgetEfficiency: 0, timeProgress: 0, clientSatisfactionValue: 0 };
+    if (!project)
+      return {
+        priorityValue: 0,
+        progressValue: 0,
+        budgetEfficiency: 0,
+        timeProgress: 0,
+        clientSatisfactionValue: 0,
+      };
 
-    const priorityValue = { Low: 33, Medium: 66, High: 100 }[project.priority] || 0;
+    const priorityValue =
+      { Low: 33, Medium: 66, High: 100 }[project.priority] || 0;
     const progressValue =
       project.numberOfTasks > 0
         ? (project.completedTasks / project.numberOfTasks) * 100
@@ -59,7 +67,13 @@ const RadarChartDialog = ({ trigger, project }: Props) => {
       ? project.clientSatisfaction * 20
       : 0;
 
-    return { priorityValue, progressValue, budgetEfficiency, timeProgress, clientSatisfactionValue };
+    return {
+      priorityValue,
+      progressValue,
+      budgetEfficiency,
+      timeProgress,
+      clientSatisfactionValue,
+    };
   }, [project]);
 
   // Create chart data for the radar chart
@@ -76,15 +90,21 @@ const RadarChartDialog = ({ trigger, project }: Props) => {
     const suggestionsList: string[] = [];
 
     if (metrics.progressValue < 50 && metrics.timeProgress > 50) {
-      suggestionsList.push("Consider increasing resources or adjusting timelines to improve progress.");
+      suggestionsList.push(
+        "Consider increasing resources or adjusting timelines to improve progress."
+      );
     }
 
     if (metrics.budgetEfficiency > 100) {
-      suggestionsList.push("Review expenses or adjust the budget to manage budget efficiency.");
+      suggestionsList.push(
+        "Review expenses or adjust the budget to manage budget efficiency."
+      );
     }
 
     if (metrics.clientSatisfactionValue < 60) {
-      suggestionsList.push("Improve communication or address client concerns to enhance satisfaction.");
+      suggestionsList.push(
+        "Improve communication or address client concerns to enhance satisfaction."
+      );
     }
 
     return suggestionsList;
@@ -128,7 +148,9 @@ const RadarChartDialog = ({ trigger, project }: Props) => {
         <Card className="w-full">
           <CardHeader className="items-center pb-4">
             <CardTitle>Project Performance Radar</CardTitle>
-            <CardDescription>Key metrics for the project health</CardDescription>
+            <CardDescription>
+              Key metrics for the project health
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer
@@ -138,7 +160,7 @@ const RadarChartDialog = ({ trigger, project }: Props) => {
               <RadarChart data={chartData}>
                 <ChartTooltip cursor={false} content={CustomTooltip} />
                 <PolarGrid className="fill-[--color-metrics] opacity-20" />
-                <PolarAngleAxis dataKey="metric" />
+                <PolarAngleAxis dataKey="metric" tick={false} />
                 <Radar
                   dataKey="value"
                   fill="var(--color-metrics)"

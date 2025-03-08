@@ -47,10 +47,12 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
 
     return {
       priorityValue: { Low: 33, Medium: 66, High: 100 }[task.priority] || 0,
-      progressValue: { "Not Started": 0, "Ongoing": 50, "Completed": 100 }[task.status] || 0,
-      efficiencyValue: task.estimatedHours && task.estimatedHours > 0
-        ? ((task.actualHours || 0) / task.estimatedHours) * 100
-        : 0,
+      progressValue:
+        { "Not Started": 0, Ongoing: 50, Completed: 100 }[task.status] || 0,
+      efficiencyValue:
+        task.estimatedHours && task.estimatedHours > 0
+          ? ((task.actualHours || 0) / task.estimatedHours) * 100
+          : 0,
       riskValue: task.riskFlag ? 100 : 0,
       urgencyValue: calculateUrgency() || 0,
     };
@@ -72,19 +74,27 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
     const suggestionsList: string[] = [];
 
     if (metrics.urgencyValue > 70) {
-      suggestionsList.push("The task is approaching its due date. Prioritize its completion.");
+      suggestionsList.push(
+        "The task is approaching its due date. Prioritize its completion."
+      );
     }
 
     if (metrics.efficiencyValue > 100) {
-      suggestionsList.push("The task is taking longer than estimated. Consider reviewing the task's scope or allocating additional resources.");
+      suggestionsList.push(
+        "The task is taking longer than estimated. Consider reviewing the task's scope or allocating additional resources."
+      );
     }
 
     if (metrics.riskValue === 100) {
-      suggestionsList.push("This task has a high risk flag. Take immediate action to mitigate the risk.");
+      suggestionsList.push(
+        "This task has a high risk flag. Take immediate action to mitigate the risk."
+      );
     }
 
     if (metrics.priorityValue === 100) {
-      suggestionsList.push("This is a high-priority task. Ensure it is completed on time.");
+      suggestionsList.push(
+        "This is a high-priority task. Ensure it is completed on time."
+      );
     }
 
     return suggestionsList;
@@ -137,7 +147,7 @@ const TaskRadarChart = ({ trigger, task }: Props) => {
               <RadarChart data={chartData}>
                 <ChartTooltip cursor={false} content={CustomTooltip} />
                 <PolarGrid className="fill-[--color-metrics] opacity-20" />
-                <PolarAngleAxis dataKey="metric" />
+                <PolarAngleAxis dataKey="metric" tick={false} />
                 <Radar
                   dataKey="value"
                   fill="var(--color-metrics)"
