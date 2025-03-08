@@ -40,7 +40,7 @@ const ProjectStatusChart = () => {
   // fetching api
   const { data, isLoading } = useQuery({
     queryKey: ["project-statusChart"],
-    queryFn: () => fetch("/api/project-chart").then((res) => res.json()),
+    queryFn: () => fetch("/api/project-statusChart").then((res) => res.json()),
   });
 
   // constructing chart data
