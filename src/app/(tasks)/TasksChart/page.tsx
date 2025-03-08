@@ -19,31 +19,43 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
-import ProjectDeadlinePieChart from "../MyProjects/_components/ProjectDeadlinePieChart";
+import TaskDeadlinePieChart from "../_components/TaskDeadlinePieChart";
 
 const chartConfig = {
-  COMPLETED: {
-    label: "Completed",
+  Todo: {
+    label: "Todo",
     color: "hsl(var(--chart-1))",
   },
-  ONGOING: {
-    label: "Ongoing",
+  Completed: {
+    label: "Completed",
     color: "hsl(var(--chart-2))",
   },
-  CANCELLED: {
-    label: "Cancelled",
+  "On Hold": {
+    label: "On Hold",
     color: "hsl(var(--chart-3))",
+  },
+  Ongoing: {
+    label: "Ongoing",
+    color: "hsl(var(--chart-4))",
+  },
+  Cancelled: {
+    label: "Cancelled",
+    color: "hsl(var(--chart-5))",
+  },
+  Overdue: {
+    label: "Overdue",
+    color: "hsl(var(--chart-6))",
   },
 } satisfies ChartConfig;
 
-const ProjectStatusChart = () => {
-  // fetching api
+const TasksChartPage = () => {
+  // Fetching API data
   const { data, isLoading } = useQuery({
-    queryKey: ["project-statusChart"],
-    queryFn: () => fetch("/api/project-statusChart").then((res) => res.json()),
+    queryKey: ["task-statusChart"],
+    queryFn: () => fetch("/api/task-statusChart").then((res) => res.json()),
   });
 
-  // constructing chart data
+  // Constructing chart data by combining fetched data with chart config
   const chartData = React.useMemo(() => {
     return (
       data?.statusData?.map((item: { status: string; count: number }) => ({
@@ -53,7 +65,7 @@ const ProjectStatusChart = () => {
     );
   }, [data]);
 
-  const totalProjects = data?.totalProjects || 0;
+  const totalTasks = data?.totalTasks || 0;
 
   // Skeleton loading component
   const ChartSkeleton = () => (
@@ -63,11 +75,12 @@ const ProjectStatusChart = () => {
   );
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 justify-between mt-8 px-4 md:px-8 lg:px-16">
-      <Card className="flex flex-col w-full lg:w-[48%] xl:w-[45%] mx-0 lg:mx-2">
+    <div className="flex flex-col md:flex-row gap-4 mt-8 px-4 md:px-8 lg:px-16">
+      {/* Task Status Chart */}
+      <Card className="flex flex-col w-full md:w-[48%]">
         <CardHeader className="items-center pb-0">
-          <CardTitle>Project Status Distribution</CardTitle>
-          <CardDescription>Current projects status overview</CardDescription>
+          <CardTitle>Task Status Distribution</CardTitle>
+          <CardDescription>Current tasks status overview</CardDescription>
         </CardHeader>
         <CardContent className="flex-1 pb-0 h-[300px] sm:h-[400px]">
           {isLoading ? (
@@ -107,14 +120,14 @@ const ProjectStatusChart = () => {
                               y={viewBox.cy}
                               className="fill-foreground text-4xl font-bold"
                             >
-                              {totalProjects.toLocaleString()}
+                              {totalTasks.toLocaleString()}
                             </tspan>
                             <tspan
                               x={viewBox.cx}
                               y={(viewBox.cy || 0) + 28}
                               className="fill-muted-foreground"
                             >
-                              Total Projects
+                              Total Tasks
                             </tspan>
                           </text>
                         );
@@ -135,20 +148,20 @@ const ProjectStatusChart = () => {
           ) : (
             <>
               <div className="flex items-center gap-2 font-medium leading-none">
-                Project Portfolios Health Summary{" "}
-                <TrendingUp className="h-4 w-4" />
+                Task Management Overview <TrendingUp className="h-4 w-4" />
               </div>
               <div className="leading-none text-muted-foreground text-base font-semibold text-blue-500">
-                Showing real-time status distribution across all projects
+                Showing real-time status distribution across all tasks
               </div>
             </>
           )}
         </CardFooter>
       </Card>
-      {/* Pie Chart With Project Deadlines */}
-      <ProjectDeadlinePieChart />
+
+      {/*  Another Chart (e.g., Task Deadline Distribution) */}
+      <TaskDeadlinePieChart />
     </div>
   );
 };
 
-export default ProjectStatusChart;
+export default TasksChartPage;

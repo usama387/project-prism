@@ -292,7 +292,9 @@ const MyDashboardPage = async () => {
       <Separator />
 
       {/* Task Analytics section */}
-      <h1 className="text-3xl font-bold tracking-tight">Task Analytics</h1>
+      <Link href="/TasksChart">
+        <h1 className="text-3xl font-bold tracking-tight">Task Analytics</h1>
+      </Link>
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* first card */}
         <TotalTasksCard
