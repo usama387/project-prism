@@ -83,7 +83,10 @@ const TaskDeadlinePieChart = () => {
   }));
 
   // Calculate total tasks for the footer
-  const totalTasks = data.reduce((sum: number, item: any) => sum + item.count, 0);
+  const totalTasks = data.reduce(
+    (sum: number, item: any) => sum + item.count,
+    0
+  );
 
   return (
     <Card className="flex flex-col w-full lg:w-[48%] xl:w-[45%] mx-0 lg:mx-2">

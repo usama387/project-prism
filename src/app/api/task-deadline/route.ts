@@ -13,7 +13,9 @@ export const GET = async () => {
 
     const count = await prisma.task.count({
       where: {
-        status: "Ongoing", // Only count ongoing projects
+        status: {
+          in: ["Ongoing", "Todo", "On Hold"],
+        },
         dueDate: {
           gte: startOfMonth, // Greater than or equal to start of month
           lte: endOfMonth, // Less than or equal to end of month
