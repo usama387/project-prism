@@ -230,7 +230,9 @@ const MyDashboardPage = async () => {
 
   return (
     <div className="flex flex-col h-screen container mx-auto py-6 px-4 sm:px-6 lg:px-8 gap-6">
-      <p className="text-3xl font-bold text-gray-500">Hello, {user.firstName}! 👋</p>
+      <p className="text-3xl font-bold text-gray-500">
+        Hello, {user.firstName}! 👋
+      </p>
       <div className="flex justify-between items-center">
         {/* Project Analytics section */}
         <Link href="/ProjectChart">
