@@ -9,9 +9,10 @@ import React from "react";
 import CreateIssueDialog from "../_components/CreateIssueDialog";
 import { Button } from "@/components/ui/button";
 import DeleteIssueDialog from "../_components/DeleteIssueDialog";
-import { EditIcon, TrashIcon } from "lucide-react";
+import { AlertTriangle, CircleCheckBig, EditIcon, TrashIcon } from "lucide-react";
 import UpdateIssueDialog from "../_components/UpdateIssueDialog";
 import IssuesAnalyticsDialog from "../_components/IssuesAnalyticsDialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 // project type safety
 type Project = {
@@ -61,6 +62,15 @@ const IssuesPage = () => {
 
   const role = user?.publicMetadata.role;
 
+  // function to truncate description to display first four words
+  const truncateDescription = (description: string) => {
+    const words = description.split(" ");
+    if (words.length > 4) {
+      return words.slice(0, 4).join(" ") + "...";
+    }
+    return description;
+  };
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold mb-6 text-center sm:text-left">
@@ -105,15 +115,37 @@ const IssuesPage = () => {
           issues.map((issue: any) => (
             <Card key={issue.id} className="flex flex-col animate-slideIn">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-lg font-semibold text-emerald-500 sm:text-xl flex items-center justify-between">
+                <CardTitle className="text-lg font-semibold text-emerald-500 sm:text-xl">
                   {issue?.title}
                 </CardTitle>
-                {format(new Date(issue?.date), "PP")}
+                <div className="flex items-center gap-2">
+                  {issue.status === "Resolved" ? (
+                    <CircleCheckBig className="text-green-500" />
+                  ) : issue.priority === "High" ? (
+                    <AlertTriangle className="text-red-500 animate-pulse" />
+                  ) : null}
+                  <div>{format(new Date(issue?.date), "PP")}</div>
+                </div>
               </CardHeader>
               <CardContent className="flex-grow flex flex-col justify-between p-4">
                 <SkeletonWrapper isLoading={isLoading}>
-                  <p className="text-xl text-gray-900 dark:text-gray-100 mb-4">
-                    {issue?.description}
+                  <p className="text-xl text-gray-900 dark:text-gray-100 mb-4 h-16 overflow-hidden">
+                    {truncateDescription(issue?.description)}
+                    {issue?.description.split(" ").length > 4 && (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <span className="text-emerald-500 cursor-pointer hover:underline">
+                            Read More
+                          </span>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <h2 className="text-xl font-semibold mb-2">
+                            Issue Description
+                          </h2>
+                          <p>{issue?.description}</p>
+                        </DialogContent>
+                      </Dialog>
+                    )}
                   </p>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
@@ -144,20 +176,6 @@ const IssuesPage = () => {
                         : {issue?.task?.status}
                       </h3>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        Priority:
-                      </span>
-                      <h3 className="text-base text-gray-500">
-                        {issue?.priority}
-                      </h3>
-                      <h3 className="text-base text-gray-500">
-                        <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
-                          Status
-                        </span>
-                        : {issue?.status}
-                      </h3>
-                    </div>
                   </div>
 
                   {/* Only admin can delete & update announcements with the following components */}
@@ -176,22 +194,24 @@ const IssuesPage = () => {
                       />
                     )}
 
-                    <UpdateIssueDialog
-                      issue={{
-                        ...issue,
-                        issueId: issue.id,
-                      }}
-                      projects={projects}
-                      tasks={tasks}
-                      trigger={
-                        <Button
-                          variant="outline"
-                          className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
-                        >
-                          <EditIcon className="mr-2 h-4 w-4" />
-                        </Button>
-                      }
-                    />
+                    {role === "admin" && (
+                      <UpdateIssueDialog
+                        issue={{
+                          ...issue,
+                          issueId: issue.id,
+                        }}
+                        projects={projects}
+                        tasks={tasks}
+                        trigger={
+                          <Button
+                            variant="outline"
+                            className="border-emerald-300 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
+                          >
+                            <EditIcon className="mr-2 h-4 w-4" />
+                          </Button>
+                        }
+                      />
+                    )}
                   </div>
                 </SkeletonWrapper>
               </CardContent>

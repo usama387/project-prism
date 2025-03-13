@@ -3,7 +3,7 @@ import { z } from "zod";
 // validation schema to create an issue
 export const CreateIssueSchema = z.object({
   title: z.string().min(3).max(50),
-  description: z.string().min(10).max(1000),
+  description: z.string().min(10).max(1000).optional(),
   priority: z.enum(["Low", "Medium", "High"]),
   status: z.enum(["Resolved", "Unresolved", "In Progress", "Closed"]),
   projectId: z.string().uuid("Invalid project ID"),
