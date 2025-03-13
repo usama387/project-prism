@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import DeleteAnnouncementDialog from "../_components/DeleteAnnouncementDialog";
 import { EditIcon, TrashIcon } from "lucide-react";
 import UpdateAnnouncementDialog from "../_components/UpdateAnnouncementDialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 // project type safety
 type Project = {
@@ -59,6 +60,15 @@ const AnnouncementsPage = () => {
 
   const role = user?.publicMetadata.role;
 
+  // function to truncate description to display first four words
+  const truncateDescription = (description: string) => {
+    const words = description.split(" ");
+    if (words.length > 4) {
+      return words.slice(0, 4).join(" ") + "...";
+    }
+    return description;
+  };
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold mb-6 text-center sm:text-left">
@@ -82,7 +92,7 @@ const AnnouncementsPage = () => {
           />
         )}
       </div>
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {isLoading ? (
           Array.from({ length: 9 }).map((_, index) => (
@@ -104,8 +114,23 @@ const AnnouncementsPage = () => {
               </CardHeader>
               <CardContent className="flex-grow flex flex-col justify-between p-4">
                 <SkeletonWrapper isLoading={isLoading}>
-                  <p className="text-xl text-gray-900 dark:text-gray-100 mb-4">
-                    {announcement?.description}
+                  <p className="text-xl text-gray-900 dark:text-gray-100 mb-4 h-16 overflow-hidden">
+                    {truncateDescription(announcement?.description)}
+                    {announcement?.description.split(" ").length > 4 && (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <span className="text-emerald-500 cursor-pointer hover:underline">
+                            Read More
+                          </span>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <h2 className="text-xl font-semibold mb-2">
+                            Announcement Description
+                          </h2>
+                          <p>{announcement?.description}</p>
+                        </DialogContent>
+                      </Dialog>
+                    )}
                   </p>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">

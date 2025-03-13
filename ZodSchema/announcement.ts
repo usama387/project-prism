@@ -3,7 +3,7 @@ import { z } from "zod";
 // form validation schema to create announcements
 export const CreateAnnouncementSchema = z.object({
   title: z.string().min(1, "Title is Required"),
-  description: z.string().min(1, "Description is Required"),
+  description: z.string().min(10, "Description is Required"),
   projectId: z.string().uuid("Invalid project ID"),
   taskId: z.string().uuid("Invalid task ID"),
   date: z.date().optional(),
@@ -26,7 +26,7 @@ export type DeleteAnnouncementSchemaType = z.infer<
 export const UpdateAnnouncementSchema = z.object({
   announcementId: z.string().uuid("Invalid announcement id"),
   title: z.string().min(1, "Title is Required"),
-  description: z.string().min(1, "Description is Required"),
+  description: z.string().min(10, "Description is Required"),
   projectId: z.string().uuid("Invalid project ID"),
   taskId: z.string().uuid("Invalid task ID"),
   date: z.date().optional(),
