@@ -9,7 +9,12 @@ import React from "react";
 import CreateIssueDialog from "../_components/CreateIssueDialog";
 import { Button } from "@/components/ui/button";
 import DeleteIssueDialog from "../_components/DeleteIssueDialog";
-import { AlertTriangle, CircleCheckBig, EditIcon, TrashIcon } from "lucide-react";
+import {
+  AlertTriangle,
+  CircleCheckBig,
+  EditIcon,
+  TrashIcon,
+} from "lucide-react";
 import UpdateIssueDialog from "../_components/UpdateIssueDialog";
 import IssuesAnalyticsDialog from "../_components/IssuesAnalyticsDialog";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -73,7 +78,7 @@ const IssuesPage = () => {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold mb-6 text-center sm:text-left">
+      <h1 className="text-2xl sm:text-3xl md:text-3xl font-bold mb-6">
         Issues
       </h1>
 
