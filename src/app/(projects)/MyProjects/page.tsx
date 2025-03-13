@@ -29,6 +29,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import CreateProjectDialog from "../_components/CreateProjectDialog";
 import { useUser } from "@clerk/nextjs";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 // Define the Project type with the status field
 type Project = {
@@ -110,6 +111,15 @@ function ProjectsPageContent() {
   const { user } = useUser();
 
   const role = user?.publicMetadata.role;
+
+  // function to truncate description to display first 7 words
+  const truncateDescription = (description: string) => {
+    const words = description.split(" ");
+    if (words.length > 7) {
+      return words.slice(0, 7).join(" ") + "...";
+    }
+    return description;
+  };
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 h-screen">
@@ -228,8 +238,23 @@ function ProjectsPageContent() {
                     </Badge>
                   </CardHeader>
                   <CardContent className="flex-grow flex flex-col justify-between">
-                    <p className="text-muted-foreground text-sm sm:text-base mb-4">
-                      {project.description}
+                    <p className="text-muted-foreground text-sm sm:text-base mb-4 h-16 overflow-hidden">
+                      {truncateDescription(project?.description)}
+                      {project?.description.split(" ").length > 7 && (
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <span className="text-emerald-500 cursor-pointer hover:underline">
+                              Read More
+                            </span>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl">
+                            <h2 className="text-xl font-semibold mb-2">
+                              Project Description
+                            </h2>
+                            <p>{project?.description}</p>
+                          </DialogContent>
+                        </Dialog>
+                      )}
                     </p>
                     <div className="flex flex-col sm:flex-row justify-between text-xs sm:text-sm space-y-2 sm:space-y-0">
                       <div>
