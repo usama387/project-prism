@@ -3,6 +3,7 @@ import UpdateVersionDialog from "@/app/(tasks)/_components/UpdateVersionDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
@@ -35,10 +36,19 @@ const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
 
   if (!version) return <VersionSkeleton />;
 
+  // function to truncate description to display first 7 words
+  const truncateDescription = (description: string) => {
+    const words = description.split(" ");
+    if (words.length > 7) {
+      return words.slice(0, 7).join(" ") + "...";
+    }
+    return description;
+  };
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
       <Link
-        href="/versions"
+        href="/MyTasks/versions"
         className="inline-flex items-center mb-6 text-sm font-medium text-gray-500 hover:text-gray-700"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -55,33 +65,32 @@ const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
               <Badge>Task Status: {version?.task.status}</Badge>
             </div>
 
-            {role === "admin" ||
-              (role === "member" && (
-                <UpdateVersionDialog
-                  version={{
-                    versionId: version.id,
-                    version: version.version,
-                    changes: version.changes,
-                    updatedBy: version.updatedBy as
-                      | "Usama"
-                      | "Maryam"
-                      | "Noor"
-                      | "Abdul Wasay",
-                    updatedAt: version.updatedAt ?? undefined,
-                    taskId: version.taskId,
-                    priority: version.priority as "Low" | "Medium" | "High",
-                  }}
-                  trigger={
-                    <Button
-                      className="flex w-max items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
-                      variant={"secondary"}
-                    >
-                      <EditIcon className="mr-2 h-4 w-4" />
-                      Edit Version
-                    </Button>
-                  }
-                />
-              ))}
+            {role === "admin" && (
+              <UpdateVersionDialog
+                version={{
+                  versionId: version.id,
+                  version: version.version,
+                  changes: version.changes,
+                  updatedBy: version.updatedBy as
+                    | "Usama"
+                    | "Maryam"
+                    | "Noor"
+                    | "Abdul Wasay",
+                  updatedAt: version.updatedAt ?? undefined,
+                  taskId: version.taskId,
+                  priority: version.priority as "Low" | "Medium" | "High",
+                }}
+                trigger={
+                  <Button
+                    className="flex w-max items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                    variant={"secondary"}
+                  >
+                    <EditIcon className="mr-2 h-4 w-4" />
+                    Edit Version
+                  </Button>
+                }
+              />
+            )}
           </div>
         </CardHeader>
         <CardContent>
@@ -107,8 +116,25 @@ const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
           <CardTitle className="text-xl">Deadline</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-row items-center justify-between">
-          <p className="text-gray-700 font-semibold">{version?.changes}</p>
-          <p className="text-gray-700 font-semibold">
+          <p className="text-gray-500 font-semibold">
+            {truncateDescription(version?.changes)}
+            {version?.changes && version?.changes.split(" ").length > 7 && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <span className="text-emerald-500 cursor-pointer hover:underline">
+                    Read More
+                  </span>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <h2 className="text-xl font-semibold mb-2">
+                    Changes Description
+                  </h2>
+                  <p>{version?.changes}</p>
+                </DialogContent>
+              </Dialog>
+            )}
+          </p>
+          <p className="text-gray-500 font-semibold">
             {version.dueDate && format(new Date(version.dueDate), "PPP")}
           </p>
         </CardContent>
@@ -120,9 +146,27 @@ const SingleVersionPage = async ({ params }: { params: { id: string } }) => {
           <CardTitle className="text-xl">Related Task</CardTitle>
         </CardHeader>
         <CardContent>
-          <h3 className="font-semibold text-lg mb-2">{version?.task.name}</h3>
-          <p className="text-gray-700 font-semibold mb-4">
-            {version?.task.description}
+          <h3 className="font-semibold text-lg mb-2 text-emerald-400">
+            {version?.task.name}
+          </h3>
+          <p className="text-gray-500 font-semibold mb-4">
+            {truncateDescription(version?.task?.description!)}
+            {version?.task?.description &&
+              version?.task?.description.split(" ").length > 7 && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <span className="text-emerald-500 cursor-pointer hover:underline">
+                      Read More
+                    </span>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl">
+                    <h2 className="text-xl font-semibold mb-2">
+                      Related Task Description
+                    </h2>
+                    <p>{version?.task?.description}</p>
+                  </DialogContent>
+                </Dialog>
+              )}
           </p>
           <Link href={`/MyTasks/${version?.taskId}`}>
             <Button variant="outline">View Task</Button>
