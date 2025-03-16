@@ -28,6 +28,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import RadarChartDialog from "../_components/RadarChartDialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
   // getting user from clerk to get its role
@@ -86,6 +87,15 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
       "border-rose-500 bg-rose-950 text-white hover:border-emerald-700 hover:text-white",
   };
 
+  // function to truncate description to display first 7 words
+  const truncateDescription = (description: string) => {
+    const words = description.split(" ");
+    if (words.length > 7) {
+      return words.slice(0, 7).join(" ") + "...";
+    }
+    return description;
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-4xl sm:text-2xl font-bold text-center mb-8 gradient-text">
@@ -97,8 +107,24 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
           <h1 className="text-3xl sm:text-4xl font-bold text-emerald-500 mb-2">
             {project.name}
           </h1>
-          <p className="text-base sm:text-lg text-gray-500">
-            {project.description || "No description available."}
+          <p className="text-base text-muted-foreground sm:text-lg text-gray-500">
+            {truncateDescription(project?.description!)}
+            {project?.description &&
+              project.description.split(" ").length > 7 && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <span className="text-emerald-500 cursor-pointer hover:underline">
+                      Read More
+                    </span>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl">
+                    <h2 className="text-xl font-semibold mb-2">
+                      Project Description
+                    </h2>
+                    <p>{project?.description}</p>
+                  </DialogContent>
+                </Dialog>
+              )}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
