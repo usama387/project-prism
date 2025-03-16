@@ -231,7 +231,7 @@ const TransactionTable = ({ from, to }: Props) => {
               column={table.getColumn("type")}
               options={[
                 {
-                  label: "Income",
+                  label: "Budget",
                   value: "income",
                 },
                 {
