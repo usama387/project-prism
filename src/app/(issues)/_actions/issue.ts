@@ -29,7 +29,7 @@ export const CreateIssue = async (form: CreateIssueSchemaType) => {
     const newIssue = await prisma.issue.create({
       data: {
         title,
-        description: description ?? "",
+        description: description,
         status,
         priority,
         project: {
