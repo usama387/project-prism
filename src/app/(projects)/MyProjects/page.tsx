@@ -123,7 +123,7 @@ function ProjectsPageContent() {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 h-screen">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-center sm:text-left animate-slideIn">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-center sm:text-left animate-slideIn">
         Projects
       </h1>
 
