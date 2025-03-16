@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TaskRadarChart from "../../_components/TaskRadarChart";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
   // getting user from clerk
@@ -93,6 +94,15 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
     Low: "border-green-500 bg-green-950 text-white hover:border-green-700",
   };
 
+  // function to truncate description to display first 7 words
+  const truncateDescription = (description: string) => {
+    const words = description.split(" ");
+    if (words.length > 7) {
+      return words.slice(0, 7).join(" ") + "...";
+    }
+    return description;
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl sm:text-2xl font-bold mb-8 animate-slideIn">
@@ -100,11 +110,26 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
       </h1>
       <div className="mb-8 flex flex-col space-y-6 sm:flex-row sm:justify-between sm:items-center">
         <div className="animate-slideIn">
-          <h1 className="text-3xl sm:text-4xl font-bold text-emerald-500 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-emerald-600 dark:text-emerald-500 mb-2">
             {task.name}
           </h1>
-          <p className="text-base sm:text-lg text-gray-700 font-semibold">
-            {task.description || "No description available."}
+          <p className="text-base sm:text-lg text-gray-700 font-semibold text-muted-foreground">
+            {truncateDescription(task?.description!)}
+            {task?.description && task.description.split(" ").length > 7 && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <span className="text-emerald-500 cursor-pointer hover:underline">
+                    Read More
+                  </span>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <h2 className="text-xl font-semibold mb-2">
+                    Task Description
+                  </h2>
+                  <p>{task?.description}</p>
+                </DialogContent>
+              </Dialog>
+            )}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
@@ -112,7 +137,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             task={task}
             trigger={
               <Button
-                className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-105"
                 variant={"secondary"}
               >
                 <Radar className="h-4 w-4" />
@@ -151,7 +176,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               }}
               trigger={
                 <Button
-                  className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                  className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-105"
                   variant={"secondary"}
                 >
                   <EditIcon className="mr-2 h-4 w-4" />
@@ -166,7 +191,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               task={task}
               trigger={
                 <Button
-                  className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                  className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-105"
                   variant={"secondary"}
                 >
                   <TrashIcon className="h-4 w-4 " />
@@ -181,7 +206,7 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
             <AddVersionDialog
               trigger={
                 <Button
-                  className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/20"
+                  className="flex w-full items-center gap-2 text-muted-foreground text-base text-emerald-500 hover:bg-red-500/30 transition-all duration-300 hover:scale-105"
                   variant={"secondary"}
                 >
                   <TrashIcon className="h-4 w-4 " />
@@ -264,14 +289,30 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
         {/* Project Details */}
         <Card className="hover:shadow-lg transform transition-transform duration-300 hover:scale-105 border border-muted-foreground">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-base font-semibold">
+            <CardTitle className="text-lg font-semibold">
               Project Title
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg font-medium">{task.project.name}</p>
-            <p className="text-lg font-medium text-gray-500 mt-3">
-              {task.project.description}
+            <p className="text-base font-medium">{task.project.name}</p>
+            <p className="text-base font-medium text-gray-600 mt-3">
+              {truncateDescription(task?.project.description!)}
+              {task?.project?.description &&
+                task?.project?.description.split(" ").length > 7 && (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <span className="text-emerald-500 cursor-pointer hover:underline">
+                        Read More
+                      </span>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl">
+                      <h2 className="text-xl font-semibold mb-2">
+                        Project Description
+                      </h2>
+                      <p>{task?.project?.description}</p>
+                    </DialogContent>
+                  </Dialog>
+                )}
             </p>
           </CardContent>
         </Card>
@@ -332,16 +373,16 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="text-gray-700 text-base font-extrabold">
+                <TableHead className="text-emerald-500 text-base font-extrabold">
                   Version
                 </TableHead>
-                <TableHead className="text-gray-700 text-base font-extrabold">
+                <TableHead className="text-emerald-500 text-base font-extrabold">
                   Changes
                 </TableHead>
-                <TableHead className="text-gray-700 text-base font-extrabold">
+                <TableHead className="text-emerald-500 text-base font-extrabold">
                   Updated At
                 </TableHead>
-                <TableHead className="text-gray-700 text-base font-extrabold">
+                <TableHead className="text-emerald-500 text-base font-extrabold">
                   Updated By
                 </TableHead>
               </TableRow>
@@ -350,17 +391,33 @@ const SingleTaskPage = async ({ params }: { params: { id: string } }) => {
               {task.TaskHistory.length > 0 ? (
                 task.TaskHistory.map((history) => (
                   <TableRow key={history.id}>
-                    <TableCell className="font-semibold text-base text-emerald-500">
+                    <TableCell className="font-semibold text-base text-gray-600">
                       {history.version}
                     </TableCell>
-                    <TableCell className="font-semibold text-base text-emerald-500">
-                      {history.changes}
+                    <TableCell className="font-semibold text-base text-gray-600">
+                      {truncateDescription(history?.changes)}
+                      {history?.changes &&
+                        history?.changes.split(" ").length > 7 && (
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <span className="text-emerald-500 cursor-pointer hover:underline">
+                                Read More
+                              </span>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl">
+                              <h2 className="text-xl font-semibold mb-2">
+                                Changes Description
+                              </h2>
+                              <p>{history?.changes}</p>
+                            </DialogContent>
+                          </Dialog>
+                        )}
                     </TableCell>
-                    <TableCell className="font-semibold text-base text-emerald-500">
+                    <TableCell className="font-semibold text-base text-gray-600">
                       {history.updatedAt &&
                         new Date(history.updatedAt).toLocaleDateString()}
                     </TableCell>
-                    <TableCell className="font-semibold text-base text-emerald-500">
+                    <TableCell className="font-semibold text-base text-gray-600">
                       {history.updatedBy}
                     </TableCell>
                   </TableRow>
