@@ -124,9 +124,9 @@ const IssuesPage = () => {
                   {issue?.title}
                 </CardTitle>
                 <div className="flex items-center gap-2">
-                  {issue.status === "Resolved" ? (
+                  {issue?.status === "Resolved" ? (
                     <CircleCheckBig className="text-green-500" />
-                  ) : issue.priority === "High" ? (
+                  ) : issue?.priority === "High" ? (
                     <AlertTriangle className="text-red-500 animate-pulse" />
                   ) : null}
                   <div>{format(new Date(issue?.date), "PP")}</div>
@@ -153,7 +153,7 @@ const IssuesPage = () => {
                     )}
                   </p>
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                         Project:
                       </span>
@@ -180,7 +180,7 @@ const IssuesPage = () => {
                         </span>
                         : {issue?.task?.status}
                       </h3>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Only admin can delete & update announcements with the following components */}
