@@ -207,7 +207,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
         <BudgetDetailsCard project={project} />
 
         {/* Task Progress */}
-        <Card className="hover:shadow-xl transform transition-all duration-300">
+        <Card className="transform transition-transform duration-300 hover:scale-105">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
               Tasks Progress
@@ -226,7 +226,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
         </Card>
 
         {/* Project Status and Priority */}
-        <Card className="hover:shadow-xl transform transition-all duration-300">
+        <Card className="transform transition-transform duration-300 hover:scale-105">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Status</CardTitle>
             <AlertTriangleIcon className="h-4 w-4 text-muted-foreground" />
@@ -255,7 +255,7 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
       </div>
 
       {/* Project Timeline */}
-      <Card className="mt-6 hover:shadow-xl transform transition-all duration-300">
+      <Card className="mt-6 transform transition-transform duration-300 hover:scale-105">
         <CardHeader className="flex flex-row justify-between items-center">
           <CardTitle>Timeline</CardTitle>
           <ClockIcon className="h-4 w-4 text-muted-foreground" />
@@ -296,31 +296,31 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
             <TableHeader>
               <TableRow>
                 <TableHead
-                  className="text-gray-700 text-base font-extrabold"
+                  className="text-emerald-500 text-base font-extrabold"
                   scope="col"
                 >
                   Name
                 </TableHead>
                 <TableHead
-                  className="text-gray-700 text-base font-extrabold"
+                  className="text-emerald-500 text-base font-extrabold"
                   scope="col"
                 >
                   Description
                 </TableHead>
                 <TableHead
-                  className="text-gray-700 text-base font-extrabold"
+                  className="text-emerald-500 text-base font-extrabold"
                   scope="col"
                 >
                   Status
                 </TableHead>
                 <TableHead
-                  className="text-gray-700 text-base font-extrabold"
+                  className="text-emerald-500 text-base font-extrabold"
                   scope="col"
                 >
                   Due Date
                 </TableHead>
                 <TableHead
-                  className="text-gray-700 text-base font-extrabold text-center"
+                  className="text-emerald-500 text-base font-extrabold text-center"
                   scope="col"
                 >
                   Versions
@@ -331,16 +331,32 @@ const SingleProjectPage = async ({ params }: { params: { id: string } }) => {
               {project.tasks.length > 0 ? (
                 project.tasks.map((task) => (
                   <TableRow key={task.id}>
-                    <TableCell className="font-semibold text-base text-emerald-500">
+                    <TableCell className="font-semibold text-base text-gray-600">
                       {task.name}
                     </TableCell>
-                    <TableCell className="font-semibold text-base text-emerald-500">
-                      {task.description}
+                    <TableCell className="font-semibold text-base text-gray-600">
+                      {truncateDescription(task?.description!)}
+                      {task?.description &&
+                        task.description.split(" ").length > 7 && (
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <span className="text-emerald-500 cursor-pointer hover:underline">
+                                Read More
+                              </span>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl">
+                              <h2 className="text-xl font-semibold mb-2">
+                                Task Description
+                              </h2>
+                              <p>{task?.description}</p>
+                            </DialogContent>
+                          </Dialog>
+                        )}
                     </TableCell>
-                    <TableCell className="font-semibold text-base text-emerald-500">
+                    <TableCell className="font-semibold text-base text-gray-600">
                       {task.status}
                     </TableCell>
-                    <TableCell className="font-semibold text-base text-emerald-500">
+                    <TableCell className="font-semibold text-base text-gray-600">
                       {task.dueDate
                         ? new Date(task.dueDate).toLocaleDateString()
                         : "N/A"}
