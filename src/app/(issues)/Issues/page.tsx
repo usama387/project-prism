@@ -153,34 +153,43 @@ const IssuesPage = () => {
                     )}
                   </p>
                   <div className="flex flex-col gap-2">
-                    {/* <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        Project:
-                      </span>
-                      <h3 className="text-base font-semibold text-gray-500">
-                        {issue?.project.name}
-                      </h3>
-                      <h3 className="text-base text-gray-500 lowercase">
-                        <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
-                          Status
+                    {issue?.project ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          Project:
                         </span>
-                        : {issue?.project?.status}
-                      </h3>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        Task:
-                      </span>
-                      <h3 className="text-base  text-gray-500">
-                        {issue?.task.name}
-                      </h3>
-                      <h3 className="text-base text-gray-500 lowercase">
-                        <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
-                          Status
+                        <h3 className="text-base font-semibold text-gray-500">
+                          {issue.project.name}
+                        </h3>
+                        <h3 className="text-base text-gray-500 lowercase">
+                          <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
+                            Status
+                          </span>
+                          : {issue.project.status}
+                        </h3>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">No project assigned</p>
+                    )}
+
+                    {issue?.task ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          Task:
                         </span>
-                        : {issue?.task?.status}
-                      </h3>
-                    </div> */}
+                        <h3 className="text-base text-gray-500">
+                          {issue.task.name}
+                        </h3>
+                        <h3 className="text-base text-gray-500 lowercase">
+                          <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
+                            Status
+                          </span>
+                          : {issue.task.status}
+                        </h3>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">No task assigned</p>
+                    )}
                   </div>
 
                   {/* Only admin can delete & update announcements with the following components */}
