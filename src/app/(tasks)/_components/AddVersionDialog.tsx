@@ -237,7 +237,7 @@ export default function AddVersionDialog({ trigger }: Props) {
                         <SelectValue placeholder="Select a person" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="usama">Usama</SelectItem>
+                        <SelectItem value="Usama">Usama</SelectItem>
                         <SelectItem value="Maryam">Maryam</SelectItem>
                         <SelectItem value="Noor">Noor</SelectItem>
                         <SelectItem value="Abdul Wasay">Abdul Wasay</SelectItem>
