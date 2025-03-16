@@ -56,11 +56,6 @@ const items = [
     name: "Transactions",
     link: "/transactions",
   },
-  {
-    id: 7,
-    name: "Manage",
-    link: "/manage",
-  },
 ];
 
 // Navbar for large screens
