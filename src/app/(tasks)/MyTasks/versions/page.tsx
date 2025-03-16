@@ -23,6 +23,7 @@ import {
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { useUser } from "@clerk/nextjs";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 // Adjusted TaskHistory type to include task.name
 type TaskHistory = {
@@ -70,6 +71,15 @@ const TaskVersionsPage = () => {
 
   // when api fails renders this div is rendered
   if (error) return <div>An error occurred: {error.message}</div>;
+
+  // function to truncate description to display first 7 words
+  const truncateDescription = (description: string) => {
+    const words = description.split(" ");
+    if (words.length > 7) {
+      return words.slice(0, 7).join(" ") + "...";
+    }
+    return description;
+  };
 
   return (
     <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -131,7 +141,23 @@ const TaskVersionsPage = () => {
                   </Link>
                 </TableCell>
                 <TableCell className="text-sm md:text-base px-4 py-2">
-                  {version.changes}
+                  {truncateDescription(version?.changes)}
+                  {version?.changes &&
+                    version?.changes.split(" ").length > 7 && (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <span className="text-emerald-500 cursor-pointer hover:underline">
+                            Read More
+                          </span>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <h2 className="text-xl font-semibold mb-2">
+                            Changes Description
+                          </h2>
+                          <p>{version?.changes}</p>
+                        </DialogContent>
+                      </Dialog>
+                    )}
                 </TableCell>
                 <TableCell className="text-sm md:text-base px-4 py-2">
                   {version.status}
