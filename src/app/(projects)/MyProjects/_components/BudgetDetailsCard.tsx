@@ -11,10 +11,10 @@ type Project = {
 export default function BudgetDetailsCard({ project }: { project: Project }) {
   // Calculate the percentage of budget used, handling null values
   const budgetUsedPercentage =
-  project.budget && project.usedBudget && project.budget > 0
-  ? (project.usedBudget / project.budget) * 100
-  : 0;
-  
+    project.budget && project.usedBudget && project.budget > 0
+      ? (project.usedBudget / project.budget) * 100
+      : 0;
+
   // Format currency values, handling null values
   const formatCurrency = (value: number | null) => {
     if (value === null) return "N/A";
@@ -23,9 +23,9 @@ export default function BudgetDetailsCard({ project }: { project: Project }) {
       currency: "PKR",
     }).format(value);
   };
-  
+
   return (
-    <Card className="hover:shadow-xl transform transition-all duration-300">
+    <Card className="transform transition-transform duration-300 hover:scale-105">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium">Budget Details</CardTitle>
         <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
