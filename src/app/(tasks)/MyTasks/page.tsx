@@ -269,7 +269,7 @@ const MyTaskPage = () => {
           : currentTasks.map((task) => (
               <Card key={task.id}>
                 <CardHeader>
-                  <CardTitle className="text-lg font-semibold text-emerald-400">
+                  <CardTitle className="text-lg font-semibold text-emerald-600 sm:text-xl">
                     {task.name}
                   </CardTitle>
                 </CardHeader>

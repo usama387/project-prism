@@ -230,7 +230,7 @@ function ProjectsPageContent() {
               <Link href={`/MyProjects/${project.id}`}>
                 <Card key={project.id} className="flex flex-col">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-lg text-emerald-500 sm:text-xl">
+                    <CardTitle className="text-lg text-emerald-600 sm:text-xl font-semibold">
                       {project.name}
                     </CardTitle>
                     <Badge className={statusColors[project.status]}>
@@ -238,7 +238,7 @@ function ProjectsPageContent() {
                     </Badge>
                   </CardHeader>
                   <CardContent className="flex-grow flex flex-col justify-between">
-                    <p className="text-muted-foreground text-sm sm:text-base mb-4 h-16 overflow-hidden">
+                    <p className="text-muted-foreground text-sm sm:text-base mb-4 h-16 overflow-hidden text-gray-500 font-semibold">
                       {truncateDescription(project?.description)}
                       {project?.description.split(" ").length > 7 && (
                         <Dialog>
