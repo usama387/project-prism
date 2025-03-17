@@ -52,12 +52,19 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const IssuesAnalyticsDialog = ({ trigger }: Props) => {
+  // instance for invalidating queries
+  const queryClient = useQueryClient();
+
   // Fetching API data
   const { data, isLoading } = useQuery({
     queryKey: ["issue-statusChart"],
     queryFn: () => fetch("/api/issue-statusChart").then((res) => res.json()),
   });
 
+  queryClient.invalidateQueries({
+    queryKey: ["issue-statusChart"],
+  });
+  
   // Constructing chart data from data
   const chartData = useMemo(() => {
     return (
