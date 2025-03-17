@@ -3,7 +3,7 @@
 import SkeletonWrapper from "@/components/SkeletonWrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import React from "react";
 import CreateIssueDialog from "../_components/CreateIssueDialog";
@@ -44,10 +44,17 @@ type Task = {
 };
 
 const IssuesPage = () => {
+  // instance for invalidating queries
+  const queryClient = useQueryClient();
+
   // fetching issues data with api
   const { data: issues = [], isLoading } = useQuery({
-    queryKey: ["issues"],
+    queryKey: ["Issues"],
     queryFn: () => fetch("/api/issues").then((res) => res.json()),
+  });
+
+  queryClient.invalidateQueries({
+    queryKey: ["Issues"],
   });
 
   // fetching api that returns all tasks
