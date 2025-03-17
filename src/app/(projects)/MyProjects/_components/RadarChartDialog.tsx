@@ -176,7 +176,7 @@ const RadarChartDialog = ({ trigger, project }: Props) => {
             {/* Suggestions based on the data */}
             {suggestions.length > 0 && (
               <div className="mt-2">
-                <h4 className="font-semibold">Suggestions:</h4>
+                <h4 className="font-semibold">Recommendations:</h4>
                 <ul className="list-disc list-inside text-muted-foreground">
                   {suggestions.map((suggestion, index) => (
                     <li key={index}>{suggestion}</li>
