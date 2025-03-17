@@ -89,7 +89,7 @@ const UpdateTaskDialog = ({ task, trigger }: Props) => {
   // fetching projects with useQuery
   const { data: projects } = useQuery<Project[]>({
     queryKey: ["Projects"],
-    queryFn: () => fetch("/api/my-tasks").then((res) => res.json()),
+    queryFn: () => fetch("/api/my-projects").then((res) => res.json()),
   });
 
   // opening state for dialog
@@ -118,12 +118,15 @@ const UpdateTaskDialog = ({ task, trigger }: Props) => {
   });
 
   const onSubmit = (values: UpdateTaskSchemaType) => {
-    toast.loading("Updating Task", {
-      id: "update-project",
-    });
+    toast.loading("Updating Task", { id: "update-task" }); // Use consistent ID
     mutate(values, {
-      onError: () => {
-        toast.error("Failed to update task", { id: "update-task" });
+      onError: (error) => {
+        console.error("Update task error:", error);
+        const errorMessage =
+          error instanceof Error ? error.message : "An unknown error occurred";
+        toast.error(`Failed to update task: ${errorMessage}`, {
+          id: "update-task",
+        });
       },
     });
   };
