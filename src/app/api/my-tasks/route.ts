@@ -12,6 +12,9 @@ export const GET = async () => {
   }
 
   const userTasks = await prisma.task.findMany({
+    orderBy: {
+      createdAt: "desc", // latest first
+    },
     where: {
       OR: [
         { userId: user.id }, // Tasks created by the current user

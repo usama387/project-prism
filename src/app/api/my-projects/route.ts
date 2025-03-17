@@ -4,6 +4,9 @@ import { revalidatePath } from "next/cache";
 // fetches projects belonging to a particular user
 export const GET = async () => {
   const allProjects = await prisma.project.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
     include: {
       tasks: {
         select: {
