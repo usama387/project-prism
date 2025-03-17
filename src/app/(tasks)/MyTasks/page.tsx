@@ -83,13 +83,14 @@ const MyTaskPage = () => {
 
   //logic for  dynamic colors for different statuses
   const statusColors = {
-    Completed: "border-rose-500 bg-rose-950 text-white hover:border-blue-700",
+    Completed:
+      "border-rose-500 bg-rose-950 text-white hover:border-blue-700 px-2 rounded-full",
     Ongoing:
-      "border-emerald-500 bg-emerald-950 text-white hover:border-emerald-700 hover:text-white",
+      "border-emerald-500 bg-emerald-950 text-white hover:border-emerald-700 hover:text-white px-2 rounded-full",
     OnHold:
-      "border-rose-500 bg-rose-950 text-white hover:border-emerald-700 hover:text-white",
+      "border-rose-500 bg-rose-950 text-white hover:border-emerald-700 hover:text-white px-2 rounded-full",
     Cancelled: "border-rose-500 bg-rose-950 text-white",
-    Todo: "border-rose-500 bg-rose-950 text-white hover:border-blue-700",
+    Todo: "border-rose-500 bg-rose-950 text-white hover:border-blue-700 px-2 rounded-full",
   };
 
   // Added filteredTasks using useMemo for performance
@@ -304,7 +305,7 @@ const MyTaskPage = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="w-full mt-4 text-emerald-400"
+                        className="w-full mt-4 text-emerald-600 text-base"
                       >
                         View Details
                       </Button>
