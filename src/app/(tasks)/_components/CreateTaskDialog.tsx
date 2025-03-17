@@ -78,7 +78,7 @@ export default function CreateTaskDialog({ trigger, projects, tasks }: Props) {
         id: "create-task",
       });
       queryClient.invalidateQueries({
-        queryKey: ["tasks"],
+        queryKey: ["Tasks"],
       });
       form.reset({
         name: "",
