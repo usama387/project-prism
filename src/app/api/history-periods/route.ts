@@ -1,8 +1,8 @@
 import prisma from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server"; 
-import { redirect } from "next/navigation"; 
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-// this api is being used in HistoryPeriodSelector component
+// This API is being used in HistoryPeriodSelector component
 export const GET = async (request: Request) => {
   // Get the current user using Clerk
   const user = await currentUser();
@@ -12,8 +12,8 @@ export const GET = async (request: Request) => {
     redirect("/sign-in");
   }
 
-  // Get the user's history periods by calling the helper function
-  const periods = await getHistoryPeriods(user.id);
+  // Get the history periods for all users by calling the helper function
+  const periods = await getHistoryPeriods();
 
   // Return the periods as a JSON response
   return Response.json(periods);
@@ -24,12 +24,9 @@ export type GetHistoryPeriodsResponseType = Awaited<
   ReturnType<typeof getHistoryPeriods>
 >;
 
-// Helper function to fetch distinct years of history periods for a user
-const getHistoryPeriods = async (userId: string) => {
+// Helper function to fetch distinct years of history periods for all users
+const getHistoryPeriods = async () => {
   const result = await prisma.monthHistory.findMany({
-    where: {
-      userId, // Filter records by userId
-    },
     select: {
       year: true, // Only select the year field
     },
