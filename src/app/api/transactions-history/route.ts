@@ -4,23 +4,23 @@ import { OverviewQuerySchema } from "../../../../ZodSchema/overview";
 import prisma from "@/lib/prisma";
 import { GetFormatterForCurrency } from "@/lib/helpers";
 
-// this api is being fetched transaction table component to get transaction history and its data
+// This API is fetched by the transaction table component to get transaction history and its data
 export const GET = async (request: Request) => {
-  //  getting user from clerk
+  // Getting user from Clerk
   const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in");
   }
 
-  //   lets destructure the searchParams from from request url to pass it in the request using new URL method
+  // Destructure the searchParams from the request URL
   const { searchParams } = new URL(request.url);
 
-  //   accessing parameters with get method of searchParams
+  // Accessing parameters with get method of searchParams
   const from = searchParams.get("from");
   const to = searchParams.get("to");
 
-  //   validating parameters with zod schema safeParse method
+  // Validating parameters with Zod schema safeParse method
   const QueryParams = OverviewQuerySchema.safeParse({
     from,
     to,
@@ -32,7 +32,7 @@ export const GET = async (request: Request) => {
     });
   }
 
-  //   getTransactionHistory is a sub function of this api which accepts userId from clerk and to and from as parameters to return transactions history based on the range
+  // Get transaction history without filtering by userId
   const transactions = await getTransactionHistory(
     user.id,
     QueryParams.data.from,
@@ -42,13 +42,13 @@ export const GET = async (request: Request) => {
   return Response.json(transactions);
 };
 
-// exporting the type of downward function
+// Exporting the type of the getTransactionHistory function
 export type getTransactionHistoryResponseType = Awaited<
   ReturnType<typeof getTransactionHistory>
 >;
 
 const getTransactionHistory = async (userId: string, from: Date, to: Date) => {
-  // accessing currency details through userSettings table in db
+  // Accessing currency details through userSettings table in db for the authenticated user
   const userSettings = await prisma.userSettings.findUnique({
     where: {
       userId,
@@ -59,13 +59,12 @@ const getTransactionHistory = async (userId: string, from: Date, to: Date) => {
     throw new Error("User settings not found");
   }
 
-  //   passing user currency
+  // Passing user currency to the formatter
   const formatter = GetFormatterForCurrency(userSettings.currency);
 
-  //   fetching transactions now
+  // Fetching all transactions within the date range, without filtering by userId
   const transactions = await prisma.transaction.findMany({
     where: {
-      userId,
       date: {
         gte: from,
         lte: to,
@@ -76,11 +75,9 @@ const getTransactionHistory = async (userId: string, from: Date, to: Date) => {
     },
   });
 
-  //   mapping through the transactions and then spreading it to extract and format amount with user currency
+  // Mapping through the transactions, spreading them, and formatting the amount with the user's currency
   return transactions.map((transaction) => ({
     ...transaction,
-
-    // formatting the amount with user currency
     formattedAmount: formatter.format(transaction.amount),
   }));
 };
