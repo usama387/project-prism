@@ -4,20 +4,20 @@ import { OverviewQuerySchema } from "../../../../../ZodSchema/overview";
 import prisma from "@/lib/prisma";
 
 export const GET = async (request: Request) => {
-  // getting current user details from clerk
+  // Getting current user details from Clerk
   const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in");
   }
 
-  //   extracting searchParams from request
+  // Extracting searchParams from request
   const { searchParams } = new URL(request.url);
 
   const from = searchParams.get("from");
   const to = searchParams.get("to");
 
-  //   passing search params into zod schema validator
+  // Passing search params into Zod schema validator
   const queryParams = OverviewQuerySchema.safeParse({
     from,
     to,
@@ -27,9 +27,8 @@ export const GET = async (request: Request) => {
     throw new Error(queryParams.error.message);
   }
 
-  //   a sub api that fetches data based on query parameters
+  // Fetch category statistics for all users
   const stats = await getCategoriesState(
-    user.id,
     queryParams.data.from,
     queryParams.data.to
   );
@@ -37,15 +36,16 @@ export const GET = async (request: Request) => {
   return Response.json(stats);
 };
 
+// Type definition for the response (unchanged)
 export type GetCategoriesStateResponseType = Awaited<
   ReturnType<typeof getCategoriesState>
 >;
 
-const getCategoriesState = async (userId: string, from: Date, to: Date) => {
+// Updated function without userId filter
+const getCategoriesState = async (from: Date, to: Date) => {
   const stats = await prisma.transaction.groupBy({
     by: ["type", "category", "categoryIcon"],
     where: {
-      userId,
       date: {
         gte: from,
         lte: to,
