@@ -37,15 +37,10 @@ const MyDashboardPage = async () => {
   }
 
   // query for total projects card
-  const projects = await prisma.project.count({
-    where: {
-      userId: user.id,
-    },
-  });
+  const projects = await prisma.project.count();
 
   const projectsCompletedThisMonth = await prisma.project.count({
     where: {
-      userId: user.id,
       status: "COMPLETED",
       updatedAt: {
         gte: startOfThisMonth,
@@ -57,7 +52,6 @@ const MyDashboardPage = async () => {
   // query for completed projects card
   const CompletedProjects = await prisma.project.count({
     where: {
-      userId: user.id,
       status: "COMPLETED",
     },
   });
@@ -65,7 +59,6 @@ const MyDashboardPage = async () => {
   // query for completed projects card
   const OnGoingProjects = await prisma.project.count({
     where: {
-      userId: user.id,
       status: "ONGOING",
     },
   });
@@ -73,7 +66,6 @@ const MyDashboardPage = async () => {
   // query for cancelled projects
   const CancelledProjects = await prisma.project.count({
     where: {
-      userId: user.id,
       status: "CANCELLED",
     },
   });
@@ -81,7 +73,6 @@ const MyDashboardPage = async () => {
   // query for cancelled projects card
   const CancelledProjectsThisMonth = await prisma.project.count({
     where: {
-      userId: user.id,
       status: "CANCELLED",
       updatedAt: {
         gte: startOfThisMonth,
@@ -91,16 +82,11 @@ const MyDashboardPage = async () => {
   });
 
   // Fetch all tasks for the user
-  const TotalTasks = await prisma.task.count({
-    where: {
-      userId: user.id,
-    },
-  });
+  const TotalTasks = await prisma.task.count();
 
   // Count completed tasks this week
   const CompletedTasksThisWeek = await prisma.task.count({
     where: {
-      userId: user.id,
       status: "Completed",
       updatedAt: {
         gte: startOfThisWeek,
@@ -112,7 +98,6 @@ const MyDashboardPage = async () => {
   // count all the completed tasks in the table
   const CompletedTasks = await prisma.task.count({
     where: {
-      userId: user.id,
       status: "Completed",
     },
   });
@@ -120,7 +105,6 @@ const MyDashboardPage = async () => {
   // count all the pending tasks in the table
   const PendingTasksThisWeek = await prisma.task.count({
     where: {
-      userId: user.id,
       status: "On Hold",
       updatedAt: {
         gte: startOfThisWeek,
@@ -132,7 +116,6 @@ const MyDashboardPage = async () => {
   // count all the overdue tasks in the table
   const OverdueTasks = await prisma.task.count({
     where: {
-      userId: user.id,
       status: "Overdue",
     },
   });
@@ -168,15 +151,10 @@ const MyDashboardPage = async () => {
   });
 
   // query for fetching team performance based task completed, client satisfaction and delivered
-  const AllTasks = await prisma.task.count({
-    where: {
-      userId: user.id,
-    },
-  });
+  const AllTasks = await prisma.task.count({});
 
   const CompletedTasksByTeam = await prisma.task.count({
     where: {
-      userId: user.id,
       status: "Completed",
     },
   });
@@ -186,15 +164,10 @@ const MyDashboardPage = async () => {
     AllTasks > 0 ? (CompletedTasksByTeam / AllTasks) * 100 : 0;
 
   // query for delivered projects and percentage calculation
-  const AllProjects = await prisma.project.count({
-    where: {
-      userId: user.id,
-    },
-  });
+  const AllProjects = await prisma.project.count({});
 
   const CompletedProjectsByTeam = await prisma.project.count({
     where: {
-      userId: user.id,
       status: "COMPLETED",
     },
   });
@@ -206,7 +179,6 @@ const MyDashboardPage = async () => {
   // query for fetching projects with client ratings
   const ClientSatisfactionRatings = await prisma.project.findMany({
     where: {
-      userId: user.id,
       clientSatisfaction: {
         not: null,
       },
