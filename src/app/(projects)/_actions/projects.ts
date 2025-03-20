@@ -78,14 +78,11 @@ export const DeleteProject = async (form: DeleteProjectSchemaType) => {
 
   const deletedProject = await prisma.project.delete({
     where: {
-      userId: user.id,
       id: parsedBody.data.projectId,
     },
   });
 
   redirect("/MyProjects");
-
-  return deletedProject;
 };
 
 export const UpdateProject = async (form: UpdateProjectSchemaType) => {
@@ -121,7 +118,6 @@ export const UpdateProject = async (form: UpdateProjectSchemaType) => {
   // Update the project
   const updatedProject = await prisma.project.update({
     where: {
-      userId: user.id,
       id: projectId,
     },
     data: {
