@@ -42,8 +42,8 @@ export const GET = async (request: Request) => {
     });
   }
 
-  // Fetch history data based on the validated parameters
-  const data = await getHistoryData(user.id, queryParams.data.timeFrame, {
+  // Fetch history data based on the validated parameters without user ID
+  const data = await getHistoryData(queryParams.data.timeFrame, {
     month: queryParams.data.month,
     year: queryParams.data.year,
   });
@@ -57,17 +57,13 @@ export type GetHistoryDataResponseType = Awaited<
   ReturnType<typeof getHistoryData>
 >;
 
-// Fetch history data based on the timeframe (month or year)
-const getHistoryData = async (
-  userId: string,
-  timeFrame: TimeFrame,
-  period: Period
-) => {
+// Fetch history data based on the timeframe (month or year) without user ID
+const getHistoryData = async (timeFrame: TimeFrame, period: Period) => {
   switch (timeFrame) {
     case "year":
-      return await getYearHistoryData(userId, period.year); // Fetch data for the whole year
+      return await getYearHistoryData(period.year); // Fetch data for the whole year
     case "month":
-      return await getMonthHistoryData(userId, period.year, period.month); // Fetch data for a specific month
+      return await getMonthHistoryData(period.year, period.month); // Fetch data for a specific month
   }
 };
 
@@ -80,12 +76,11 @@ type HistoryData = {
   day?: number; // Optional for monthly data
 };
 
-// Fetch yearly history data, grouping results by month
-const getYearHistoryData = async (userId: string, year: number) => {
+// Fetch yearly history data, grouping results by month without user ID
+const getYearHistoryData = async (year: number) => {
   const result = await prisma.yearHistory.groupBy({
     by: ["month"], // Group by month
     where: {
-      userId, // Filter by user ID
       year, // Filter by year
     },
     _sum: {
@@ -129,16 +124,11 @@ const getYearHistoryData = async (userId: string, year: number) => {
   return history;
 };
 
-// Fetch monthly history data, grouping results by day
-const getMonthHistoryData = async (
-  userId: string,
-  year: number,
-  month: number
-) => {
+// Fetch monthly history data, grouping results by day without user ID
+const getMonthHistoryData = async (year: number, month: number) => {
   const result = await prisma.monthHistory.groupBy({
     by: ["day"], // Group by day
     where: {
-      userId, // Filter by user ID
       year, // Filter by year
       month, // Filter by month
     },
