@@ -97,8 +97,6 @@ export const DeleteTask = async (form: DeleTeTaskSchemaType) => {
   });
 
   redirect("/MyTasks");
-
-  return DeletedTask;
 };
 
 export const UpdateTask = async (form: UpdateTaskSchemaType) => {
@@ -134,7 +132,6 @@ export const UpdateTask = async (form: UpdateTaskSchemaType) => {
 
   const UpdatedTask = await prisma.task.update({
     where: {
-      userId: user.id,
       id: taskId,
     },
     data: {
