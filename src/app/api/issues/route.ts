@@ -5,6 +5,9 @@ import { NextResponse } from "next/server";
 export const GET = async () => {
   try {
     const issues = await prisma.issue.findMany({
+      orderBy: {
+        date: "desc",
+      },
       include: {
         project: {
           select: {
@@ -26,6 +29,9 @@ export const GET = async () => {
     return NextResponse.json(issues);
   } catch (error) {
     console.error("Error fetching issues:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 };
