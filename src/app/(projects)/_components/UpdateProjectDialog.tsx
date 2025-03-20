@@ -361,30 +361,26 @@ const UpdateProjectDialog = ({
                 </FormItem>
               )}
             />
-
-            {/* Contains logic for form submission */}
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => {
-                    form.reset();
-                  }}
-                >
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button
-                onClick={form.handleSubmit(onSubmit)}
-                disabled={isPending}
-              >
-                {!isPending && "Update"}
-                {isPending && <Loader2 className="animate-spin" />}
-              </Button>
-            </DialogFooter>
           </form>
         </Form>
+        {/* Contains logic for form submission */}
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                form.reset();
+              }}
+            >
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button onClick={form.handleSubmit(onSubmit)} disabled={isPending}>
+            {!isPending && "Update"}
+            {isPending && <Loader2 className="animate-spin" />}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
